@@ -51,5 +51,4 @@ const create_new_file = ( new_text = "" ) =>
     debugger;
 };
 
-fs.readFile( "src/config.json", "utf8", (error, conf) => load_config(error, conf) );
-
+module.exports = load_config;
