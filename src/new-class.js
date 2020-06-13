@@ -24,7 +24,6 @@ class StaticSiteGenerator {
                 }
             })
         });
-        debugger;
     }
     read_directory()
     {

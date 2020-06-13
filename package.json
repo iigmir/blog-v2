@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "markdown-it": "^11.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^8.0.1"
   }
 }

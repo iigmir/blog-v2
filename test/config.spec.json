@@ -1,0 +1,5 @@
+{
+    "source_directory": "test/articles",
+    "template_file": "test/template.spec.html",
+    "destination_directory": "test/docs"
+}
