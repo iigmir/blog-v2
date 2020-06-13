@@ -9,6 +9,7 @@ const error_handling = up =>
 class StaticSiteGenerator {
     config = {};
     directory_files = [];
+    template = "";
     get source_markdowns()
     {
         // https://flaviocopes.com/javascript-async-await-array-map
@@ -34,7 +35,7 @@ class StaticSiteGenerator {
         }
         return [];
     }
-    async load_config( config_path = "src/config.json" )
+    set_config( config_path = "src/config.json" )
     {
         return new Promise( ( resolve, reject ) =>
             fs.readFile( config_path, "utf8", ( fs_error, file ) =>
@@ -56,13 +57,13 @@ class StaticSiteGenerator {
         ).then( config => this.config = config )
         .catch( error => error_handling( error ) );
     }
-    async read_directory()
+    read_directory()
     {
-        const { config } = this;
-        if( config.source_directory )
+        const { source_directory } = this.config;
+        if( source_directory )
         {
             return new Promise( ( resolve, reject ) =>
-                fs.readdir( config.source_directory, ( error, files ) =>
+                fs.readdir( source_directory, ( error, files ) =>
                 {
                     if( error ) reject( new Error( error ) );
                     resolve( files );
@@ -71,9 +72,16 @@ class StaticSiteGenerator {
             .catch( error => error_handling( error ) );
         }
     }
+    set_template()
+    {
+        if( this.config.template_file )
+        {
+            // 
+        }
+    }
     async main( config_path = "src/config.json" )
     {
-        this.load_config( config_path );
+        this.set_config( config_path );
         this.read_directory();
     }
 };
