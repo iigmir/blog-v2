@@ -1,28 +1,22 @@
+const util = require("util");
+const fs = require("fs");
+
 class StaticSiteGenerator {
-    config = {
-        source_directory: "",
-        template_file: "",
-    };
+    config = {};
     directory_files = [];
-    constructor( config_path = "src/config.json" )
+    async load_config( config_path = "src/config.json" )
     {
-        this.load_config( config_path );
-    }
-    load_config( config_path = "src/config.json" )
-    {
-        const json_factory = new Promise( config_path =>
-        {
-            debugger
-            fs.readFile( config_path, "utf8", (error, conf) =>
+        return new Promise((resolve, reject) =>
+            fs.readFile( config_path, "utf8", (error, file) =>
             {
-                if( error ) Promise.reject( error );
-                try {
-                    const config = JSON.parse( conf );
-                    Promise.resolve( config );
-                } catch ( json_error ) {
-                    Promise.reject( json_error );
-                }
+                if( error ) reject( new Error( error ) );
+                resolve( file );
             })
+        ).then( res => this.config = JSON.parse( res ) )
+        .catch( e =>
+        {
+            console.error( e );
+            throw e;
         });
     }
     read_directory()
@@ -56,3 +50,5 @@ class StaticSiteGenerator {
         }
     }
 };
+
+module.exports = StaticSiteGenerator;
