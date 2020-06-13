@@ -13,4 +13,11 @@ describe( "StaticSiteGenerator", () =>
             destination_directory: "test/docs"
         });
     });
+    it( "should get the directory array by out input", async () =>
+    {
+        const instance = new StaticSiteGenerator();
+        await instance.load_config( "test/config.json" );
+        await instance.read_directory();
+        assert.deepStrictEqual( instance.directory_files, ["test.spec.md"]);
+    });
 });
