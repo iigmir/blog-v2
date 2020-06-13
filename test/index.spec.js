@@ -1,37 +1,40 @@
 const StaticSiteGenerator = require( "../src/new-class.js" );
+const expected = require( "./expect-cases.js" );
 const assert = require( "assert" );
 
 const config_path = "test/test-suits/config.json";
 
 describe( "StaticSiteGenerator", () =>
 {
-    it( "should get the input setting by input", async () =>
+    it( "should get the input config by input", async () =>
     {
         const app = new StaticSiteGenerator();
-        const expected_cases = {
-            source_directory: "test/articles",
-            template_file: "test/test-suits/template.spec.html",
-            destination_directory: "test/docs"
-        };
         await app.set_config( config_path );
-        assert.deepStrictEqual( app.config, expected_cases );
+        assert.deepStrictEqual( app.config, expected.config );
     });
-    it( "should get the directory array by input", async () =>
+    it( "should get the directory array by config", async () =>
     {
         const app = new StaticSiteGenerator();
-        const expected_cases = [ "test.spec.md", ];
         await app.set_config( config_path );
         await app.read_directory();
-        assert.deepStrictEqual( app.directory_files, expected_cases );
+        assert.deepStrictEqual( app.directory_files, expected.directory_files );
     });
-    it( "should get markdowns by source file paths", async () =>
+    it( "should get markdowns by config", async () =>
     {
         const app = new StaticSiteGenerator();
-        const expected_cases = [ `# Test\n\nHello\n`, ];
         await app.set_config( config_path );
         await app.read_directory();
-        assert.deepStrictEqual( await app.source_markdowns, expected_cases );
+        assert.deepStrictEqual( await app.source_markdowns, expected.source_markdowns );
     });
+    it( "should get HTML template by config", async () =>
+    {
+        const template_file = "test/test-suits/template.spec.html";
+        const app = new StaticSiteGenerator();
+        await app.set_config( config_path );
+        await app.set_template();
+        assert.deepStrictEqual( await app.template, expected.template );
+    });
+    /*
     describe( "main function", () =>
     {
         it( "should works as expected", async () =>
@@ -47,4 +50,5 @@ describe( "StaticSiteGenerator", () =>
             assert.deepStrictEqual( await app.source_markdowns, [ `# Test\n\nHello\n`, ] );
         });
     });
+    */
 });

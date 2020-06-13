@@ -74,9 +74,17 @@ class StaticSiteGenerator {
     }
     set_template()
     {
-        if( this.config.template_file )
+        const { template_file } = this.config;
+        if( template_file )
         {
-            // 
+            return new Promise( ( resolve, reject ) =>
+                fs.readFile( template_file, "utf8", ( error, files ) =>
+                {
+                    if( error ) reject( new Error( error ) );
+                    resolve( files );
+                })
+            ).then( res => this.template = res )
+            .catch( error => error_handling( error ) );
         }
     }
     async main( config_path = "src/config.json" )
