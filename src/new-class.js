@@ -9,6 +9,28 @@ const error_handling = up =>
 class StaticSiteGenerator {
     config = {};
     directory_files = [];
+    get source_markdowns()
+    {
+        if( this.directory_files.length > 0 )
+        {
+            const read_file = source_file =>
+            {
+                const fpath = `${ this.config.source_directory }/${ source_file }`;
+                return new Promise( (resolve, reject ) =>
+                    fs.readFile( fpath, "utf8", ( error, md_file ) =>
+                    {
+                        if( error ) reject( new Error( error ) );
+                        resolve( md_file );
+                    })
+                );
+            };
+            const main = this.directory_files.map(
+                source_file => read_file( source_file )
+            );
+            return Promise.all( main ).then( x => x );
+        }
+        return [];
+    }
     async load_config( config_path = "src/config.json" )
     {
         return new Promise( ( resolve, reject ) =>
@@ -34,6 +56,11 @@ class StaticSiteGenerator {
             ).then( res => this.directory_files = res )
             .catch( error => error_handling( error ) );
         }
+    }
+    async main( config_path = "src/config.json" )
+    {
+        this.load_config( config_path );
+        this.read_directory();
     }
 };
 
