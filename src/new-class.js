@@ -37,12 +37,23 @@ class StaticSiteGenerator {
     async load_config( config_path = "src/config.json" )
     {
         return new Promise( ( resolve, reject ) =>
-            fs.readFile( config_path, "utf8", (error, file) =>
+            fs.readFile( config_path, "utf8", ( fs_error, file ) =>
             {
-                if( error ) reject( new Error( error ) );
-                resolve( file );
+                if( fs_error )
+                {
+                    reject( new Error( fs_error ) );
+                }
+                try
+                {
+                    const result = JSON.parse( file );
+                    resolve( result );
+                }
+                catch ( json_error )
+                {
+                    reject( new Error( json_error ) );
+                }
             })
-        ).then( res => this.config = JSON.parse( res ) )
+        ).then( config => this.config = config )
         .catch( error => error_handling( error ) );
     }
     async read_directory()
