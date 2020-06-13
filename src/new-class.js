@@ -11,6 +11,9 @@ class StaticSiteGenerator {
     directory_files = [];
     get source_markdowns()
     {
+        // https://flaviocopes.com/javascript-async-await-array-map
+        // https://stackoverflow.com/questions/40140149
+        // https://stackoverflow.com/questions/33879401
         if( this.directory_files.length > 0 )
         {
             const read_file = source_file =>
