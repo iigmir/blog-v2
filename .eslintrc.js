@@ -27,10 +27,6 @@ module.exports = {
             "error",
             "always"
         ],
-        "curly": [
-            "error",
-            "all"
-        ],
         "brace-style": [
             "error",
             "allman"
@@ -54,6 +50,7 @@ module.exports = {
         "template-curly-spacing": [
             "error",
             "always"
-        ]
+        ],
+        "camelcase": "off",
     }
 };

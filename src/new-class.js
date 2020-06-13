@@ -46,10 +46,7 @@ class StaticSiteGenerator
             const config = await new Promise( ( resolve, reject ) =>
                 fs.readFile( config_path, "utf8", ( fs_error, file ) => 
                 {
-                    if ( fs_error ) 
-                    {
-                        reject( new Error( fs_error ) );
-                    }
+                    if ( fs_error ) reject( new Error( fs_error ) );
                     try 
                     {
                         const result = JSON.parse( file );
@@ -76,12 +73,9 @@ class StaticSiteGenerator
             try
             {
                 const res = await new Promise( ( resolve, reject ) =>
-                    fs.readdir( source_directory, ( error, files ) => 
+                    fs.readdir( source_directory, ( error, files ) =>
                     {
-                        if ( error )
-                        {
-                            reject( new Error( error ) );
-                        }
+                        if ( error ) reject( new Error( error ) );
                         resolve( files );
                     } )
                 );
@@ -103,10 +97,7 @@ class StaticSiteGenerator
                 const res = await new Promise( ( resolve, reject ) =>
                     fs.readFile( template_file, "utf8", ( error, files ) =>
                     {
-                        if ( error ) 
-                        {
-                            reject( new Error( error ) );
-                        }
+                        if ( error ) reject( new Error( error ) );
                         resolve( files );
                     } )
                 );
