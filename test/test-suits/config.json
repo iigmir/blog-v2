@@ -1,5 +1,5 @@
 {
     "source_directory": "test/articles",
-    "template_file": "test/template.spec.html",
+    "template_file": "test/test-suits/template.spec.html",
     "destination_directory": "test/docs"
 }
