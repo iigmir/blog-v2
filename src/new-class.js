@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require( "fs" );
 
 const error_handling = up =>
 {
@@ -21,7 +21,7 @@ class StaticSiteGenerator
             const read_file = source_file =>
             {
                 const fpath = `${ this.config.source_directory }/${ source_file }`;
-                return new Promise( (resolve, reject ) =>
+                return new Promise( ( resolve, reject ) =>
                     fs.readFile( fpath, "utf8", ( error, md_file ) =>
                     {
                         if( error ) 
@@ -29,7 +29,7 @@ class StaticSiteGenerator
                             reject( new Error( error ) );
                         }
                         resolve( md_file );
-                    })
+                    } )
                 );
             };
             const main = this.directory_files.map(
@@ -43,28 +43,29 @@ class StaticSiteGenerator
     {
         try 
         {
-            const config = await new Promise((resolve, reject) => fs.readFile(config_path, "utf8", (fs_error, file) => 
-            {
-                if (fs_error) 
+            const config = await new Promise( ( resolve, reject ) =>
+                fs.readFile( config_path, "utf8", ( fs_error, file ) => 
                 {
-                    reject(new Error(fs_error));
-                }
-                try 
-                {
-                    const result = JSON.parse(file);
-                    resolve(result);
-                }
-                catch (json_error) 
-                {
-                    reject(new Error(json_error));
-                }
-            })
+                    if ( fs_error ) 
+                    {
+                        reject( new Error( fs_error ) );
+                    }
+                    try 
+                    {
+                        const result = JSON.parse( file );
+                        resolve( result );
+                    }
+                    catch ( json_error ) 
+                    {
+                        reject( new Error( json_error ) );
+                    }
+                } )
             );
             return this.config = config;
         }
-        catch (error) 
+        catch ( error ) 
         {
-            return error_handling(error);
+            return error_handling( error );
         }
     }
     async read_directory()
@@ -74,20 +75,21 @@ class StaticSiteGenerator
         {
             try
             {
-                const res = await new Promise((resolve, reject) => fs.readdir(source_directory, (error, files) => 
-                {
-                    if (error)
+                const res = await new Promise( ( resolve, reject ) =>
+                    fs.readdir( source_directory, ( error, files ) => 
                     {
-                        reject(new Error(error));
-                    }
-                    resolve(files);
-                })
+                        if ( error )
+                        {
+                            reject( new Error( error ) );
+                        }
+                        resolve( files );
+                    } )
                 );
                 return this.directory_files = res;
             }
-            catch (error_1)
+            catch ( error_1 )
             {
-                return error_handling(error_1);
+                return error_handling( error_1 );
             }
         }
     }
@@ -98,21 +100,21 @@ class StaticSiteGenerator
         {
             try
             {
-                const res = await new Promise((resolve, reject) =>
-                    fs.readFile(template_file, "utf8", (error, files) =>
+                const res = await new Promise( ( resolve, reject ) =>
+                    fs.readFile( template_file, "utf8", ( error, files ) =>
                     {
-                        if (error) 
+                        if ( error ) 
                         {
-                            reject(new Error(error));
+                            reject( new Error( error ) );
                         }
-                        resolve(files);
-                    })
+                        resolve( files );
+                    } )
                 );
                 return this.template = res;
             }
-            catch (error_1)
+            catch ( error_1 )
             {
-                return error_handling(error_1);
+                return error_handling( error_1 );
             }
         }
     }

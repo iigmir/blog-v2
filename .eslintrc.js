@@ -35,5 +35,25 @@ module.exports = {
             "error",
             "allman"
         ],
+        "space-in-parens": [
+            "error",
+            "always"
+        ],
+        "space-before-function-paren": [
+            "error",
+            "never",
+        ],
+        "array-bracket-spacing": [
+            "error",
+            "always"
+        ],
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "template-curly-spacing": [
+            "error",
+            "always"
+        ]
     }
 };
