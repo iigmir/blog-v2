@@ -48,7 +48,11 @@ const parse_html = ({ file = "", template = '<!DOCTYPE html><html lang="en"><hea
 
 const create_new_file = ( new_text = "" ) =>
 {
-    debugger;
+    fs.writeFile( "docs/template.html", new_text, (error, data) =>
+    {
+        if( error ) throw new Error( error );
+        console.log( data );
+    });
 };
 
 module.exports = load_config;
