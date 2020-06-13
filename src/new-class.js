@@ -6,7 +6,8 @@ const error_handling = up =>
     throw up;
 };
 
-class StaticSiteGenerator {
+class StaticSiteGenerator 
+{
     config = {};
     directory_files = [];
     template = "";
@@ -23,7 +24,10 @@ class StaticSiteGenerator {
                 return new Promise( (resolve, reject ) =>
                     fs.readFile( fpath, "utf8", ( error, md_file ) =>
                     {
-                        if( error ) reject( new Error( error ) );
+                        if( error ) 
+                        {
+                            reject( new Error( error ) );
+                        }
                         resolve( md_file );
                     })
                 );
@@ -35,56 +39,81 @@ class StaticSiteGenerator {
         }
         return [];
     }
-    set_config( config_path = "src/config.json" )
+    async set_config( config_path = "src/config.json" )
     {
-        return new Promise( ( resolve, reject ) =>
-            fs.readFile( config_path, "utf8", ( fs_error, file ) =>
+        try 
+        {
+            const config = await new Promise((resolve, reject) => fs.readFile(config_path, "utf8", (fs_error, file) => 
             {
-                if( fs_error )
+                if (fs_error) 
                 {
-                    reject( new Error( fs_error ) );
+                    reject(new Error(fs_error));
                 }
-                try
+                try 
                 {
-                    const result = JSON.parse( file );
-                    resolve( result );
+                    const result = JSON.parse(file);
+                    resolve(result);
                 }
-                catch ( json_error )
+                catch (json_error) 
                 {
-                    reject( new Error( json_error ) );
+                    reject(new Error(json_error));
                 }
             })
-        ).then( config => this.config = config )
-        .catch( error => error_handling( error ) );
+            );
+            return this.config = config;
+        }
+        catch (error) 
+        {
+            return error_handling(error);
+        }
     }
-    read_directory()
+    async read_directory()
     {
         const { source_directory } = this.config;
         if( source_directory )
         {
-            return new Promise( ( resolve, reject ) =>
-                fs.readdir( source_directory, ( error, files ) =>
+            try
+            {
+                const res = await new Promise((resolve, reject) => fs.readdir(source_directory, (error, files) => 
                 {
-                    if( error ) reject( new Error( error ) );
-                    resolve( files );
+                    if (error)
+                    {
+                        reject(new Error(error));
+                    }
+                    resolve(files);
                 })
-            ).then( res => this.directory_files = res )
-            .catch( error => error_handling( error ) );
+                );
+                return this.directory_files = res;
+            }
+            catch (error_1)
+            {
+                return error_handling(error_1);
+            }
         }
     }
-    set_template()
+    async set_template()
     {
         const { template_file } = this.config;
         if( template_file )
         {
-            return new Promise( ( resolve, reject ) =>
-                fs.readFile( template_file, "utf8", ( error, files ) =>
-                {
-                    if( error ) reject( new Error( error ) );
-                    resolve( files );
-                })
-            ).then( res => this.template = res )
-            .catch( error => error_handling( error ) );
+            try
+            {
+                const res = await new Promise((resolve, reject) =>
+                    fs.readFile(template_file, "utf8", (error, files) =>
+                    {
+                        if (error) 
+                        {
+                            reject(new Error(error));
+                        }
+                        resolve(files);
+                    })
+                );
+                return this.template = res;
+            }
+            catch (error_1)
+            {
+                return error_handling(error_1);
+            }
         }
     }
     async main( config_path = "src/config.json" )
@@ -92,6 +121,6 @@ class StaticSiteGenerator {
         this.set_config( config_path );
         this.read_directory();
     }
-};
+}
 
 module.exports = StaticSiteGenerator;

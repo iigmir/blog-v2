@@ -5,18 +5,27 @@ const md = new MarkdownIt();
 // Functions
 const load_config = (error, conf) =>
 {
-    if( error ) throw new Error( error );
-    try {
+    if( error ) 
+    {
+        throw new Error( error );
+    }
+    try 
+    {
         const config = JSON.parse( conf );
         fs.readdir( config.source_directory, ( error, files ) => init( error, files ) );
-    } catch ( json_error ) {
+    }
+    catch ( json_error ) 
+    {
         throw new Error( json_error );
     }
 };
 
 const init = ( error, fname ) =>
 {
-    if( error ) throw new Error( error );
+    if( error ) 
+    {
+        throw new Error( error );
+    }
     const src_dir = "src/articles";
     fname.map( fname_item =>
         fs.readFile(
@@ -29,16 +38,22 @@ const init = ( error, fname ) =>
 
 const read_markdown_files = ( error, file = "" ) =>
 {
-    if( error ) throw new Error( error );
+    if( error ) 
+    {
+        throw new Error( error );
+    }
     // Add templates
     fs.readFile( "src/template.html", "utf8", (error, template) =>
     {
-        if( error ) throw new Error( error );
+        if( error ) 
+        {
+            throw new Error( error );
+        }
         parse_html({ file, template });
     });
 };
 
-const parse_html = ({ file = "", template = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><title>Hello</title></head><body></body></html>' }) =>
+const parse_html = ({ file = "", template = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\" /><title>Hello</title></head><body></body></html>" }) =>
 {
     const text_should_replaced = "<!-- THE MD PARSER PARSES HERE -->";
     const parsed_md_text = md.render( file );
@@ -50,7 +65,10 @@ const create_new_file = ( new_text = "" ) =>
 {
     fs.writeFile( "docs/template.html", new_text, (error, data) =>
     {
-        if( error ) throw new Error( error );
+        if( error ) 
+        {
+            throw new Error( error );
+        }
         console.log( data );
     });
 };
