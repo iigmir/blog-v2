@@ -1,39 +1,22 @@
+const fs = require( "fs" );
+const read_file = ( file_path = "" ) => new Promise( ( resolve, reject ) =>
+    fs.readFile( file_path, "utf8", ( error, md_file ) =>
+    {
+        if( error ) reject( new Error( error ) );
+        resolve( md_file );
+    }
+    )
+);
+const read_array_file = ( input = [] ) => Promise.all( input ).then( x => x );
+
 const config_source = require( "./test-suits/config.json" );
 const config =  config_source;
 const directory_files = [ "test.spec.md", ];
 const source_markdowns = [ `# Test\n\nHello\n`, ];
-const template = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-</head>
-<body>
-    <main>
-        <!-- THE MD PARSER PARSES HERE -->
-    </main>
-</body>
-</html>
-`;
-const parsed_htmls = [
-    `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-</head>
-<body>
-    <main>
-        <h1>Test</h1>
-<p>Hello</p>
-
-    </main>
-</body>
-</html>
-`
-];
+const template = read_file( "test/test-suits/template.spec.html" );
+const parsed_htmls = read_array_file( [
+    read_file( "test/test-suits/expected.html" )
+] );
 
 module.exports = {
     config,

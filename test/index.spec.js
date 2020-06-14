@@ -31,7 +31,7 @@ describe( "StaticSiteGenerator", () =>
         const app = new StaticSiteGenerator();
         await app.set_config( config_path );
         await app.set_template();
-        assert.deepStrictEqual( await app.template, expected.template );
+        assert.deepStrictEqual( await app.template, await expected.template );
     } );
     it( "should get parsed HTMLs by template and source markdowns", async() =>
     {
@@ -39,7 +39,7 @@ describe( "StaticSiteGenerator", () =>
         await app.set_config( config_path );
         await app.read_directory();
         await app.set_template();
-        assert.deepStrictEqual( await app.parsed_htmls, expected.parsed_htmls );
+        assert.deepStrictEqual( await app.parsed_htmls, await expected.parsed_htmls );
     } );
     /*
     describe( "main function", () =>
