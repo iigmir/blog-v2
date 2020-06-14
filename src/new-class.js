@@ -13,6 +13,9 @@ class StaticSiteGenerator
     config = {};
     directory_files = [];
     template = "";
+    /**
+     * @returns {Array} - Markdown texts by file
+     */
     get source_markdowns()
     {
         // https://flaviocopes.com/javascript-async-await-array-map
@@ -38,6 +41,9 @@ class StaticSiteGenerator
         }
         return [];
     }
+    /**
+     * @returns {Array} - HTML texts with parsed Markdown HTML
+     */
     get parsed_htmls()
     {
         return ( async() =>
@@ -124,6 +130,27 @@ class StaticSiteGenerator
             {
                 return error_handling( error_1 );
             }
+        }
+    }
+    async write_files()
+    {
+        const { config, directory_files } = this;
+        const parsed_htmls = await this.parsed_htmls;
+        const can_parse = config.destination_directory &&
+            directory_files.length > 0 &&
+            parsed_htmls.length > 0
+        ;
+        if( can_parse )
+        {
+            directory_files.forEach( ( md_name, md_index ) =>
+            {
+                const file_name = config.destination_directory + "/" + md_name.replace( /.md$/g, ".html" );
+                const file_data = parsed_htmls[md_index];
+                fs.writeFile( file_name, file_data, "utf8", ( err ) => 
+                {
+                    if ( err ) throw err;
+                } );
+            } );
         }
     }
     async main( config_path = "src/config.json" )

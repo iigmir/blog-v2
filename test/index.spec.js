@@ -41,6 +41,14 @@ describe( "StaticSiteGenerator", () =>
         await app.set_template();
         assert.deepStrictEqual( await app.parsed_htmls, await expected.parsed_htmls );
     } );
+    it( "should write parsed HTMLs to specified destination directory", async() =>
+    {
+        const app = new StaticSiteGenerator();
+        await app.set_config( config_path );
+        await app.read_directory();
+        await app.set_template();
+        assert.doesNotThrow( async() => await app.write_files(), Error );
+    } );
     /*
     describe( "main function", () =>
     {
