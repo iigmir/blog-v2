@@ -1,4 +1,4 @@
-const StaticSiteGenerator = require( "../src/new-class.js" );
+const StaticSiteGenerator = require( "../lib/index.js" );
 const expected = require( "./expect-cases.js" );
 const assert = require( "assert" );
 
