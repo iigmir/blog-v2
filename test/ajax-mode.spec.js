@@ -1,11 +1,11 @@
+/*
 const StaticSiteGenerator = require( "../lib/index.js" );
-const expected = require( "./test-suits/expect-cases.js" );
+const expected = require( "./ajax-mode-suits/expect-cases.js" );
 const assert = require( "assert" );
 
-const config_path = "test/test-suits/config.json";
-const test_main_function = true;
+const config_path = "test/ajax-mode-suits/config.json";
 
-describe( "StaticSiteGenerator", () =>
+describe( "StaticSiteGenerator in AJAX mode", () =>
 {
     it( "should get the config by input", async() =>
     {
@@ -65,3 +65,4 @@ describe( "StaticSiteGenerator", () =>
         });
     });
 });
+*/

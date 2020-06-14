@@ -1,0 +1,7 @@
+{
+    "mode": "ajax",
+    "source_directory": "https://api.github.com/repos/iigmir/blog-source/contents/new-articles",
+    "template_file": "test/test-suits/template.spec.html",
+    "destination_directory": "test/ajax-mode-suits/docs",
+    "replaced_text": "<!-- THE MD PARSER PARSES HERE -->"
+}
