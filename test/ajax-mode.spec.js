@@ -5,8 +5,9 @@ const assert = require( "assert" );
 const config_path = "test/ajax-mode-suits/config.json";
 const test_main_function = false;
 
-describe( "StaticSiteGenerator in AJAX mode", () =>
+describe( "StaticSiteGenerator in AJAX mode", function()
 {
+    this.timeout( 300000 );
     it( "should get the config by input", async() =>
     {
         const app = new StaticSiteGenerator();
