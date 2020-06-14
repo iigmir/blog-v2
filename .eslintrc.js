@@ -34,7 +34,8 @@ module.exports = {
         ],
         "space-in-parens": [
             "error",
-            "always"
+            "always",
+            { "exceptions": [ "{}", "[]", "()" ] }
         ],
         "space-before-function-paren": [
             "error",
