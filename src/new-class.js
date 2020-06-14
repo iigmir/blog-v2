@@ -1,4 +1,6 @@
 const fs = require( "fs" );
+const MarkdownIt = require( "markdown-it" );
+const MDParser = new MarkdownIt();
 
 const error_handling = up =>
 {
@@ -24,10 +26,7 @@ class StaticSiteGenerator
                 return new Promise( ( resolve, reject ) =>
                     fs.readFile( fpath, "utf8", ( error, md_file ) =>
                     {
-                        if( error ) 
-                        {
-                            reject( new Error( error ) );
-                        }
+                        if( error ) reject( new Error( error ) );
                         resolve( md_file );
                     } )
                 );
@@ -38,6 +37,24 @@ class StaticSiteGenerator
             return Promise.all( main ).then( x => x );
         }
         return [];
+    }
+    get parsed_htmls()
+    {
+        return ( async() =>
+        {
+            const { config, template } = this;
+            const source_markdowns = await this.source_markdowns;
+            if( source_markdowns.length > 0 && config.replaced_text )
+            {
+                return source_markdowns.map( md_text =>
+                    template.replace(
+                        config.replaced_text,
+                        MDParser.render( md_text )
+                    )
+                );
+            }
+            return [];
+        } )();
     }
     async set_config( config_path = "src/config.json" )
     {

@@ -6,33 +6,41 @@ const config_path = "test/test-suits/config.json";
 
 describe( "StaticSiteGenerator", () =>
 {
-    it( "should get the config by input", async () =>
+    it( "should get the config by input", async() =>
     {
         const app = new StaticSiteGenerator();
         await app.set_config( config_path );
         assert.deepStrictEqual( app.config, expected.config );
-    });
-    it( "should get the directory files by config", async () =>
+    } );
+    it( "should get the directory files by config", async() =>
     {
         const app = new StaticSiteGenerator();
         await app.set_config( config_path );
         await app.read_directory();
         assert.deepStrictEqual( app.directory_files, expected.directory_files );
-    });
-    it( "should get source markdowns by config", async () =>
+    } );
+    it( "should get source markdowns by config", async() =>
     {
         const app = new StaticSiteGenerator();
         await app.set_config( config_path );
         await app.read_directory();
         assert.deepStrictEqual( await app.source_markdowns, expected.source_markdowns );
-    });
-    it( "should get HTML template by config", async () =>
+    } );
+    it( "should get HTML template by config", async() =>
     {
         const app = new StaticSiteGenerator();
         await app.set_config( config_path );
         await app.set_template();
         assert.deepStrictEqual( await app.template, expected.template );
-    });
+    } );
+    it( "should get parsed HTMLs by template and source markdowns", async() =>
+    {
+        const app = new StaticSiteGenerator();
+        await app.set_config( config_path );
+        await app.read_directory();
+        await app.set_template();
+        assert.deepStrictEqual( await app.parsed_htmls, expected.parsed_htmls );
+    } );
     /*
     describe( "main function", () =>
     {
@@ -50,4 +58,4 @@ describe( "StaticSiteGenerator", () =>
         });
     });
     */
-});
+} );
