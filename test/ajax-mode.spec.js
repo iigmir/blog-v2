@@ -1,9 +1,9 @@
-/*
 const StaticSiteGenerator = require( "../lib/index.js" );
 const expected = require( "./ajax-mode-suits/expect-cases.js" );
 const assert = require( "assert" );
 
 const config_path = "test/ajax-mode-suits/config.json";
+const test_main_function = false;
 
 describe( "StaticSiteGenerator in AJAX mode", () =>
 {
@@ -65,4 +65,4 @@ describe( "StaticSiteGenerator in AJAX mode", () =>
         });
     });
 });
-*/
+
