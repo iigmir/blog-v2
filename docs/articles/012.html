@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>ckeditor without precompiled</h1>
+<p>&lt;p&gt;本來的編輯器只有 HTML 加上數個 HTML 標籤插入鈕。這樣其實不太方便。所以我想用 ckeditor。&lt;/p&gt;
+&lt;p&gt;運氣不錯的是，&lt;a href=&quot;https://github.com/galetahub/ckeditor&quot;&gt;ckeditor 有 gem 能用&lt;/a&gt;。我看著官方教程，以及 &lt;a href=&quot;http://mariahavefun.logdown.com/posts/774943-ckeditor-installation-of-blood-and-tears&quot;&gt;maria 的程式&lt;/a&gt;……然後就在我的上建好了！真叫人開心，&lt;/p&gt;
+&lt;p&gt;真叫人開心，這麼簡單，佈署很快就能完成了。讚。&lt;/p&gt;
+&lt;p&gt;……你以為這樣就能完成了？才不呢！&lt;/p&gt;
+&lt;p&gt;到了上線以後，才是麻煩的開始。整個 ckeditor 根本沒有東西載入。&lt;/p&gt;
+&lt;p&gt;瀏覽器是這麼寫的：&lt;code&gt;The resource from “https://iismmx-rails-blog.herokuapp.com/” was blocked due to MIME type mismatch (X-Content-Type-Options: nosniff).&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;MIME 是啥？簡單查了一下，姑且當作檔案類型吧：整個檔案類型似乎不對。看了訊息，有兩個 ckeditor 檔案是 301：也就是永遠移動了。因為我設定只要找不到的檔案，就會導回首頁，所以我會把它當成 404。&lt;/p&gt;
+&lt;p&gt;對。&lt;strong&gt;找不到這兩個檔案&lt;/strong&gt;。所以我又去查了一下，&lt;strong&gt;是因為某些檔案在上線後，不會被 precompile&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;precompile？啥？是我的話，我會翻成預先編譯。&lt;/p&gt;
+&lt;p&gt;為什麼？目前不知道了。官方手冊說要加上這行：&lt;code&gt;Rails.application.config.assets.precompile += %w( ckeditor/* )&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;然而這並沒有什麼卵用。&lt;/p&gt;
+&lt;p&gt;好吧。看到也有人碰上類似的問題，就覺得胃好痛。&lt;/p&gt;
+&lt;p&gt;也許我該考慮去其他網站用 ckeditor，之後再複製貼上？&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;參考資料：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;logdown
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;http://mariahavefun.logdown.com/posts/774943-ckeditor-installation-of-blood-and-tears&quot;&gt;Maria&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://xtony77.logdown.com/posts/210308-rails-notes-ckeditor-interface-is-not-displayed-uploaded-file-failed-on-rails-4-production&quot;&gt;xtony77&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;Stack Overflow
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/35578067/ckeditor-with-rails-4-mime-type-error&quot;&gt;CKeditor with Rails 4 mime type error&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/19777316/problems-with-ckeditor-running-on-production-rails-application-with-heroku&quot;&gt;Problems with ckeditor running on production Rails application with Heroku&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/galetahub/ckeditor/issues/714&quot;&gt;Github issue #714&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</p>
+<hr>
+<p>2018/01/03 後記：新版改用 Markdown 格式，不再使用 ckeditor。</p>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>this is sparta</h1>
+<p>&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/wzqXggZU3eE&quot; frameborder=&quot;0&quot; allow=&quot;autoplay; encrypted-media&quot; allowfullscreen&gt;&lt;/iframe&gt;</p>
+<p>大多數情況下，<code>this</code> 是由「<a href="https://ithelp.ithome.com.tw/articles/10193193">在哪裡呼叫</a>」決定的。大多數情況下 <code>this</code> 是全域物件（在瀏覽器就是 <code>Window</code>，因為大多數時候，最開始的呼叫就是從 <code>Window</code> 開始 ），除非：</p>
+<ol>
+<li>由 <code>bind</code> or <code>apply</code> 綁定指定參數，那 <code>this</code> 就是被指定的參數。</li>
+<li>由 <code>new</code> 產生新物件，那 <code>this</code> 就是該新物件。</li>
+<li>該函式在某個物件內，那 <code>this</code> 就是該物件。</li>
+</ol>
+<p>另外，在嚴謹模式（strict mode）下，「在哪裡呼叫」的規則會嚴格執行：很多只有呼叫函式的寫法，其實是省略了 <code>Window</code> 這個（全域變數）主詞。也就是說，<code>foo()</code> 呼叫，其實該寫成 <code>Window.foo()</code>。如果沒有這主詞，你就會看到一個 <code>undefined</code>。</p>
+<p>對了，在嚴謹模式，你可能想這麼玩：</p>
+<pre><code class="language-javascript">function foo()
+{
+  &quot;use strict&quot;;
+  this.foo = &quot;Bar&quot;;
+  return this;
+}
+console.log( undefined.foo() ); // TypeError: undefined has no properties
+</code></pre>
+<p>undefined: <a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Errors/No_properties">但我拒絕，我 undefined 最喜歡做的一件事，就是對自以為能玩壞我的傢伙說「不」！</a></p>
+<hr>
+<pre><code class="language-javascript">var all_prop = function(ap){ return ap.prop; };
+var another_prop = function(){ return this.prop; };
+
+var test = {
+  //&quot;use strict&quot;;
+  prop: 42,
+  func: function() {
+    return this.prop;
+  },
+  f:all_prop(this),
+  fu:another_prop()
+};
+
+console.log(test.fu());
+console.log(test.f());
+// expected output: 42
+// But actually is: &quot;Error: test.fu is not a function&quot;
+</code></pre>
+<p>問題：為什麼不能呼叫 <code>test.fu()</code> 或是呼叫 <code>test.f()</code>？</p>
+
+    </main>
+</body>
+</html>

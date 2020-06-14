@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>旭川の配線は、少しに無茶苦茶です。</h1>
+<p>&lt;p&gt;今天為了修改部落格的一點 CSS 架構，所以又去參考了一下&lt;a href=&quot;https://ihower.tw/rails/assets-pipeline.html&quot;&gt;實戰聖經的 Asset Pipeline 章節&lt;/a&gt;。&lt;/p&gt;
+&lt;blockquote&gt;Rails 產生 controller 檔案時，也會產生一個同名的 &lt;code&gt;.coffee&lt;/code&gt; 和 &lt;code&gt;.scss&lt;/code&gt; 檔案，這沒有什麼實際的用途，它並不是說該 controller 的頁面才會執行該 js 和 css。建議可以砍掉這個檔案，自己安排 js 和 css 的檔案即可。&lt;/blockquote&gt;
+&lt;p&gt;這段話也不能說錯。不過，事實上 rails 是可以讓只有某 controller 的頁面下，執行對應 JS 和 CSS 的。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://guides.rubyonrails.org/asset_pipeline.html#how-to-use-the-asset-pipeline&quot;&gt;指引看來不難&lt;/a&gt;，就針對 JS 使用 &lt;code&gt;&lt;%= javascript_include_tag params[:controller] %&gt;&lt;/code&gt; 而 CSS 使用 &lt;code&gt;&lt;%= stylesheet_include_tag params[:controller] %&gt;&lt;/code&gt; 這樣。&lt;/p&gt;
+&lt;p&gt;那就在 app/views/layouts/application.html.erb 加入 &lt;code&gt;&lt;%= javascript_include_tag params[:controller] %&gt;&lt;/code&gt; 看看吧。&lt;/p&gt;
+&lt;pre&gt;Sprockets::Rails::Helper::AssetNotPrecompiled in Home#index</p>
+<p>Asset was not declared to be precompiled in production.
+Add <code>Rails.application.config.assets.precompile += %w( articles.js )</code> to <code>config/initializers/assets.rb</code> and restart your server
+&lt;/pre&gt;
+&lt;p&gt;很明顯，我們需要一點施工：&lt;/p&gt;
+&lt;blockquote&gt;When using asset precompilation, you will need to ensure that your controller assets will be precompiled when loading them on a per page basis. By default .coffee and .scss files will not be precompiled on their own. See Precompiling Assets for more information on how precompiling works.&lt;/blockquote&gt;
+&lt;p&gt;理由是 &lt;code&gt;.coffee&lt;/code&gt; 和 &lt;code&gt;.scss&lt;/code&gt; 檔案都不是 HTML 能讀取的 JS 和 CSS 檔案：&lt;code&gt;.coffee&lt;/code&gt; 要透過 &lt;a href=&quot;http://coffeescript.org&quot;&gt;CoffeeScript&lt;/a&gt; 編譯成 JS 檔案、而 &lt;code&gt;.scss&lt;/code&gt; 則要依賴 &lt;a href=&quot;http://sass-lang.com&quot;&gt;SASS&lt;/a&gt; 編譯成 CSS 檔案。&lt;/p&gt;
+&lt;p&gt;趕緊去 &lt;code&gt;config/initializers/assets.rb&lt;/code&gt; 加上 &lt;code&gt;Rails.application.config.assets.precompile += %w( articles.js )&lt;/code&gt; 後重新開機吧。&lt;/p&gt;
+&lt;p&gt;現在，你應該可以用 CoffeeScript 與 SASS 來寫程式了。&lt;/p&gt;
+&lt;p&gt;當然，如果你習慣其他預處理器如 &lt;a href=&quot;https://github.com/metaskills/less-rails&quot;&gt;LESS&lt;/a&gt; 或 &lt;a href=&quot;https://github.com/typescript-ruby/typescript-rails&quot;&gt;TypeScript&lt;/a&gt;，rails 也有對應的 gem 完成你的願望。&lt;/p&gt;
+&lt;p&gt;Ref:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Stack Overflow: &lt;a href=&quot;https://stackoverflow.com/questions/9245228/how-do-i-use-controller-specific-stylesheets-in-rails-3-2-1&quot;&gt;How do I use Controller specific stylesheets in Rails 3.2.1?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;Railsguides: &lt;a href=&quot;http://guides.rubyonrails.org/asset_pipeline.html#controller-specific-assets&quot;&gt;Controller Specific Assets&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;Ruby on Rails 實戰聖經：&lt;a href=&quot;https://ihower.tw/rails/assets-pipeline.html&quot;&gt;Asset Pipeline&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</p>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>nginx worker_connections are not enough</h1>
+<p>I set my nginx for my Mac for developing. However, it goes <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500">500</a>.</p>
+<p>I read access log, gosh, about ten thousand access log there. &lt;br /&gt;
+Then, I read error log, it said:</p>
+<p>&lt;pre&gt;
+2018/05/05 15:05:35 [alert] 1346#0: 20000 worker_connections are not enough
+2018/05/05 15:05:35 [error] 1346#0: *86966 kevent() reported about an closed connection (54: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost, request: &quot;GET /phpinfo.php HTTP/1.0&quot;, upstream: &quot;http://127.0.0.1:80/phpinfo.php&quot;, host: &quot;127.0.0.1&quot;, referrer: &quot;http://127.0.0.1/&quot;
+&lt;/pre&gt;</p>
+<p>Okay, then, why? I read <a href="https://stackoverflow.com/questions/28265717/worker-connections-are-not-enough">Stack overflow</a> and <a href="http://www.netingcn.com/nginx-proxy-error-500.html">netingcn</a>, found that 500 error may because nginx stuck in infinity loop.</p>
+<p>I found my nginx.conf, there are two <code>location ~ \.php$</code> nginx.conf. One is:</p>
+<p>&lt;pre&gt;
+location ~ .php$ {
+proxy_pass   http://127.0.0.1;
+}
+&lt;/pre&gt;</p>
+<p>Looks like it self-reference? So I comment this. Now there's no <code>nginx worker_connections are not enough</code> more.</p>
+<p>And, refer <a href="https://unix.stackexchange.com/questions/108174/how-to-persistently-control-maximum-system-resource-consumption-on-mac">How to persistently control maximum system resource consumption on Mac</a> in Unix &amp; Linux Stack Exchange.</p>
+
+    </main>
+</body>
+</html>

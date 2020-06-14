@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>Vuing order</h1>
+<p>There's a bug really disturb me today:</p>
+<pre><code>vue.js:1023 [Vue warn]: Unknown custom element &lt;foobar&gt;: - did you register the component correctly? For recursive components, make sure to provide the &quot;name&quot; option.
+</code></pre>
+<p>Looks easy, right? But I cannot find where the bug occurs, because it looks something like this:</p>
+<pre><code class="language-javascript">import foobar from &quot;./foobar.vue&quot;;
+
+export default {
+    components: {
+        foobar
+    },
+    data() {},
+    methods: {},
+    components: {},
+};
+</code></pre>
+<p>Yes, someone puts <code>components</code> instance at the bottom of component. In convention however, <code>components</code> instance <a href="https://vuejs.org/v2/style-guide/#Priority-C-Rules-Recommended-Minimizing-Arbitrary-Choices-and-Cognitive-Overhead">should be on top</a>.</p>
+<p>I don't know what to say. Why linting tool doesn't tell me?</p>
+<p>Anyway, by convention, you should order like this:</p>
+<pre><code>export default {
+    // Side Effects
+    el: &quot;&quot;,
+    // Global Awareness
+    name: &quot;&quot;,
+    parent: &quot;&quot;,
+    // Component Type
+    functional: false,
+    // Template Modifiers
+    delimiters: [&quot;${&quot;, &quot;}&quot;],
+    comments: false,
+    // Template Dependencies
+    components: {},
+    directives: {},
+    filters: {},
+    // Composition
+    extends: {},
+    mixins: [],
+    // Interface
+    inheritAttrs: true,
+    model: {},
+    props: {},
+    propsData: {},
+    // Local State
+    data() { return {}; },
+    computed: {},
+    // Events
+    watch: {},
+    beforeCreate() {},
+    created() {},
+    beforeMount() {},
+    mounted() {},
+    beforeUpdate() {},
+    updated() {},
+    activated() {},
+    deactivated() {},
+    beforeDestroy() {},
+    destroyed() {},
+    // Non-Reactive Properties
+    methods: {},
+    // Rendering (the declarative description of the component output)
+    template: &quot;&quot;,
+    render (h) { return h(); },
+    renderError (h, err) { return h(&quot;pre&quot;, { style: { color: &quot;red&quot; }}, err.stack) }
+};
+</code></pre>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>爬蟲程式 Takami 的感想文</h1>
+<p><a href="https://github.com/iigmir/Takami">作品展示</a>。另外，取名為 Takami 的原因，是 LoveLive Sunshine 的主角<a href="http://love-live.wikia.com/wiki/Chika_Takami">高海千歌</a>。</p>
+<p>一切是因為看了<a href="https://ithelp.ithome.com.tw/users/20107159/ironman/1325">鐵人賽</a>的文章才想到的：看了鐵人賽的文章，才發現爬蟲沒有我想像中的那麼困難：無非就是發出請求、擷取回應、針對回應抓取文字。</p>
+<p>身為一位 Love Liver 平時興趣聽 <a href="http://love-live.wikia.com">Love Live</a> 的歌也很正常。但是，如果每首歌都要搜尋、複製、貼上的話…我曾經做過，那是個酷刑……</p>
+<p>看了鐵人賽的文章，我想自己應該也能做一個。</p>
+<p>所以就開始吧。用 <a href="http://love-live.wikia.com/wiki/Aozora_Jumping_Heart">Aozora Jumping Heart</a> 來做示範。</p>
+<p>如果想聽音樂，我們的行為將是點選 Audio 裡面那個稱為 <img src="http://vignette2.wikia.nocookie.net/emoticon-bank/images/6/61/AqoursPlay.png" alt="Aqours"> 的按鈕。</p>
+<p>那麼，它怎麼玩呢？難道是給 JSON API 嗎？</p>
+<p>網路告訴我它直接給了 <code>.ogg</code> 檔案播放，沒有 <code>.json</code> 檔案被傳送。這意味著，按鈕裡面很可能直接包含來源網址。</p>
+<p>那我們把網頁原始碼打開來看吧：</p>
+<pre><code class="language-html">&amp;lt;span class=&quot;ogg_custom aqours&quot;&amp;gt;
+    &amp;lt;div id=&quot;ogg_player_1&quot; class=&quot;ogg_player&quot;&amp;gt;
+        &amp;lt;div&amp;gt;
+            &amp;lt;button onclick=&quot;if (typeof(wgOggPlayer)&amp;nbsp;!= 'undefined') wgOggPlayer.init(false, {&amp;quot;id&amp;quot;:&amp;quot;ogg_player_1&amp;quot;,&amp;quot;videoUrl&amp;quot;:&amp;quot;https://vignette.wikia.nocookie.net/love-live/images/e/e6/Aozora_Jumping_Heart.ogg/revision/latest?cb=20160716075746&amp;quot;,&amp;quot;width&amp;quot;:180,&amp;quot;height&amp;quot;:35,&amp;quot;length&amp;quot;:284,&amp;quot;linkUrl&amp;quot;:&amp;quot;/wiki/File:Aozora_Jumping_Heart.ogg&amp;quot;,&amp;quot;isVideo&amp;quot;:false});&quot; style=&quot;width: 180px; text-align: center&quot; title=&quot;Play sound&quot;&amp;gt;&amp;lt;img src=&quot;/extensions/OggHandler/play.png&quot; alt=&quot;Play sound&quot; width=&quot;22&quot; height=&quot;22&quot;&amp;gt;&amp;lt;/button&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div&amp;gt;
+            &amp;lt;a href=&quot;/wiki/File:Aozora_Jumping_Heart.ogg&quot; class=&quot;image&quot; title=&quot;About this file&quot;&amp;gt;&amp;lt;img src=&quot;/extensions/OggHandler/info.png&quot; alt=&quot;Aozora Jumping Heart&quot; width=&quot;22&quot; height=&quot;22&quot;&amp;gt;&amp;lt;/a&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/span&amp;gt;
+</code></pre>
+<p>注意一下 <code>&lt;button&gt;</code> 裡面的標籤：</p>
+<pre><code class="language-html">onclick=&quot;if (typeof(wgOggPlayer) != 'undefined') wgOggPlayer.init(false, {&quot;id&quot;:&quot;oggplayer1&quot;,&quot;videoUrl&quot;:&quot;https://vignette.wikia.nocookie.net/love-live/images/e/e6/AozoraJumpingHeart.ogg/revision/latest?cb=20160716075746&quot;,&quot;width&quot;:180,&quot;height&quot;:35,&quot;length&quot;:284,&quot;linkUrl&quot;:&quot;/wiki/File:AozoraJumpingHeart.ogg&quot;,&quot;isVideo&quot;:false});&quot;
+</code></pre>
+<p>裡面放了個有趣的執行程式：<code>wgOggPlayer.init()</code>。如果你用除錯器（在開發工具內，針對 <code>onclick</code> 屬性的程式碼輸入 <code>debugger</code>，也就是 <code>onclick=&quot; debugger; if (typeof(</code>，除錯器就會在開發工具啟動時開始跑除錯器）去追蹤這段程式碼，它會把你帶往一個 JavaScript 的頁面。</p>
+<p>那個程式要幹嘛不重要，重要的是裡面有個東西叫做 <code>videoUrl</code>，它有我們需要的東西：
+&lt;pre&gt;
+https://vignette.wikia.nocookie.net/love-live/images/e/e6/AozoraJumpingHeart.ogg/revision/latest?cb=20160716075746
+&lt;/pre&gt;</p>
+<p>於是，我們知道了。追這個 <code>&lt;button&gt;</code> 標籤裡面的東西準沒錯。</p>
+<p>不過，它好像不能用 jQuery 的 <code>$(&quot;button&quot;)</code> 叫出來啊……怎麼辦呢？</p>
+<p>你想到了嗎？<code>$(&quot;span.ogg_custom &quot;).html()</code> 啊。這樣就能以字串的形式，叫出裡面的 HTML 了。抓到以後，用<a href="http://regexr.com">正規表達式</a>抓文字不就好了？</p>
+<p>我看了幾個檔案，我想我需要這樣：<code>https://vignette.wikia.nocookie.net/love-live/images/（都可以）/（都可以）/（都可以）.ogg/</code></p>
+<p>如果要這樣匹配的話，我們的正規表達式就需要這樣：<code>/(https:\/\/vignette.wikia.nocookie.net\/love-live\/images)\/(.*)\/(.*)\/(.*).ogg\//g</code></p>
+<ol>
+<li>那個看起來像是 V 的 <code>\/</code> 是 <code>/</code> 的跳脫字元，因為 <code>/</code> 本身就有表達意義。</li>
+<li><code>(.*)</code> 是一組匹配查詢，它會匹配所有字詞直到斷行、或是為止該組匹配查詢碰上某個東西為止：例如 <code>(.*)\/</code> 就是匹配所有字詞、直到 <code>/</code> 為止。</li>
+</ol>
+<p>最後就是讀 URL 了：拿到歌曲 URL 以後，就可以讀取 URL 裡面 <code>span.ogg_custom</code> 的 DOM 了。</p>
+<p>不過有點小插曲：我們用的 <code>request</code> 套件，它請求是非同步的，所以基本上是先到先贏，而不按照順序。如果順序會亂跳的話，又要怎麼知道第幾首呢？</p>
+<p>索性也不難：在迴圈裡面加個變數檢查就好。</p>
+<p>好的，就這樣完成了。</p>
+
+    </main>
+</body>
+</html>

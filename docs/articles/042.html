@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>2018/03/12 面試題目</h1>
+<p>這次的面試很開心，回答得算順利，面試者也認為有專業。</p>
+<p>雖然我不清楚面試者如何對他不熟悉的領域，聽出有沒有理解就是了。</p>
+<h2>你的工作經驗？</h2>
+<p>維護該公司的系統、導入一些小套件、寫新的頁面。
+那個公司的系統很舊，所以我都是用 jQuery 與後端 helper 完成事情。</p>
+<h2>Vue 做什麼的？</h2>
+<p>在 jQuery 的時代，資料呈現是以 DOM element 為單位：這種情況下，如果要更換資料，就會以 DOM element 操作為主。
+例如我想要輸入 input 時把資料呈現的話，在 jQuery 就會這樣寫：</p>
+<p>&lt;pre&gt;
+&lt;div id=&quot;app&quot;&gt;
+&lt;input class=&quot;foo&quot;&gt;&lt;br /&gt;
+&lt;span class=&quot;bar&quot;&gt;&lt;/span&gt;&lt;br /&gt;
+&lt;span class=&quot;baz&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;</p>
+<p>$(&quot;.foo&quot;).keypress(function()
+{
+var the_text = $(&quot;.foo&quot;).val();
+$(&quot;.bar&quot;).text(the_text);
+$(&quot;.baz&quot;).text( &quot;輸入了&quot; + the_text);
+});
+&lt;/pre&gt;</p>
+<p>但萬一我要改動 DOM element 的話，就會是惡夢一場。</p>
+<p>在雙向綁定的 Vue 就不同了，你可以這樣寫：</p>
+<p>&lt;pre&gt;
+&lt;div id=&quot;app&quot;&gt;
+&lt;input clas=&quot;foo&quot; v-model=&quot;foo_m&quot;&gt;&lt;br /&gt;
+&lt;span class=&quot;bar&quot;&gt; {{ foo_m }} &lt;/span&gt;&lt;br /&gt;
+&lt;span class=&quot;baz&quot;&gt; {{ &quot;輸入了&quot; + foo_m }} &lt;/span&gt;
+&lt;/div&gt;</p>
+<p>var app = new Vue({
+data:{ foo_m : &quot;&quot; },
+method:{  }
+})
+&lt;/pre&gt;</p>
+<p>整個程式碼就會整潔許多。</p>
+<ul>
+<li><a href="https://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000/00147574857851718682c42639f466a934ad9d4f485d1f2000">廖雪峰的官方网站：双向绑定</a></li>
+<li><a href="https://yami.io/jquery-to-vuejs/">脫離資料分散的問題，從 jQuery 換到 Vue.js</a></li>
+<li><a href="http://www.h5w3.com/?p=836">已经在用jquery了，为什么还要使用Vue.js？</a></li>
+</ul>
+<h2>如果要驗證資料，例如身份證號碼，要怎麼做？</h2>
+<ol>
+<li>HTML 有 <code>pattern</code> 或是 <code>type</code> 屬性可以做最簡單的驗證。</li>
+<li>當然我可以繞過 HTML 驗證，所以還需要 JavaScript 驗證。</li>
+<li>然而用戶端還是有辦法[繞過 JavaScript 驗證](https://www.google.com.tw/search?q=繞過 JavaScript 驗證)。因此，不管前端做得再全，後端還是要驗證。</li>
+<li>身份證號碼就第一位是字母、第二位是 1 或 2、最後是檢查碼。併此指名。</li>
+</ol>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input">MDN</a></li>
+</ul>
+<h2>如果我給一個 JSON API，你如何把它變成網頁表格的資料？</h2>
+<p>假設在 Vue 的話：</p>
+<pre><code class="language-html">&amp;lt;table&gt;
+    &amp;lt;thead&gt;
+        &amp;lt;tr&gt;
+            &amp;lt;td&gt;ID&amp;lt;/td&gt;
+            &amp;lt;td&gt;Name&amp;lt;/td&gt;
+            &amp;lt;td&gt;Account&amp;lt;/td&gt;
+        &amp;lt;/tr&gt;
+    &amp;lt;/thead&gt;
+    &amp;lt;tbody&gt;
+        &amp;lt;tr v-for=&quot;(value, key, index) in i_ajax&quot; :key=&quot;i.id&quot;&gt;
+            &amp;lt;td&gt; {{ index }} &amp;lt;/td&gt;
+            &amp;lt;td&gt; {{ value.name }} &amp;lt;/td&gt;
+            &amp;lt;td&gt; {{ value.account }} &amp;lt;/td&gt;
+        &amp;lt;/tr&gt;
+    &amp;lt;/tbody&gt;
+&amp;lt;/table&gt;
+</code></pre>
+<ul>
+<li><a href="https://vuejs.org/v2/guide/list.html">List Rendering</a></li>
+</ul>
+<h2>一個表單，從送出去到回應，中間發生什麼事？</h2>
+<ol>
+<li>首先會執行前端驗證。</li>
+<li>接著瀏覽器會發出一段 Request。</li>
+<li>這個 Request 會跑到伺服器執行。</li>
+<li>伺服器執行完畢一定會給個 Reponse。</li>
+<li>瀏覽器再針對 Reponse 做對應動作。</li>
+</ol>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-TW/docs/Learn/Getting_started_with_the_web/How_the_Web_works">MDN</a></li>
+<li><a href="https://github.com/alex/what-happens-when">alex/what-happens-when</a></li>
+</ul>
+<h2>你對後端 PHP 的理解？</h2>
+<p>我寫過幾次原生 PHP，用原生的 echo 手刻，但發現這樣寫會很恐怖。我之後接觸過 Laravel 還有 Ruby on Rails。知道如何用後端 helper 或是 RESTful 或是 API 之類的東西產生網頁、也理解什麼是 MVC。</p>
+<h2>什麼是 RESTful？</h2>
+<p>假設我有 <code>foo.bar/3</code> 這個網址，它其實就是個資源（Resource）。這個名詞，對應的就是 <code>foo.bar</code> 的第 <code>3</code> 個資源。再透過 HTTP 的 <code>GET</code> <code>POST</code> <code>PATCH</code> <code>DELETE</code> 完成對應的 CRUD。</p>
+<ul>
+<li><a href="https://iismmx-rails-blog.herokuapp.com/articles/34">2018/01/15 面試題目</a></li>
+<li><a href="https://developer.mozilla.org/zh-TW/docs/Glossary/REST">MDN</a></li>
+</ul>
+<h2>什麼是 MVC？</h2>
+<p>我目前的應徵的前端網頁，在整個框架就是對應到 MVC 的 View、接著 M 就是 Model，它掌管算法或是與資料庫的交互、最後 C 的 Controller 負責把這兩者結合在一起。</p>
+<h2>你平常如何找資料？用英文論壇嗎？</h2>
+<p>我會找官方手冊，接著找 Stack Overflow。完全沒有，就會去中文即時通訊軟體如 Line Telegram 之類的，因為它們能很快得到需要的回應。</p>
+<h2>你使用什麼版控？</h2>
+<blockquote>
+<p>「Git，你們該不會用 SVN？」 &lt;br /&gt; 「我的確是 SVN，不過我可以用 Git」</p>
+</blockquote>
+<h2>針對 RWD 你會用手刻？還是框架？</h2>
+<p>針對 RWD 我會以框架優先：因為框架速度快、大家都懂、也好維護。真的沒有辦法（例如查遍手冊都沒有正確用法）時，才會考慮手刻。</p>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>PHP 專案：PHP</h1>
+<p>設定好開發環境後，終於可以開始編寫了。就來寫物件導向的 PHP 吧。</p>
+<h2>關於方法</h2>
+<p>先簡單講講物件導向吧：我們會用抽象的 class 生產物件（object），然後在裡面呼叫無數個相似的方法（method）。因此，class 就是個生產物件的工廠；而方法則是每個透過 class 建立的物件，所內建的函式。</p>
+<pre><code class="language-PHP">class Water
+{
+    private function suger($secret)
+    {
+        return $secret;
+    }
+    public function h2o()
+    {
+        return 1;
+    }
+    public function coffine($contain)
+    {
+        return $contain;
+    }
+}
+
+$tea = new Water;
+$beer = new Water;
+$juice = new Water;
+
+// 在這裡，三個變數（$tea、$beer、$juice）都內建了 h2o 與 coffine 這兩個方法。
+
+// 那 suger 呢？這方法有趣了：它只能在 class 裡面被呼叫，在 class 以外呼叫會出錯：
+
+echo( $juice-&gt;suger(100) ); // Fatal error: Uncaught Error: Call to private method Water::suger()
+
+// 善加使用的話，就能貫徹物件導向的其中一個原則：封裝（Encapsulation）。
+
+</code></pre>
+<h2>靜態方法</h2>
+<p>class 是一個抽象的存在：在物件誕生前，你<em>理論上</em>沒辦法把方法叫出來。因此，像下面這麼作會出問題：</p>
+<pre><code class="language-PHP">// 承上
+$milk = Water-&gt;h2o(); // Deprecated: Non-static method Water::h2o() should not be called statically...
+$coke = Water::coffine(0.1); // Deprecated: Non-static method Water::coffine() should not be called statically...
+</code></pre>
+<p>這樣寫的話會出現 <a href="https://stackoverflow.com/questions/4684454">Non-static method should not be called statically 的警告</a>。有些還會直接壞掉，所以最好先宣告物件，再呼叫方法。</p>
+<p>好險 PHP 7 可以寫成這樣來同時建立物件、並呼叫方法： <code>$milk = (new Water)-&gt;h2o();</code></p>
+<h2>其他東西</h2>
+<ol>
+<li>如果想用相對路徑，請使用 <code>__DIR__</code> 關鍵字。</li>
+<li>想接 JSON API 的話，請使用 <code>file_get_contents()</code> 方法。對了，記得要用 <code>json_decode()</code> 方法，讓 PHP 能讀 JSON API 喔。</li>
+</ol>
+<p>好，結束囉。下次有空再寫吧。雖然以後應該沒有了。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://stackoverflow.com/questions/4684454">Error message Strict standards: Non-static method should not be called statically in php</a></li>
+<li><a href="https://stackoverflow.com/questions/41631623">How to call non-static method from static method of same class?</a></li>
+<li><a href="https://weisnote.blogspot.com/2012/08/static.html">一秒看破 static</a></li>
+<li><a href="https://thephp.cc/news/2017/07/dont-call-instance-methods-statically">Don't call instance methods statically</a></li>
+<li><a href="https://stackoverflow.com/questions/13898894/php-relative-paths-require">PHP - Relative paths “require”</a></li>
+<li><a href="https://stackoverflow.com/questions/5364233/php-fatal-error-failed-opening-required-file">PHP Fatal Error Failed opening required File</a></li>
+<li><a href="https://stackoverflow.com/questions/15617512/get-json-object-from-url">Get JSON object from URL</a></li>
+<li><a href="https://www.php.net/manual/en/function.file-get-contents.php">PHP: file_get_contents</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

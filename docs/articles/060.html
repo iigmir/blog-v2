@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>React 初探</h1>
+<p>剛把專案上線有點無聊、公司又在用 OKR 管理專案、另外我也想試試看 React 的東東，於是就花了大概三天，寫一個 <a href="https://iigmir.github.io/okr-table-by-react">OKR 管理的表格</a>...</p>
+<p>我沒有像以前那樣對 React 及 JSX 反感了、也多少感受到 React 對某些人的魅力：對某些很喜歡寫 JavaScript 的人來說，React 真的寫起來很有效率。但我還是覺得自己比較喜歡 Vue。另外外部的 CSS 框架語法好難搞。</p>
+<p>總之，來寫些我覺得有趣的東西吧。</p>
+<h2>JSX, Virtual DOM, or other so.</h2>
+<p>React 的 JSX：</p>
+<pre><code class="language-jsx">&lt;main className=&quot;foo&quot;&gt;
+    Hello
+    &lt;h1 onClick={ bar }&gt; { baz } &lt;/h1&gt;
+    there
+&lt;/main&gt;
+</code></pre>
+<p>其實就是以下語法的語法糖：</p>
+<pre><code class="language-javascript">React.createElement(
+    &quot;main&quot;,
+    { className: &quot;Foo&quot; },
+    &quot; Hello &quot;,
+    React.createElement(&quot;h1&quot;, { onClick: foo },&quot; &quot;, baz, &quot; &quot;),
+    &quot; there.&quot;
+);
+</code></pre>
+<p>這代表 HTML 的巢狀結構可以用 JavsScript 完成。</p>
+<h2>上下關係</h2>
+<p>與 Vue 一樣，React 可以用 <code>function</code> 關鍵字建構一個組件、並傳送數值給子組件。但如果想要這麼做，你需要用 <code>class</code> 語法。</p>
+<p>在 Vue 想傳上下值與事件，你可以在這麼寫：</p>
+<pre><code class="language-vue">&lt;!-- 父組件 --&gt;
+&lt;main class=&quot;foo&quot;&gt;
+    &lt;nav v-bind:propval=&quot;baz&quot; v-on:propevt&quot;whatever&quot; &gt;
+&lt;/main&gt;
+
+&lt;!-- 子組件 --&gt;
+&lt;li v-on:click=&quot;propevt&quot;&gt;{{ propval }}&lt;/li&gt;
+</code></pre>
+<p>React 差不多：</p>
+<pre><code class="language-jsx">&lt;!-- 父組件 --&gt;
+&lt;main className=&quot;foo&quot;&gt;
+    &lt;nav propval={ baz } propevt={ whatever } &gt;
+&lt;/main&gt;
+
+&lt;!-- 子組件 --&gt;
+&lt;li onClick={ this.propevt }&gt;{ this.props.propval }&lt;/li&gt;
+</code></pre>
+<p>但 React 需要使用 class 關鍵字並引入 props：</p>
+<pre><code class="language-javascript">class Foobar extends React.Component {
+    constructor(props)
+    {
+        super(props);
+        this.state = {
+            foobar: props.propval
+        };
+        this.propevt = props.propevt;
+    }
+};
+</code></pre>
+<p>constructor 與 super 都是 ES6 關鍵字，constructor 用來產生物件，super 則是取得父層面的物件。</p>
+<p>先寫到這邊吧。之後再寫。</p>
+
+    </main>
+</body>
+</html>

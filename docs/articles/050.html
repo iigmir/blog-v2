@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>在 Rails 使用 ES6</h1>
+<p>身為一位潮到不行der前端開發，使用 <a href="http://es6-features.org">ES6</a> 也是理所當然的事情。</p>
+<p>不過呢，身為後端的 Rails 可不一定就那麼潮：</p>
+<p>&lt;pre&gt;
+remote:        Running: rake assets:precompile
+remote:        rake aborted!
+remote:        Uglifier::Error: Unexpected token: operator (&gt;). To use ES6 syntax, harmony mode must be enabled with Uglifier.new(:harmony =&gt; true).
+&lt;/pre&gt;</p>
+<p>我想英文訊息已經很清楚了：如果你想用 ES6 語法，就要開啟 harmony 模式。</p>
+<p>嗯，真和諧。</p>
+<p>那怎麼做？錯誤訊息的 <a href="https://github.com/lautis/uglifier">Uglifier</a> 是個處理並壓縮 JavaScript 的程式。你需要下載他來用。首先，請輸入 <code>gem install uglifier</code> 安裝他。成功的話，去 <code>config/environments/production.rb</code>，也就是上線環境設定檔找到：</p>
+<pre><code class="language-ruby">config.assets.js_compressor = :uglifier
+</code></pre>
+<p>然後寫成：</p>
+<pre><code class="language-ruby">config.assets.js_compressor = Uglifier.new(harmony: true)
+</code></pre>
+<p>Rails 就能吃 ES6 語法了。</p>
+
+    </main>
+</body>
+</html>

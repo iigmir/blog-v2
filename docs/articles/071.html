@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>PHP 專案：Docker</h1>
+<p><a href="https://github.com/iigmir/php-blog">成果</a></p>
+<p>這專案我會分成幾篇來講。</p>
+<h2>緣起</h2>
+<p>最近發現<a href="https://iigmir.github.io/blog/#/">我的 Github 部落格</a>沒辦法開 <a href="https://support.mozilla.org/zh-TW/kb/firefox-reader-view-clutter-free-web-pages">Firefox 的閱讀模式</a>。看了下閱讀模式的算法，他需要原始碼本身，就載入完整的文章。而用純 API 接的部落格沒辦法這麼做。</p>
+<p>我檢查了一下，似乎可以用 SSR 渲染解決。但看了一堆後，我發覺還是用後端語言寫比較快。反正 API 都有了，我也有一點後端語言的基礎。最後我選了一個託管網站來寫。因為那網站的語言是 PHP，所以我也決定用 PHP 寫網頁。</p>
+<h2>開發環境</h2>
+<p>選用 PHP 寫網頁後，第一個問題就出來了：如何模擬一個純 PHP 的開發環境。我的經驗是不管手動安裝、還是在 Virtual Box 裝，都要搞一堆繁瑣的基礎設定、還有可能把我的電腦搞爛。所以我望向了本來就很想學的虛擬化工具 <a href="www.docker.com">Docker</a>。</p>
+<p>安裝 Docker 後就要開始使用了。原理是這樣的：你要抓需要的 Image 來用、組成你想要的 Container：這就好像前端從 npm 抓套件來用後，再把他弄成專案一樣。而就好像前端要用 <code>package.json</code> 完成一樣，從 Docker 完成這些事，則要透過撰寫 <code>dockerfile</code> 完成。</p>
+<p>從託管網站的資訊來看，我需要一個 PHP on Apache 的開發環境。當然 Docker 早就提供了 <a href="https://hub.docker.com/_/php">PHP 的 Image</a>了。所以，我按照手冊在 <code>dockerfile</code> 引入 <code>FROM php:7.2-apache</code>，然後輸入 <code>docker build -t phpdev-container</code> 把 Image 組成 Container 就好了。</p>
+<h2>問題解決：localhost</h2>
+<p>弄一下之後，就完成了。只不過還要解決很多問題：首先是裝好後，怎麼訪問 Container 呢？</p>
+<p>啊既然是虛擬化，那不就是要訪問 <code>localhost</code> 嗎——我這麼想著，卻發現失敗了。查了查 <a href="https://stackoverflow.com/questions/36530905">Stack Overflow 的討論</a>才發現 Docker 是先搞一個 Linux 的虛擬機，接著把這個虛擬機分派到 <code>192.168.99.100</code> 那邊。</p>
+<p>但我想用 <code>localhost</code> 啊怎麼辦？</p>
+<p>我又看到 <code>RUN echo 'ServerName localhost' &gt;&gt; /etc/apache2/apache2.conf</code>——嗯，把 ServerName 的設定覆寫到 <code>apache2.conf</code> 吧。我試了試，終於成功了。至少可以寫 PHP 了。</p>
+<h2>問題解決：Rewrite engine</h2>
+<p>在開發 PHP 的時候，你可能覺得這種 URL 很醜： <code>article/index.php?id=100</code> 而想改用這種 URL： <code>/article/100</code>。</p>
+<p>這是怎麼做的呢，在 apache 你要在 <code>.htaccess</code> 透過 Rewrite engine 完成：</p>
+<pre><code>RewriteEngine On
+RewriteRule ^article/([0-9]+)?$ article/index.php?id=$1
+</code></pre>
+<p>結果用沒多久就 500 了：</p>
+<pre><code>/var/www/html/.htaccess: Invalid command 'RewriteEngine', perhaps misspelled or defined by a module not included in the server configuration
+</code></pre>
+<p>但 <code>RewriteEngine</code> 怎麼會無效呢？查到有人回答說<a href="https://askubuntu.com/questions/64454">伺服器需要打開 Rewrite engine</a>。那問題就很明顯了：怎麼在 Docker 開 Rewrite engine 呢？</p>
+<p><a href="https://github.com/docker-library/php/issues/227">答案是 RUN a2enmod rewrite。</a></p>
+<p>於是我的 <code>dockerfile</code> 就變成這樣：</p>
+<pre><code>FROM php:7.2-apache
+
+RUN a2enmod rewrite
+RUN mv &quot;$PHP_INI_DIR/php.ini-development&quot; &quot;$PHP_INI_DIR/php.ini&quot;
+RUN echo &quot;ServerName localhost&quot; &gt;&gt; /etc/apache2/apache2.conf
+RUN service apache2 restart
+</code></pre>
+<h2>結束</h2>
+<p>先講到這邊吧。PHP 的有空繼續寫。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://stackoverflow.com/questions/53892686">PHP Docker container not processing files and serving the source instead</a></li>
+<li><a href="https://medium.com/@lynzt/learning-docker-error-mounts-denied-mac-73307b49f545">Learning Docker — error: Mounts denied (mac)</a></li>
+<li><a href="https://stackoverflow.com/questions/36530905">can't access apache on docker from my localhost</a></li>
+<li><a href="https://stackoverflow.com/questions/42866013">Docker Toolbox - Localhost not working</a></li>
+<li><a href="https://stackify.com/docker-for-php-a-start-to-finish-guide/">Docker for PHP: A Start-to-Finish Guide</a></li>
+<li><a href="https://github.com/docker-library/php/issues/227">Invalid command 'RewriteEngine'</a></li>
+<li><a href="https://stackoverflow.com/questions/26285463">Creating SEO friendly urls using htaccess</a></li>
+<li><a href="https://askubuntu.com/questions/64454">How do I enable the mod_rewrite Apache module for Ubuntu 11.04?</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

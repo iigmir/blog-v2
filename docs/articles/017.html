@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>npm 的筆記</h1>
+<p>由「用 node 架一個迷你靜態伺服器」、「npm 超級簡短文」、「久違的自動化」合併。</p>
+<hr>
+<p>&lt;p&gt;之前的網頁都直接在目錄中點擊 HTML 檔案。這個樣子的網址列，會以 &lt;code&gt;file://&lt;/code&gt; 為開頭。雖然在自家電腦的版面配置上，這樣已經頗足夠了──但──&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果要在其他電腦上檢查網頁呢？&lt;/li&gt;
+&lt;li&gt;如果想模擬網站又不想用 &lt;a href=&quot;https://www.apachefriends.org/zh_tw/&quot;&gt;XAMPP&lt;/a&gt; 呢？&lt;/li&gt;
+&lt;li&gt;如果想要在目錄間不斷切換呢？&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Access_control_CORS&quot;&gt;「為什麼會我網頁的某些圖片不見了？」&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;…………&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;為什麼不用 &lt;a href=&quot;https://nodejs.org&quot;&gt;node.js&lt;/a&gt; 做個超簡單的伺服器呢？&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;於是我就開始裝了。其實不難：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先去 node.js 官網下載並安裝 node.js。安裝好以後，應該能用上兩個指令：node 與 npm。&lt;/li&gt;
+&lt;li&gt;打開作業系統的終端機（例如 WIndows7 以後的就選 Powershell）然後鍵入這個指令：&lt;code&gt;npm install http-server -g&lt;/code&gt;
+&lt;/li&gt;
+&lt;li&gt;成功的話應該會開始下載、安裝必要的程式。&lt;br&gt;
+另外解釋一下各個指令的含意：
+&lt;ol&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://www.npmjs.com/&quot;&gt;npm&lt;/a&gt; 是管理各個小套件的程式。&lt;/li&gt;
+&lt;li&gt;install 可以幫你安裝在 npm 網站的套件。&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://www.npmjs.com/package/http-server&quot;&gt;http-server&lt;/a&gt; 是這篇文章的主角：http-server 套件。&lt;/li&gt;
+&lt;li&gt;-g 可以讓 http-server 這個套件，在這台電腦的任何目錄運行。這樣想測試其他網頁的目錄，就可以直接關機後在目錄切換，而不需要每個目錄都安裝。 &lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;裝好以後，把終端機的目錄轉換到想測試的網頁目錄所在（如果在 WIndows7 想偷懶，可以在該目錄的目錄列上鍵入 &lt;code&gt;powershell&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;開啟終端機以後，鍵入 &lt;code&gt;http-server&lt;/code&gt; 指令。看到 &lt;code&gt;Starting up http-server, serving ./&lt;/code&gt; 之類的字眼以後，一個迷你的伺服器就開始在運作了。&lt;/li&gt;
+&lt;li&gt;你可以在本機用任何 &lt;code&gt;Available on:&lt;/code&gt; 下面的 IP 網址連結。&lt;/li&gt;
+&lt;li&gt;若要在其他電腦上檢查你的網頁，最好還是先用 &lt;code&gt;ipconfig&lt;/code&gt; 檢查一下位置。另外，防火牆記得開啟 8080 port，不然會被擋住。（想要偷懶的話也可以直接關掉，但盡量不要這麼做）&lt;/li&gt;
+&lt;li&gt;想關掉 http-server，請按 &lt;kbd&gt;Ctrl&lt;/kbd&gt; 與 &lt;kbd&gt;C&lt;/kbd&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;接下來我會試著尋找、安裝、並探索 SASS 套件，這樣就可以在本機寫好 &lt;a href=&quot;http://sass-lang.com/&quot;&gt;SASS&lt;/a&gt; 後直接編譯了。&lt;/p&gt;
+&lt;p&gt;再之後，也許可以用測試套件自動化這一切？&lt;/p&gt;</p>
+<hr>
+<p>&lt;p&gt;先從建立空白資料夾開始說吧：你想要開啟專案，可以下 &lt;code&gt;npm init&lt;/code&gt; 指令開始，然後按照指示完成基本資料。接著，在 &lt;code&gt;package.json&lt;/code&gt; 的 &lt;code&gt;devDependencies&lt;/code&gt; 裡面增加所需要的套件：例如說我裝了 &lt;code&gt;http-server&lt;/code&gt; 與 &lt;code&gt;node-sass&lt;/code&gt; 的話，就鍵入 &lt;kbd&gt;npm install&lt;/kbd&gt; 開始安裝這兩個套件。完成以後，就可以用了。&lt;/p&gt;
+&lt;p&gt;SASS 編譯方法不難：想把 sass 目錄的 foo.scss 編譯到 public 目錄下，變成 bar.css 的話，輸入 &lt;code&gt;node-sass sass/foo.scss public/bar.css&lt;/code&gt; 就好。&lt;/p&gt;
+&lt;p&gt;但是，如果想執行的話，就要從 &lt;code&gt;node_modules&lt;/code&gt; 下面的套件找 bin 執行。這樣很麻煩呢，有沒有簡單的辦法？&lt;br&gt;
+有。請在 &lt;code&gt;package.json&lt;/code&gt; 的 &lt;code&gt;scripts&lt;/code&gt; 裡撰寫指令。&lt;br&gt;
+指令當然可以直接寫，但這樣總有一天會造成麻煩。所以，試著參考下各套件的指令，接著把對應的指令寫進 &lt;code&gt;bin&lt;/code&gt; 目錄裡面吧。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://medium.com/@brianhan/watch-compile-your-sass-with-npm-9ba2b878415b&quot;&gt;Watch &amp; Compile your Sass with npm&lt;/a&gt; 這文章還不錯的，好入門。&lt;/p&gt;
+&lt;p&gt;另外還有些雜七雜八的紀錄：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;a href=&quot;https://stackoverflow.com/questions/39330727/node-sass-command-not-found-when-compiling&quot;&gt;為什麼想執行程式，得從 &lt;code&gt;node_modules&lt;/code&gt; 下面的套件找 bin 執行？&lt;/a&gt;</p>
+<pre><code>&lt;blockquote&gt;Did you install the package globally (npm install -g node-sass) or locally? If locally, the CLI tool can be called as ./node_modules/.bin/node-sass.&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://eddychang.me/blog/16-javascript/58-nodes-update.html&quot;&gt;如何更新 node？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;寫好的檔案無法執行？把 bin 檔裡面的權限設定好了嗎？要可執行（exectueable）才行。&lt;/li&gt;
+&lt;li&gt;想得到壓縮版的 CSS？ &lt;a href=&quot;https://stackoverflow.com/questions/40579330/minify-css-with-node-sass&quot;&gt;--output-style compressed&lt;/a&gt;
+</code></pre>
+<p>&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;暫時先寫這樣。接下來，會想試試如何用 browserSync、還有該用什麼自動化指令，讓我存檔後立刻重整頁面，而不用一直打 &lt;code&gt;npm run&lt;/code&gt;。&lt;a href=&quot;https://kejyuntw.gitbooks.io/gulp-learning-notes/content/plguins/Tool/Plugins-Tool-browser-sync.html&quot;&gt;參考資料&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;唔，好累。好想睡覺……&lt;/p&gt;</p>
+<hr>
+<p>&lt;p&gt;前面說好的 &lt;code&gt;npm&lt;/code&gt; 自動化，因為一直找不到入門點，所以學起來其實很不順利。直到看了 &lt;a href=&quot;https://developer.mozilla.org/zh-TW/docs/Learn/Tools_and_testing/Cross_browser_testing/Automated_testing&quot;&gt;MDN&lt;/a&gt; 的文章，才發現了希望。&lt;/p&gt;</p>
+<p>&lt;p&gt;MDN 示範的自動化工具稱作 &lt;a href=&quot;http://gulpjs.com/&quot;&gt;&lt;code&gt;gulp&lt;/code&gt;&lt;/a&gt;。用 &lt;code&gt;npm install --global gulp-cli&lt;/code&gt; 與 &lt;code&gt;npm install --save-dev gulp&lt;/code&gt; 安裝 gulp 以後，這個專案就有自動化的功能了--但你必須在根目錄的 &lt;code&gt;gulpfile.js&lt;/code&gt; 先設定好。&lt;/p&gt;</p>
+<p>&lt;p&gt;我們直接給個程式碼吧：&lt;/p&gt;</p>
+<p>&lt;pre&gt;
+var gulp        = require('gulp');
+var browserSync = require('browser-sync').create();
+var gulpSass    = require('gulp-sass');</p>
+<p>gulp.task('browser-sync', function()
+{
+browserSync.init({
+server: {
+baseDir: &quot;./public&quot;
+}
+});
+});</p>
+<p>gulp.task('sass', function()
+{
+return gulp.src(&quot;src/scss/*.scss&quot;)
+.pipe(gulpSass({
+outputStyle: 'compressed'
+}))
+.pipe(gulp.dest(&quot;public/css&quot;))
+.pipe(browserSync.stream());
+});</p>
+<p>gulp.task('watch', function ()
+{
+gulp.watch(&quot;src/scss/<em>.scss&quot;, ['sass']);
+gulp.watch(&quot;public/</em>/<em>&quot;).on('change', browserSync.reload);
+gulp.watch(&quot;public/</em>&quot;).on('change', browserSync.reload);
+});</p>
+<p>gulp.task('default',['browser-sync','watch']);
+&lt;/pre&gt;</p>
+<p>&lt;p&gt;最上面的 &lt;code&gt;require&lt;/code&gt; 就是這個程式要引用的軟體。這裡用了 &lt;code&gt;gulp&lt;/code&gt;、&lt;a href=&quot;https://www.npmjs.com/package/browser-sync&quot;&gt;&lt;code&gt;browser-sync&lt;/code&gt;&lt;/a&gt;、&lt;a href=&quot;https://www.npmjs.com/package/gulp-sass&quot;&gt;&lt;code&gt;gulp-sass&lt;/code&gt;&lt;/a&gt; 這三個。針對不同的軟體，要寫不同的指令，以做出對應的動作：&lt;a href=&quot;https://browsersync.io/&quot;&gt;BrowserSync&lt;/a&gt; 是個能自動重整、模擬網站的工具。&lt;br&gt;
+在這裡，我們指定了 BrowserSync 要測試的目錄，它位於 &lt;code&gt;./public&lt;/code&gt; 裡面。&lt;br&gt;
+&lt;code&gt;sass&lt;/code&gt; 呢，就叫它把 &lt;code&gt;src/scss&lt;/code&gt; 的 SCSS 檔案變成 CSS 檔案，並放到 &lt;code&gt;public/css&lt;/code&gt; 目錄。&lt;/p&gt;</p>
+<p>&lt;p&gt;&lt;code&gt;watch&lt;/code&gt; 會自動檢查指定的檔案有沒有變更。變更的話就會：&lt;/p&gt;</p>
+<p>&lt;ul&gt;
+&lt;li&gt;檢查 &lt;code&gt;src/scss&lt;/code&gt; 的 SCSS 檔有沒有變更。有的話，執行 &lt;code&gt;['sass']&lt;/code&gt; 任務。&lt;/li&gt;
+&lt;li&gt;檢查 &lt;code&gt;public&lt;/code&gt; 目錄裡面的檔案有沒有變更。有的話，叫 &lt;code&gt;browserSync&lt;/code&gt; 重新整理。&lt;/li&gt;
+&lt;/ul&gt;</p>
+<p>&lt;p&gt;那麼，下一步呢？告訴你，我們最後可以用 &lt;code&gt;gulp&lt;/code&gt; 指令就能完成一切。&lt;/p&gt;</p>
+<p>&lt;p&gt;可是如何完成？&lt;/p&gt;</p>
+<p>&lt;p&gt;看到最下面的 &lt;code&gt;gulp.task('default',['browser-sync','watch']);&lt;/code&gt; 了嗎？&lt;code&gt;gulp.task('default'); &lt;/code&gt;是 &lt;code&gt;gulp&lt;/code&gt; 的預設指令。如果只有輸入 &lt;code&gt;gulp&lt;/code&gt; 而沒輸入其他任務以執行之，&lt;code&gt;gulp&lt;/code&gt; 就會執行 &lt;code&gt;default&lt;/code&gt;。而在 &lt;code&gt;default&lt;/code&gt; 裡面，我們安插了兩個任務：&lt;code&gt;browser-sync &lt;/code&gt;與 &lt;code&gt;watch&lt;/code&gt;。這樣，&lt;code&gt;gulp&lt;/code&gt; 預設就會執行 &lt;code&gt;browser-sync&lt;/code&gt; 與 &lt;code&gt;watch&lt;/code&gt;。而 &lt;code&gt;watch&lt;/code&gt; 會執行 &lt;code&gt;sass&lt;/code&gt;，使我們可以完成：存檔後立刻重整頁面、還有把 SCSS 檔案編譯成 CSS 後複製到 &lt;code&gt;public&lt;/code&gt; 目錄。&lt;/p&gt;</p>
+<p>&lt;p&gt;就這樣，只要開啟命令列並移動到專案目錄後輸入 &lt;code&gt;gulp&lt;/code&gt;，自動化工作開始了。可喜可賀可喜可賀。&lt;/p&gt;</p>
+<p>&lt;p&gt;改天把作品傳上來？&lt;/p&gt;</p>
+<p>&lt;p&gt;註：&lt;a href=&quot;https://stackoverflow.com/questions/9901082/what-is-this-javascript-require&quot;&gt;&lt;code&gt;require()&lt;/code&gt; 並不是 JavaScript 的語法&lt;/a&gt;。&lt;code&gt;require()&lt;/code&gt; 指令使用的是 Node.js 的模組。&lt;/p&gt;</p>
+<p>&lt;p&gt;參考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://kejyuntw.gitbooks.io/gulp-learning-notes/plguins/CSS/Plugins-CSS-gulp-sass.html&quot;&gt;Gitbook&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/zh-TW/docs/Learn/Tools_and_testing/Cross_browser_testing/Automated_testing&quot;&gt;MDN&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://browsersync.io/docs/gulp%22%22&quot;&gt;BrowserSync&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</p>
+
+    </main>
+</body>
+</html>

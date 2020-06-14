@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>Docker-compose in /usr/bin</h1>
+<p>I encountered a problem:</p>
+<p>&lt;pre&gt;
+[***@localhost <em><strong>]$ sudo docker-compose
+sudo: docker-compose: command not found
+[</strong></em>@localhost ***]$ sudo whereis docker-compose
+docker-compose: /usr/local/bin/docker-compose
+&lt;/pre&gt;</p>
+<p>I installed <code>docker-compose</code>, but there's no such command if executed as root. Pretty weird. I read what permission the file was and changed it, wish that works:</p>
+<p>&lt;pre&gt;
+[**<em>@localhost <em><strong>]$ ls -l /usr/local/bin/docker-compose
+-rwxr-xr-x. 1 root root 8856752 Nov  5 09:25 /usr/local/bin/docker-compose
+[</strong></em></em>@localhost <strong><strong>]$ sudo chmod 777 /usr/local/bin/docker-compose
+[sudo] password for **:
+[</strong></strong>@localhost <strong><strong>]$ ls -l /usr/local/bin/docker-compose<br>
+-rwxrwxrwx. 1 root root 8856752 Nov  5 09:25 /usr/local/bin/docker-compose
+[</strong></strong>@localhost <strong><strong>]$ sudo docker-compose
+sudo: docker-compose: command not found
+[</strong></strong>@localhost ****]$
+&lt;/pre&gt;</p>
+<p>As you see, it's useless, root user still not found <code>docker-compose</code> command. Therefore, I asked my friend. He suggested that I should type <code>sudo /usr/local/bin/docker-compose</code> command to see absolute path works or not.</p>
+<p>It works -- But I don't want to type absolute path always, what should I do? He said,</p>
+<blockquote>
+<p>Move to <code>/usr/bin</code>, and that's done.</p>
+</blockquote>
+<p>&lt;p&gt;Yes, moved to &lt;code&gt;/usr/bin&lt;/code&gt; works. However, why it works? What's different between &lt;code&gt;/usr/local/bin&lt;/code&gt; and &lt;code&gt;/usr/bin&lt;/code&gt;? Here are my notes:&lt;/p&gt;</p>
+<p>&lt;ol&gt;
+&lt;li&gt;
+&lt;code&gt;/usr/local/bin&lt;/code&gt; contain commands &lt;strong&gt;what user have&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Whereas, &lt;code&gt;/usr/bin&lt;/code&gt; contain commands &lt;strong&gt;what system have&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;But, if &lt;code&gt;/usr/local/bin&lt;/code&gt; contain commands what user have, why &lt;code&gt;sudo&lt;/code&gt; -- that is, root &lt;strong&gt;user&lt;/strong&gt;-- cannot run &lt;code&gt;/usr/local/bin&lt;/code&gt;? The answer is, &lt;code&gt;/usr/local/bin&lt;/code&gt; don't have shell script for root user, as root user is so powerful that any action may result into danger.&lt;/li&gt;
+&lt;/ol&gt;</p>
+<p>That's all.</p>
+<p>Ref:</p>
+<p>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://linux.vbird.org/linux_basic/0210filepermission.php&quot;&gt;鳥哥的 Linux 私房菜 -- 第五章、Linux 的檔案權限與目錄配置&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://linux.cn/article-3737-1.html&quot;&gt;Linux有问必答：如何为sudo命令定义PATH环境变量&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://unix.stackexchange.com/questions/8656/usr-bin-vs-usr-local-bin-on-linux&quot;&gt;/usr/bin vs /usr/local/bin on Linux&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://unix.stackexchange.com/questions/115129/why-does-root-not-have-usr-local-in-path&quot;&gt;
+Why does root not have /usr/local in path?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://ja.stackoverflow.com/questions/30665/root%E3%81%AB-usr-local-bin%E3%81%AE%E3%83%91%E3%82%B9%E3%81%8C%E9%80%9A%E3%81%A3%E3%81%A6%E3%81%AA%E3%81%84%E7%90%86%E7%94%B1%E3%81%AF%E3%81%AA%E3%82%93%E3%81%A7%E3%81%99%E3%81%8B&quot;&gt;rootに/usr/local/binのパスが通ってない理由はなんですか？&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</p>
+
+    </main>
+</body>
+</html>

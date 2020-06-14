@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>讀讀 Vue 的原始碼：生命週期</h1>
+<h2>TL;DR</h2>
+<p>在 Vue 裡面的：</p>
+<pre><code class="language-javascript">beforeCreate =&gt; created =&gt; beforeMount =&gt; mounted =&gt; beforeUpdate =&gt; updated =&gt; beforeDestroy =&gt; destroyed
+</code></pre>
+<p>等於：</p>
+<pre><code class="language-javascript">// From: src/core/index.js
+Vue =&gt; initMixin =&gt; $mount =&gt; mountComponent =&gt; Watcher =&gt; $destroy
+</code></pre>
+<p>而分隔這些階段的關鍵（也就是 <code>=&gt;</code>）是 <code>callHook</code> 函式。</p>
+<h2>序言</h2>
+<p>這幾天想知道原生 JavaScript 的生命週期到底是怎麼搞的，所以我立刻想到讀 Vue 的<a href="https://github.com/vuejs/vue">原始碼</a>，來看看 Vue 到底是用什麼原生 API 呼叫。</p>
+<p>但我最後發現 Vue 的生命週期與完全原生 JavaScript 完全不一樣，不過看了原始碼也收穫頗豐啦。</p>
+<h2>複習一下生命週期</h2>
+<p>Vue 的生命週期有四個階段。加上階段的前與後，總共有八個階段：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>before</th>
+<th>after</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>create</td>
+<td>beforeCreate</td>
+<td>created</td>
+</tr>
+<tr>
+<td>mount</td>
+<td>beforeMount</td>
+<td>mounted</td>
+</tr>
+<tr>
+<td>update</td>
+<td>beforeUpdate</td>
+<td>updated</td>
+</tr>
+<tr>
+<td>destroy</td>
+<td>beforeDestroy</td>
+<td>destroyed</td>
+</tr>
+</tbody>
+</table>
+<p>在載入必要的生命週期與事件後，四個生命週期的發動時機分別是：</p>
+<ul>
+<li>create：載入注入（injection）、內部狀態與響應模式的前後。</li>
+<li>mount：繪製 HTML template 的前後。</li>
+<li>update：組件內部狀態更新的前後。</li>
+<li>destroy：組件觀察器（watcher）與事件被銷毀的前後。</li>
+</ul>
+<p><img src="https://vuejs.org/images/lifecycle.png" alt="Vue 官方繪製的生命週期圖"></p>
+<h2>啟程：Instance 的五行函式</h2>
+<p>先從 <code>src/core/index.js</code> 開始。這個檔案會帶我們進到 <code>src/core/instance/index.js</code> 檔案。跳進去以後，你會發現 Vue 執行了五個函式：</p>
+<pre><code class="language-javascript">initMixin(Vue)
+stateMixin(Vue)
+eventsMixin(Vue)
+lifecycleMixin(Vue)
+renderMixin(Vue)
+</code></pre>
+<p>比較重要的就 <code>lifecycleMixin</code> 與 <code>initMixin</code>。這兩個以外的函式，都是初始化各種變數。你可能覺得我應該會先從 <code>lifecycleMixin</code> 開始講——但我要先講的是 <code>initMixin</code> 這個函式：從這裡接入，才能知道 Vue 的生命旅程。</p>
+<p>開始吧。</p>
+<h2>揭露真實的自我：initMixin 做了啥</h2>
+<p><code>initMixin</code> 這函式大約六十行左右。裡面有不少是針對環境不同所給出的措施。所以你看連<a href="https://github.com/gotwarlost/istanbul">伊斯坦堡</a>都不鳥它了。</p>
+<p>重點是後面的程式碼：</p>
+<pre><code class="language-javascript">// expose real self
+vm._self = vm
+initLifecycle(vm)
+initEvents(vm)
+initRender(vm)
+callHook(vm, 'beforeCreate')
+initInjections(vm) // resolve injections before data/props
+initState(vm)
+initProvide(vm) // resolve provide after data/props
+callHook(vm, 'created')
+</code></pre>
+<p>這段程式把整個過程都解釋得很清楚：在一切開始之前，先執行 <code>initLifecycle</code> <code>initEvents</code> <code>initRender</code> 這三個函式。<code>initLifecycle</code> 很簡單，就是啟動組件的變數：</p>
+<pre><code class="language-javascript">// src/core/instance/lifecycle.js
+export function initLifecycle (vm: Component) {
+  const options = vm.$options
+
+  // locate first non-abstract parent
+  let parent = options.parent
+  if (parent &amp;&amp; !options.abstract) {
+    while (parent.$options.abstract &amp;&amp; parent.$parent) {
+      parent = parent.$parent
+    }
+    parent.$children.push(vm)
+  }
+
+  vm.$parent = parent
+  vm.$root = parent ? parent.$root : vm
+
+  vm.$children = []
+  vm.$refs = {}
+
+  vm._watcher = null
+  vm._inactive = null
+  vm._directInactive = false
+  vm._isMounted = false
+  vm._isDestroyed = false
+  vm._isBeingDestroyed = false
+}
+</code></pre>
+<p>雖然我不懂為什麼這函式會叫「初始化生命週期」。</p>
+<p>接著 <code>initEvents</code> 會讓組件開始添加監聽器。監聽器的內部運作……頗複雜的，所以暫時不看了。在 <code>src/core/instance/events.js</code> 還不夠、還需要載入 <code>src/core/vdom/helpers/update-listeners.js</code> 啥的……</p>
+<p><code>initRender</code> 會透過 <a href="https://cythilya.github.io/2017/03/31/virtual-dom">Virtual DOM</a> 來建立組件的元素、同時藉由 <code>defineReactive</code> 開始載入 Vue 的響應式功能：</p>
+<pre><code class="language-javascript">// src/core/instance/render.js
+/* 略 */
+vm._c = (a, b, c, d) =&gt; createElement(vm, a, b, c, d, false)
+/* 略 */
+vm.$createElement = (a, b, c, d) =&gt; createElement(vm, a, b, c, d, true)
+/* 略 */
+/* istanbul ignore else */
+if (process.env.NODE_ENV !== 'production') {
+  defineReactive(vm, '$attrs', parentData &amp;&amp; parentData.attrs || emptyObject, () =&gt; {
+    !isUpdatingChildComponent &amp;&amp; warn(`$attrs is readonly.`, vm)
+  }, true)
+  defineReactive(vm, '$listeners', options._parentListeners || emptyObject, () =&gt; {
+    !isUpdatingChildComponent &amp;&amp; warn(`$listeners is readonly.`, vm)
+  }, true)
+} else {
+  defineReactive(vm, '$attrs', parentData &amp;&amp; parentData.attrs || emptyObject, null, true)
+  defineReactive(vm, '$listeners', options._parentListeners || emptyObject, null, true)
+}
+</code></pre>
+<p>附帶一題，Vue 的響應式功能可以從 <code>src/core/observer/index.js</code> 看到，裡面是由 <code>getOwnPropertyDescriptor</code> 與 <code>defineProperty</code> 完成的。</p>
+<p>完成後，就開始呼叫 <code>callHook</code> 了。<code>callHook</code> 會呼叫對應的事件監聽器。所以這就是為什麼在 Vue 裡面寫了 <code>beforeCreate</code> 就能執行裡面的程式。</p>
+<p>然後從 <code>callHook(vm, 'beforeCreate')</code> 到 <code>callHook(vm, 'created')</code> 之間又執行了 <code>initInjections</code> <code>initState</code> <code>initProvide</code> 三個函式。</p>
+<ol>
+<li>位於 src/core/instance/inject.js 的 <code>initInjections</code> 其實也是去呼叫前面提到的 <code>initRender</code></li>
+<li>位於 <code>src/core/instance/state.js</code> 的 <code>initState</code> 則會初始化所有有寫到的 instance 像是 <code>props</code>, <code>methods</code>, <code>data</code> 之類的。不過 <code>computed</code> 不會初始化。</li>
+<li>位於 <code>src/core/instance/inject.js</code> 的 <code>initProvide</code> 則與 <a href="https://vuejs.org/v2/api/#provide-inject">inject API</a> 有關。不過我沒用過所以不清楚。</li>
+</ol>
+<p>然後 <code>$mount</code> 函式會把我們帶到下個階段。</p>
+<p>直到現在才把 create 階段講完。不好了不好了。不過現在已經發現一個新的函式：<strong><code>callHook</code></strong> 了。我們可以用這函式當各階段的分界點。</p>
+<h2>風塵僕僕的旅途：mountComponent</h2>
+<p>那麼 <code>$mount</code> 又會去哪裡？我只好用搜尋的，搜看看 <code>$mount</code> 去哪裡了。按照平台不同，也所差異。但最後都會指向一個稱作 <code>mountComponent</code> 的函式。這函式又位於 <code>src/core/instance/lifecycle.js</code> 那邊。</p>
+<p>欸……<code>src/core/instance/lifecycle.js</code>？那我們不就回到了生命週期嗎？好欸！快看看 <code>mountComponent</code> 做了啥吧！</p>
+<p><code>mountComponent</code> 主要做兩件事：把渲染的組件更新到 Virtual DOM 裡面、還有添加 update 階段所需的 <code>Watcher</code> 類別。你看裡面都有 <code>callHook(vm, 'beforeUpdate')</code> 了。</p>
+<p>為什麼要加在這裡？</p>
+<pre><code class="language-javascript">// we set this to vm._watcher inside the watcher's constructor
+// since the watcher's initial patch may call $forceUpdate (e.g. inside child
+// component's mounted hook), which relies on vm._watcher being already defined
+</code></pre>
+<p>看起來與 <code>$forceUpdate</code> 有關啊……但這也就是說，你如果要更新，就只要更新裡面的變數/狀態就好。</p>
+<h2>峰迴路轉：Watcher 怎麼這麼多方法</h2>
+<p><code>Watcher</code> 這個類別在 <code>src/core/observer/watcher.js</code> 那邊。裡面有很多方法。但其中最重要的方法，就是 <code>update</code>。</p>
+<p>但 <code>callHook(vm, 'updated')</code> 又跑去哪裡了呢？</p>
+<ol>
+<li><code>update</code> 方法會呼叫 <code>src/core/observer/scheduler.js</code> 裡面的 <code>queueWatcher</code> 函式</li>
+<li><code>queueWatcher</code> 又會呼叫 <code>flushSchedulerQueue</code></li>
+<li><code>flushSchedulerQueue</code> 則在一段優化與更新後呼叫 <code>callUpdatedHooks</code>。</li>
+<li><code>callUpdatedHooks</code> 在最後終於呼叫了 <code>callHook(vm, 'updated')</code>。</li>
+</ol>
+<p>另外 <code>Watcher</code> 那段，我實際上的追蹤流程，整個是反過來的。</p>
+<h2>我看到有個組件落在地，看它的生命似已到盡頭：$destroy 怎麼跑的</h2>
+<p>那麼 callHook(vm, 'beforeDestroy') 又在哪裡？
+在 <code>src/core/instance/lifecycle.js</code> 的 <code>lifecycleMixin</code> 那裡。</p>
+<p><code>lifecycleMixin</code> 註冊了一個稱作 <code>$destroy</code> 的 <code>prototype</code>。<code>$destroy</code> 裡面瑣碎的程式碼太多，就用註解來幫我講好了：</p>
+<pre><code class="language-javascript">// src/core/instance/lifecycle.js
+// 省略
+callHook(vm, 'beforeDestroy')
+// remove self from parent
+// teardown watchers
+// remove reference from data ob
+// frozen object may not have observer.
+// call the last hook...
+// invoke destroy hooks on current rendered tree
+// fire destroyed hook
+callHook(vm, 'destroyed')
+// turn off all instance listeners.
+// remove __vue__ reference
+// release circular reference (#6759)
+</code></pre>
+<p>這樣，整個組件的歷程就結束了。文章也接近尾聲。</p>
+<h2>結語</h2>
+<p>雖然我到現在都還不知道原生 JavaScript 的歷程。但是現在，我們已經對 Vue 的生命週期，已經有更深理解了。</p>
+<p>可是我好累……</p>
+
+    </main>
+</body>
+</html>

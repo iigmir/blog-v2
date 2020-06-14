@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>Firefox 匯入/匯出搜尋引擎套件</h1>
+<p>我是 Firefox 用戶，很久以前自己加了很多搜尋引擎套件（套件的運作原理，請參考 <a href="https://developer.mozilla.org/zh-TW/docs/Web/OpenSearch">MDN</a> 的說明）來用。</p>
+<p>Firefox 更新以後，目前在 AMO 的搜尋引擎套件目前不是很多、自己加的功能也找不到、另外我還需要備份並移植搜尋引擎套件到其他電腦上……這意味著，我需要找到可以匯入/匯出搜尋引擎套件的方法。</p>
+<p>放這些搜尋引擎套件的檔案在 <code>\%userprofile%\AppData\Roaming\Mozilla\Firefox\Profiles\（個人檔案路徑）\search.json.mozlz4</code>。請注意這個 <code>search.json.mozlz4</code>，它是一個被壓縮的檔案，所以你不能直接用文字編輯器開啟、複製、貼上。</p>
+<p>在 Firefox 56 以前，可以用 <a href="https://addons.mozilla.org/zh-TW/firefox/addon/search-engines-export-import/">XML Search Engines Exporter/Importer</a> 套件完成。但……我目前在用的是 Firefox 57，所以這個套件只能廢了。</p>
+<p>看了<a href="https://github.com/nohamelin/xseei">套件官網</a>，開發者說套件：「目前的 WebExtensions 架構無法移植」。作為替代，可以在 Firefox 運行瀏覽器主控台（Browser Console，<strong>不是網頁主控台（Web Console）</strong>）。</p>
+<ol>
+<li>你需要開啟 Browser Console：可以從開發者選單選、也可以使用 &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;Shift&lt;/kbd&gt; + &lt;kbd&gt;J&lt;/kbd&gt; 快捷鍵。</li>
+<li>按照需求，把 <a href="https://gist.github.com/nohamelin/8e2e1b50dc7d97044992ae981487c6ec">匯入</a> 或是 <a href="https://gist.github.com/nohamelin/6af8907ca2dd90a9c870629c396c9521">匯出</a> 的程式碼，複製貼上到瀏覽器主控台。</li>
+<li>成功的話，匯入程式會要求你選擇要匯入的 XML 檔案；匯出程式會打包成一個壓縮檔後，要求你選擇要儲存的目錄。</li>
+</ol>
+<p>好的，總之這很有趣。也許以後找個時間去翻譯 <a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">MDN 的 Browser Console</a> 條目？</p>
+<p>Ref:</p>
+<ul>
+<li><a href="https://github.com/nohamelin/xseei">nohamelin/xseei</a></li>
+<li><a href="https://support.mozilla.org/zh-TW/questions/1157315">Tools for working with search engines</a></li>
+<li><a href="https://support.mozilla.org/zh-TW/questions/1120564">I want to know where the search engines are located and change the name of a search engine</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

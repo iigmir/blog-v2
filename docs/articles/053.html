@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>刪除文章失敗</h1>
+<p>剛剛想在這裡刪除文章時，出現<a href="./500">伍佰</a>了。我立刻下 <code>heroku logs</code> 檢查：</p>
+<p>app[web.1]: SQL (2.5ms)  （省略）
+app[web.1]: (0.6ms)  ROLLBACK
+app[web.1]: Completed 500 Internal Server Error in 10ms (ActiveRecord: 5.4ms)
+app[web.1]: ActiveRecord::InvalidForeignKey (PG::ForeignKeyViolation: ERROR:  update or delete on table &quot;articles&quot; violates foreign key constraint &quot;********&quot; on table &quot;article_tags&quot;
+app[web.1]: DETAIL:  Key (id)=(82) is still referenced from table &quot;article_tags&quot;.</p>
+<p>我一開始以為是 heroku API 有問題，但仔細看，發現「Key (id)=(82) is still referenced from table &quot;article_tags&quot;」：這也就是說，因為文章的一些分類標籤要依賴文章，所以刪不得。</p>
+<p>好吧，以後找時間修正。現在先記上一筆。</p>
+
+    </main>
+</body>
+</html>

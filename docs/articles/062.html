@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>如何自訂 CSS 清單樣式</h1>
+<p>今天要自訂清單。我在想，有沒有辦法用 CSS 自動計名單數量呢？</p>
+<p>答案是有的：<code>counter-increment</code>。</p>
+<ol>
+<li>設定 <code>counter-increment</code> 並命名計數器。</li>
+<li>使用 <code>counter()</code> 或 <code>counters()</code> 使用該計數器。</li>
+<li>使用 <code>counter-reset</code> 重設該計數器。</li>
+</ol>
+<p>例如說你可以：</p>
+<pre><code class="language-css">ul li
+{
+    counter-increment: foobar;
+}
+
+ul li:before
+{
+    content: &quot;0&quot; counter(foobar);
+}
+</code></pre>
+<p>這樣的話 <code>ul li:before</code> 選擇器就會用上 <code>foobar</code> 計數器，並在 <code>ul li</code> 顯示自動計數了。如果需要給該清單數字自訂樣式，CSS counter 會很好用。</p>
+<p>之後有空再探索這玩意好了。</p>
+<h2>20190804 增筆</h2>
+<p>Firefox 在 68 版增加了 <code>::marker</code> 這虛擬選擇器，讓清單樣式可以自訂得更容易吧我想。這裡有兩個說明：</p>
+<ul>
+<li><a href="https://hacks.mozilla.org/2019/07/new-css-features-in-firefox-68">New CSS Features in Firefox 68</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::marker">::marker on MDN</a>
+不過目前看來，這選擇器只有 Firefox 支援、功能處於實驗階段、規範則只在 Working Draft 的階段、整個樣式自訂也稱不上完善。感覺還不是使用的時機。</li>
+</ul>
+<h2>參考</h2>
+<ul>
+<li><a href="https://css-tricks.com/custom-list-number-styling/">Custom List Number Styling</a></li>
+<li><a href="https://codepen.io/chriscoyier/pen/jxvBxz/">Custom List Counters</a></li>
+<li><a href="https://codepen.io/chriscoyier/pen/GdXyWo/">Custom List Style 3</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/counter-increment">counter-increment on MDN</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters">Using CSS counters on MDN</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

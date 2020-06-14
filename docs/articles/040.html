@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>ES6 note</h1>
+<p>面試又被電爆，所以寫一下筆記。當然會是動態擴充。</p>
+<p>雖然不知道該寫在哪裡……</p>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">Arrow function</a></h2>
+<p><code>()=&gt;{}</code> ←就這玩意兒。這玩意兩種功能，一是語法簡潔化、二是把 <code>this</code> 放到外面一層的物件上。</p>
+<pre><code class="language-javascript">function Person(){
+  this.age = 0;
+  setTimeout(()=&gt;{
+    this.age++;
+  }, 1000);
+}
+
+var p = new Person();
+console.log(p);
+// 用 Babel 還原語法看看？
+
+&quot;use strict&quot;;
+function Person() {
+  var _this = this;
+
+  this.age = 0;
+  setTimeout(function () {
+    _this.age++;
+  }, 1000);
+}
+
+var p = new Person();
+console.log(p);
+</code></pre>
+<p>感覺還蠻像是 Vue 的用法……</p>
+<p>問題：<code>_this</code> 又是怎麼回事？</p>
+<hr>
+<p>2018/04/30 增筆：在 JavaScript 裡面，<strong>變數的生效範圍，是以函式為單位</strong>。因此，為了讓 <code>setTimeout(function () {})</code> 函式，能收到外面函式的 <code>this</code>，我們需要指派一個變數給 <code>this</code> 用。而這個變數，在這裡就是 <code>_this</code>。</p>
+<p>Ref: <a href="https://ithelp.ithome.com.tw/articles/10191549">重新認識 JavaScript: Day 10 函式 Functions 的基本概念</a></p>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/class">Class</a></h2>
+<p>語法糖。讓基於原型的 JavaScript 可以看起來像其他的物件導向一點。<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">MDN</a> 。</p>
+<pre><code class="language-javascript">class Bar {
+    constructor(baz) {
+        this.baz = baz;
+    }
+}
+
+class Foo extends Bar {
+    constructor(ipt) {
+        super(ipt);
+        this.player = 2000;
+    }
+}
+
+console.log(new Foo(&quot;Java&quot;)); // { baz:&quot;Java&quot; , player:2000 }
+
+// 用 Babel 把語法解壓縮以後，發現長成這樣子：
+
+&quot;use strict&quot;;
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError(&quot;this hasn't been initialised - super() hasn't been called&quot;);
+    }
+    return call &amp;&amp; (typeof call === &quot;object&quot; || typeof call === &quot;function&quot;) ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== &quot;function&quot; &amp;&amp; superClass !== null) {
+        throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass &amp;&amp; superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError(&quot;Cannot call a class as a function&quot;);
+    }
+}
+
+var Bar = function Bar(baz) {
+    _classCallCheck(this, Bar);
+
+    this.baz = baz;
+};
+
+var Foo = function(_Bar) {
+    _inherits(Foo, _Bar);
+
+    function Foo(ipt) {
+        _classCallCheck(this, Foo);
+
+        var _this = _possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this, ipt));
+
+        _this.player = 2000;
+        return _this;
+    }
+
+    return Foo;
+}(Bar);
+</code></pre>
+<p>看到 <code>_inherits</code> 函式裡面的 <code>subClass.prototype</code> 了嗎？所以儘管 ES6 用上了 <code>Class</code> 這物件導向的語法，它還是基於原型的程式語言。</p>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer">Enhanced Object Literals</a></h2>
+<pre><code class="language-javascript">var obj =
+{
+    __proto__: theProtoObj,
+    ['__proto__']: somethingElse,
+    handler,
+    toString() {
+     return &quot;d &quot; + super.toString();
+    },
+    [ &quot;prop_&quot; + (() =&gt; 42)() ]: 42
+};
+
+&quot;use strict&quot;;
+var _obj, _obj2;
+var _get = function get(object, property, receiver)
+{
+    if (object === null) object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined)
+    {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null)
+        {
+            return undefined;
+        }
+        else
+        {
+            return get(parent, property, receiver);
+        }
+    }
+    else if (&quot;value&quot; in desc)
+    {
+        return desc.value;
+    }
+    else
+    {
+        var getter = desc.get;
+        if (getter === undefined)
+        {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+
+function _defineProperty(obj, key, value)
+{
+    if (key in obj)
+    {
+        Object.defineProperty(obj, key
+        , {
+            value: value
+            , enumerable: true
+            , configurable: true
+            , writable: true
+        });
+    }
+    else
+    {
+        obj[key] = value;
+    }
+    return obj;
+}
+var obj = _obj = (_obj2 = {
+    __proto__: theProtoObj
+}, _obj2['__proto__'] = somethingElse, _defineProperty(_obj2, &quot;handler&quot;, handler), _defineProperty(_obj2, &quot;toString&quot;, function toString()
+{
+    return &quot;d &quot; + _get(_obj.__proto__ || Object.getPrototypeOf(_obj), &quot;toString&quot;, this)
+        .call(this);
+}), _defineProperty(_obj2, &quot;prop_&quot; + function ()
+{
+    return 42;
+}(), 42), _obj2);
+</code></pre>
+<p>這什麼東西？我不知道……</p>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">Template Strings</a></h2>
+<pre><code class="language-javascript">var x = &quot;foo&quot;;
+var y = &quot;2000&quot;;
+
+console.log( x + &quot;bar&quot; + y );
+console.log( &quot;I use \&quot; &quot; + x + &quot;bar&quot; + y + &quot; \&quot;.&quot; );
+// 但你可以在 ES6 這樣寫……
+console.log( `${x}bar${y}` );
+console.log( `I use &quot;${x}bar${y}&quot;.` );
+
+// 注意到 ` 符號了嗎？就是這個關鍵字。
+</code></pre>
+<h2><a href="https://iismmx-rails-blog.herokuapp.com/articles/40/edit">Destructuring</a></h2>
+<p>用 <code>[]</code> 這個看起來像是陣列的東西宣告多個變數。</p>
+<pre><code class="language-javascript">var [ x , y , z ] = [ &quot;x&quot; , &quot;y&quot; ];
+console.log( x , y , z ); // Shows: &quot;x&quot; , &quot;y&quot; , undefined
+var [ a , b , ...c ] = [ 1 , 2 , 3 , 4 , 5 , 6 ];
+console.log( a , b , c ); // Shows: 1 , 2 , [ 3 , 4 , 5 , 6 ]
+// 反過來這樣會有語法錯誤：
+var [ a , b , ...c , d ] = [ 1 , 2 , 3 , 4 , 5 , 6 ];
+console.log( a , b , c , d ); // Error: rest element may not have a trailing comma
+</code></pre>
+<h2><a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Statements/let">Let</a> , <a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Statements/const">Const</a></h2>
+<p>原本的 <a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Statements/var">var</a> 會全域生效，很容易被污染。但是在 ES6 裡面有兩種新的變數命名法：<code>let</code> 會只在被宣告的作用域內生效，而 <code>const</code> 在大多數情況下無法被變動。</p>
+<hr>
+<p>Ref: <a href="https://babeljs.io/learn-es2015/">Babel</a></p>
+
+    </main>
+</body>
+</html>

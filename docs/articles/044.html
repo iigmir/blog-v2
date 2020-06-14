@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>Flexbox ❤️ CSS Grid</h1>
+<blockquote>
+<p>公司福利：<a href="https://github.com/f2etw/jobs/issues/159">不需支援連 Flexbox 都不能用的瀏覽器</a>。</p>
+</blockquote>
+<p>有個面試題沒有答好：</p>
+<blockquote>
+<p>Flexbox 與 CSS Grid 有什麼區別？</p>
+</blockquote>
+<p>我才發現自己沒有搞懂兩者。最近玩了 <a href="http://flexboxfroggy.com">Flexbox Froggy</a> 與 <a href="http://cssgridgarden.com">Grid Garden</a> 才有了點頭緒。</p>
+<h2>簡單來說</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-TW/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout">Flexbox</a> 是以<em><strong>線性操作</strong></em>為單位。</li>
+<li><a href="https://developer.mozilla.org/zh-TW/docs/Web/CSS/CSS_Grid_Layout">CSS Grid</a> 則用<em><strong>面的操作</strong></em>為單位。</li>
+</ul>
+<p>Flexbox 有線、有方向。你可以決定這條線該從哪裡出發、哪裡結束、如何斷行……這種操作讓我想起 <code>float</code> 與 <code>inline-block</code>：你需要讓子元素乖乖排隊，但往往會讓父元素崩潰……Flexbox 就是要解決這種問題；&lt;br /&gt;相較之下，CSS Grid 則有欄、有列。你需要做的是決定子元素該放在哪個欄、還有哪個列。這種哲學我想起更古老的 <code>&lt;table&gt;</code> 排版，但在 CSS Grid 之下的 HTML 乾淨許多。</p>
+<p>那麼 CSS Grid 是取代 Flexbox 的嗎？&lt;br /&gt;<em><strong>並不是</strong></em>。</p>
+<h2>簡易實做</h2>
+<p>要講明理由，我需要請出 Windows Server 的 IIS 預設畫面：</p>
+<p><img src="https://docs.microsoft.com/en-gb/iis/install/installing-iis-85/installing-iis-85-on-windows-server-2012-r2/_static/image1.png" alt="IIS 8.5 預設畫面"></p>
+<p>我們拿例子最左上角的三個方塊好了。這裡面有英語、日語、還有義大利語。三者方塊除了大小不同，位置也不同。另外，文字還需要對齊。於是我們的排版出現以下任務：</p>
+<ol>
+<li>定義方塊大小</li>
+<li>定義方塊位置</li>
+<li>方塊文字垂直對齊</li>
+</ol>
+<h2>定義方塊大小</h2>
+<p>定義方塊大小無論如何都能辦到，只是對應屬性不同。</p>
+<h2>純 Flexbox</h2>
+<p>如果純用 Flexbox，垂直對齊無疑很簡單：</p>
+<pre><code class="language-css">.parent
+{
+    display:flex;
+    flex-direction:column-reverse;
+}
+</code></pre>
+<p>但定義方塊位置就會很彆扭了。<code>warp</code> 不完。</p>
+<h2>純 CSS Grid</h2>
+<p>在定義位置方面，CSS Grid 也很簡單：</p>
+<pre><code class="language-css">.parent
+{
+    display:grid;
+    grid-template-columns:repeat(4,80px);
+    grid-template-rows:repeat(4,80px);
+}
+
+.child
+{
+    grid-column: 1/3;
+    grid-row: 1/3;
+}
+</code></pre>
+<p>但如果要垂直對齊文字，CSS Grid 也同樣彆扭。</p>
+<p>&lt;p data-height=&quot;265&quot; data-theme-id=&quot;0&quot; data-slug-hash=&quot;aYYGZX&quot; data-default-tab=&quot;css,result&quot; data-user=&quot;iigmir&quot; data-embed-version=&quot;2&quot; data-pen-title=&quot;IIS default page in HTML(prototype)&quot; class=&quot;codepen&quot;&gt;來看看最後實做的原型：&lt;a href=&quot;https://codepen.io/iigmir/pen/aYYGZX/&quot;&gt;IIS default page in HTML(prototype)&lt;/a&gt; on &lt;a href=&quot;https://codepen.io&quot;&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;script async src=&quot;https://static.codepen.io/assets/embed/ei.js&quot;&gt;&lt;/script&gt;</p>
+<p>所以，這兩個各有長處。誰也不是來取代誰、而是利用自身的長處，彌補對方的短絀。</p>
+<p>最後以一段歌詞做結：</p>
+<blockquote>
+<p>ヒトリより　キミとなら　もっと&lt;br /&gt;
+強くなれる気がするよ&lt;br /&gt;
+僕にはない　キミにあるもの&lt;br /&gt;
+合わされば最強に&lt;br /&gt;
+-- GARNiDELiA, <a href="https://www.youtube.com/watch?v=9dfKJ503-Fc">Aikotoba</a></p>
+</blockquote>
+<p>Ref:</p>
+<ul>
+<li><a href="https://css-tricks.com/css-grid-replace-flexbox">Does CSS Grid Replace Flexbox?</a></li>
+<li><a href="https://www.youtube.com/watch?v=hs3piaN4b5I">Flexbox vs. CSS Grid — Which is Better?</a></li>
+<li><a href="http://flexboxfroggy.com">Flexbox Froggy</a> &amp; <a href="http://cssgridgarden.com">Grid Garden</a></li>
+<li><a href="http://www.oxxostudio.tw/articles/201501/css-flexbox.html">深入解析 CSS Flexbox</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

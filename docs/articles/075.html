@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>A...Component?</h1>
+<p>最近有些面試官會問一個有個我有點不懂的問題：</p>
+<blockquote>
+<p>你會寫組件嗎？</p>
+</blockquote>
+<p>對我來說，這個問題就好像是說「你會寫程式嗎？」或是「你會寫模塊（Module）嗎？」這樣。</p>
+<h2>所以到底組件是什麼</h2>
+<p>身為 Vue 出身的我是這麼理解組件的：</p>
+<p><em>組件是個獨立的程式實體。它能夠透過給定參數，擁有屬於自己的外觀、還有程式功能。</em></p>
+<p>如果我要用英文來說的話：</p>
+<p><em>Components are an independent program instance which has their own layout and functional features by given inputs.</em></p>
+<p>我又順便查了一下三個前端框架對組件的理解：</p>
+<ul>
+<li><a href="https://angular.io/api/core/Component">Angular</a>: <em>Angular components are a subset of directives, always associated with a template.</em></li>
+<li><a href="https://reactjs.org/docs/components-and-props.html">React</a>: <em>Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.</em></li>
+<li><a href="https://vuejs.org/v2/guide/components.html">Vue</a>: <em>Components are reusable Vue instances with a name.</em></li>
+</ul>
+<p>大概和我的理解相去不遠。三個前端框架的組件，主要都包含以下功能：</p>
+<ul>
+<li>外觀</li>
+<li>可複用</li>
+<li>有輸入與輸出</li>
+</ul>
+<h2>為什麼要寫組件</h2>
+<p>我認為，程式就是要切得夠小夠簡單，才方便偵錯與重用。大多數的程式設計觀念，也會告訴你程式要<strong>盡量短小</strong>、能切就切。</p>
+<p>由於電腦程式可重複執行的特性，我們發明了遞迴以精簡程式。同時為了方便理解程式、並降低閱讀程式的負擔，我們也發明了很多抽象化的方法，來試圖把程式化約為一個又一個的指令介面：只要你給我什麼，我就會秀出什麼之類的。這件事情在複雜的大型專案尤其重要。</p>
+<p>很多程式語言都藉此發展出模塊的概念，以方便我們抽象化。只不過我感覺前端開發對模塊的概念，來得有點晚。大概是因為以前 JavaScript 都只被當成是稍微裝飾、或做點小功能的玩具吧。誰知道到了今天，還有完全靠 JavaScript 的<a href="https://zh.wikipedia.org/zh-tw/%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F">網路應用程式</a>呢。</p>
+<p>反正到了這個能用 JavaScript 完成大型程式專案的時代，JavaScript 終於也碰上了管理程式的問題，所以也發明了各種方法來解決。在前端框架的世界，自然就把組件當成模塊一類的東西來用了。</p>
+<h2>那什麼時候寫組件</h2>
+<p>基本上就是想寫就寫囉。事實上組件遲早要寫的：總不能把所有程式都寫在一個檔案裡面吧。不過按照前面的理解，組件規模可以有繁有簡：你可以簡單到只有一些 HTML 與 CSS，也可以複雜到有一大串的複雜計算這樣。</p>
+<p>不過通常我會考慮寫組件的時機有：</p>
+<ol>
+<li>可能會用到三次以上時。</li>
+<li>內部程式可能會複雜到難以理解關聯時。</li>
+<li>需要獨立解釋業務邏輯。</li>
+</ol>
+<p>總之呢，為了讓程式變得好理解，程式員真的下了很多功夫。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">MDN: JavaScript modules</a></li>
+</ul>
+<h3>Vue</h3>
+<ul>
+<li><a href="https://vuejs.org/v2/guide/components.html">Vue: Components Basics</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/112250459">Mirage-ID: 狡猾的web前端面試經歷：易寶×平安2020-03-10</a></li>
+<li><a href="https://medium.com/%E4%B8%80%E5%80%8B%E5%B0%8F%E5%B0%8F%E5%B7%A5%E7%A8%8B%E5%B8%AB%E7%9A%84%E9%9A%A8%E6%89%8B%E7%AD%86%E8%A8%98/vue-components-%E7%B5%84%E4%BB%B6%E4%B9%8B%E9%96%93%E7%9A%84%E6%BA%9D%E9%80%9A%E6%96%B9%E5%BC%8F-92c1c23c3cc2">Les Lee: Vue Components 組件之間的溝通方式</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10187877">Ralph: 組件/元件(Component) - 用途及使用方式</a></li>
+</ul>
+<h3>React</h3>
+<ul>
+<li><a href="https://reactjs.org/docs/components-and-props.html">Components and Props</a></li>
+<li><a href="https://reactjs.org/docs/thinking-in-react.html">React: Thinking in React</a></li>
+<li><a href="https://medium.com/@level_out/everything-is-a-component-cf9f469ad981">Luke Hedger: Everything is a Component</a></li>
+<li><a href="https://www.edureka.co/blog/interview-questions/react-interview-questions/">Edureka: Top 50 React Interview Questions and Answers For 2020</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/47760913">掘金翻译计划: 以面试官的角度来看 React 工作面试</a></li>
+<li><a href="https://juejin.im/post/5c02142fe51d4511be77aad7">寻找海蓝96lv-6: 面试官(6): 写过『通用前端组件』吗?</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10200595">神Q超人: 關於Components的那件小事</a></li>
+</ul>
+<h3>Angular</h3>
+<ul>
+<li><a href="https://angular.io/api/core/Component">Angular: Component</a></li>
+<li><a href="https://angular.io/guide/architecture-components">Angular: Introduction to components and templates</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/56417860">啊提米米: 快速地上手Angular组件开发</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

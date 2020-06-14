@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>Wordpress 隨筆</h1>
+<p>Wordpress 真是個有趣的 CMS 啊......開發套件也是很有趣的。</p>
+<h2>聊天彈窗</h2>
+<p>大部分的聊天彈窗 Wordpress 套件，是透過完成 <code>iframe</code> 元素的。</p>
+<h2>關於設定</h2>
+<p>如果你想給讓 Wordpress 放一點可以供用戶修改的資料，要怎麼辦呢？要開一個資料表嗎？</p>
+<p><strong>請不要這麼做</strong>。請使用 Wordpress 提供的 <a href="https://codex.wordpress.org/Options_API">Options API</a> 修改：大部分套件的設定，都能透過 Options API 完成。</p>
+<p>像是你想要改變套件顏色的話，與其開個資料表，倒不如使用 <code>add_option()</code> 添加顏色設定後，再用 <code>get_option()</code> 與 <code>update_option()</code> 來觀看與修改顏色設定。</p>
+<p>但詳細細節有空再說吧。</p>
+<h2>引入外部檔案</h2>
+<p>你可以這樣寫：</p>
+<pre><code class="language-php">echo( &quot;&lt;style&gt;&quot; . $some_styles . &quot;&lt;/style&gt;&quot; );
+</code></pre>
+<p>但如果想讓樣式管理，所以把他弄到 plugin.css 呢？</p>
+<p>沒問題。</p>
+<pre><code class="language-php">// 這是 CSS 樣式
+wp_enqueue_style( &quot;indexStyle&quot;, plugin_dir_url(__FILE__) . &quot;assets/index.css&quot; );
+// 這是 JS 程式
+wp_enqueue_script( &quot;Footer&quot;,  plugin_dir_url(__FILE__) . &quot;assets/index.js&quot; );
+</code></pre>
+<h2>物件導向</h2>
+<p>是說我最近發現，物件導向概念真的在安排程式的架構上，會有很大的幫助。</p>
+<p>至於這方面，改天再說吧。</p>
+
+    </main>
+</body>
+</html>

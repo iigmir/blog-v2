@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>Vue 隨筆</h1>
+<p>由原文章「V for VEndetta」與「 Vue，關於作用域。 」合併。</p>
+<hr>
+<p>&lt;p&gt;這次面試聽到公司用 &lt;a href=&quot;https://vuejs.org&quot;&gt;Vue.js&lt;/a&gt;──嗯，沒聽過。晚上試試看吧。&lt;/p&gt;
+&lt;p&gt;然後我發現 Vue.js 頗有趣的，而且用 Angular 的我還有點熟悉感……&lt;/p&gt;
+&lt;p&gt;用這個簡單的小程式碼講些東西吧：&lt;/p&gt;</p>
+<p>&lt;pre&gt;
+&lt;div id=&quot;app&quot;&gt;
+&lt;p&gt; {{ message }} &lt;/p&gt;
+&lt;/div&gt;
+&lt;!-- 略 --&gt;
+var app = new Vue
+({
+el: &quot;#app&quot;,
+data:
+{
+message: &quot;Hello VueJS!&quot;
+}
+});
+&lt;/pre&gt;</p>
+<p>&lt;p&gt;來說說這些程式碼的意義吧：&lt;/p&gt;</p>
+<p>&lt;ol&gt;
+&lt;li&gt;
+&lt;code&gt;new Vue&lt;/code&gt; 的意思是建立一個新的 Vue 物件。因為這個新物件裡面可能會放很多東西，所以我們要借用 JSON 格式 &lt;code&gt;{}&lt;/code&gt; 來宣告。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;el&lt;/code&gt; 的意思是是 element，也就是 HTML 元素。它會讓 Vue 知道這個物件應該作用到哪個 HTML 元素上。&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;data&lt;/code&gt; 會放置訊息。裡面的 &lt;code&gt;message&lt;/code&gt; 就會對應到 HTML 的 &lt;code&gt;{{ message }}&lt;/code&gt;。&lt;/li&gt;
+&lt;/ol&gt;</p>
+<hr>
+<p>今天在撰寫一個小程式：</p>
+<p>&lt;pre&gt;
+var app = new Vue
+({
+el: '#app',
+data:
+{
+foo:&quot;Hello there&quot;,
+bar:countries_data,
+ipt:&quot;&quot;,
+},
+methods:
+{
+ret: function()
+{
+this.bar.forEach(function(ic)
+{
+if ( this.$data.ipt[0] == ic.abc )
+{
+console.log( ic.xyz );
+}
+});
+}
+}
+});
+&lt;/pre&gt;</p>
+<p>&lt;p&gt;這個程式在執行 &lt;code&gt;ret&lt;/code&gt; 函式的時候，應該要檢查 &lt;code&gt;data&lt;/code&gt; 裡面的 &lt;code&gt;ipt&lt;/code&gt; 是否與 &lt;code&gt;bar&lt;/code&gt; 裡面的 &lt;code&gt;abc&lt;/code&gt; 吻合。而且因為 &lt;code&gt;bar&lt;/code&gt; 是陣列，所以我用了 &lt;code&gt;forEach &lt;/code&gt;語法……結果我一直得到錯誤訊息：&lt;code&gt;this.$data is undefined&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;上網問人，才發現是我搞錯了作用域：如果我希望找到 &lt;code&gt;ipt&lt;/code&gt;，那把 &lt;code&gt;this&lt;/code&gt; 放到 &lt;code&gt;ret&lt;/code&gt; 函式裡面，就絕對找不到──我應該要把 &lt;code&gt;this&lt;/code&gt; 以變數的形式，放在 &lt;code&gt;forEach&lt;/code&gt; 函式的外面。然後在該函式裡面，呼叫變數：&lt;/p&gt;
+&lt;pre&gt;
+var vm = this;
+this.bar.forEach(function (ic) {
+console.log(vm.ipt);
+});
+&lt;/pre&gt;
+&lt;p&gt;把 &lt;code&gt;vm&lt;/code&gt; 放在 &lt;code&gt;forEach&lt;/code&gt; 外面的話，&lt;code&gt;forEach&lt;/code&gt; 函式呼叫的 &lt;code&gt;vm&lt;/code&gt; 就可以保留住我要的作用域了。&lt;/p&gt;
+&lt;p&gt;另外，好像還有 arrow function 以及 &lt;code&gt;bind&lt;/code&gt; 語法能用……&lt;/p&gt;</p>
+
+    </main>
+</body>
+</html>

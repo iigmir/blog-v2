@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>Vue 響應式短文</h1>
+<h2>故事前言</h2>
+<p>工作碰上一個問題，就是我在模擬一份資料。這份資料長度不明，但我會需要自己新增屬性。問題在於，如果我想更改狀態，啥都沒有。因為想先快回家，所以這個問題只好留著不解決（我的頭……）。</p>
+<h2>你怎麼了？</h2>
+<p>程式如下：</p>
+<pre><code class="language-vue">&amp;lt;div v-for=&quot;(odd, idx) in i.odds&quot;&amp;gt;
+    &amp;lt;div id=&quot;app&quot; v-bind:class=&quot;{ active : foobar( input ) , box : true }&quot;&amp;gt;
+        &amp;lt;div v-on:click=&quot;fbz( input )&quot;&amp;gt; &lt;!-- active --&gt;
+            &amp;lt;p&gt; {{ idx + 1 }} &amp;lt;/p&amp;gt;
+            &amp;lt;p class=&quot;&quot;&gt; {{ odd }} &amp;lt;/p&amp;gt;
+        &amp;lt;/div&gt;
+    &amp;lt;/div&gt;
+&amp;lt;/div&gt;
+var app =  new Vue({
+    el:&quot;#app&quot;,
+    data: { odds:[] },
+    methods: {
+        foobar: function(x,y){},
+        fbz: function(x,y){}
+    },
+    computed: {
+        other_methods: function(x,y){}
+    },
+    mounted: function() {
+        // AJAX
+        app.odds = AJAX.recived;
+        app.odds.forEach( (el,idx) =&gt; { app.odds[idx].b = false; } )
+    }
+});
+/*
+    我想透過點選 fbz 函式變換 #app 的 input 狀態，再透過 .active 參照 #app 的狀態。
+    但是我發現 .active 無論選 fbz 還是 other_methods 如何都不會變動……
+*/
+</code></pre>
+<p>回去看資料，發現有人想用 <a href="https://stackoverflow.com/questions/36978333/vuejs-event-binding-in-v-for">watch</a> 解決。不過我看不懂程式碼，所以決定先放著。</p>
+<p>直到我看見 <a href="https://github.com/vuejs/vue/issues/5565">Github 的某人提出 issue</a> 才發現曙光。</p>
+<h2>簡單來說，你有什麼發現？</h2>
+<p>關鍵字是 Reactivity。解法是 <code>.$set</code>。</p>
+<h2>所以我說為什麼？</h2>
+<p>問題是在「自己新增屬性」這點，因為 Vue「<a href="https://cn.vuejs.org/v2/guide/reactivity.html">不允许在已经创建的实例上动态添加新的根级响应式属性 (root-level reactive property。)</a>」。所以我想透過 <code>mounted</code> 新增屬性會變得徒勞無功。</p>
+<p>另外我也很好奇：Vue 官方說明之所以有這麼詭異的問題，是「受现代 JavaScript 的限制 (以及废弃 Object.observe)」。但，那個「限制」是什麼？可能要看 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get">getter</a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set">setter</a> 了。</p>
+<h2>那怎麼辦？</h2>
+<p>在 <code>mounted</code> 新增屬性時設定 <a href="https://vuejs.org/v2/api/#Vue-set-target-key-value"><code>.$set</code></a>。上例就是改為 <code>app.odds.forEach( (el,idx) =&gt; { this.$set( this.odds[idx] , 'b', false); )</code>：</p>
+<pre><code class="language-vue">mounted: function() {
+    // AJAX
+    app.odds = AJAX.recived;
+    app.odds.forEach( (el,idx) =&gt; { this.$set( this.odds[idx] , 'b', false); } )
+}
+</code></pre>
+<h2>後記</h2>
+<p>幹，我頭超級痛。我覺得我好像要看醫生。</p>
+<h2>20180701 增筆</h2>
+<p>我想起有人告訴我：「你可以用 <code>computed</code> 實例，這樣的話就能響應了。」——但是我最後沒有採用 <code>computed</code> 實例，理由是 <strong><code>computed</code> 實例無法傳送參數</strong>。這樣的話 <code>computed</code> 對上例就無能為力。</p>
+<p>可以看看 <a href="https://stackoverflow.com/questions/40522634/can-i-pass-parameters-in-computed-properties-in-vue-js">Stack Overflow</a> 還有 <a href="https://laracasts.com/discuss/channels/vue/pass-arguments-to-computed-properties?page=0">Laracasts</a> 上面的回答。</p>
+<h2>參考</h2>
+<ul>
+<li><a href="https://codepen.io/iigmir/pen/vRRroa">Two way bind v-for array troubleshooting</a></li>
+<li><a href="https://stackoverflow.com/questions/36978333/vuejs-event-binding-in-v-for">VueJS event binding in v-for</a></li>
+<li><a href="https://github.com/vuejs/vue/issues/5565">In a nested v-for, :class binding is not working with mouseover / mouseout events</a></li>
+<li><a href="https://cn.vuejs.org/v2/guide/reactivity.html">深入响应式原理</a></li>
+<li><a href="https://pjchender.blogspot.tw/2017/05/vue-vue-reactivity.html">為什麼畫面沒有隨資料更新 - Vue 響應式原理（Reactivity）</a></li>
+<li><a href="https://www.cnblogs.com/zhuzhenwei918/p/6893496.html"> vue中遇到的坑 --- 变化检测问题（数组相关） </a></li>
+<li><a href="https://www.w3cplus.com/vue/vue-reactivity-and-pitfalls.html"> Vue响应式及其缺陷 </a></li>
+</ul>
+
+    </main>
+</body>
+</html>

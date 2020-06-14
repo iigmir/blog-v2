@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>我怎麼弄都不一樣的 position</h1>
+<p>&lt;p class=&quot;codepen&quot; data-height=&quot;265&quot; data-theme-id=&quot;dark&quot; data-default-tab=&quot;html,result&quot; data-user=&quot;iigmir&quot; data-slug-hash=&quot;JgExGg&quot; style=&quot;height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;&quot; data-pen-title=&quot;css align bottom&quot;&gt;
+&lt;span&gt;See the Pen &lt;a href=&quot;https://codepen.io/iigmir/pen/JgExGg/&quot;&gt;
+css align bottom&lt;/a&gt; by iigmir (&lt;a href=&quot;https://codepen.io/iigmir&quot;&gt;@iigmir&lt;/a&gt;)
+on &lt;a href=&quot;https://codepen.io&quot;&gt;CodePen&lt;/a&gt;.&lt;/span&gt;
+&lt;/p&gt;
+&lt;script async src=&quot;https://static.codepen.io/assets/embed/ei.js&quot;&gt;&lt;/script&gt;</p>
+<h2>問題解決</h2>
+<p>今天我碰上了一個奇怪的問題：我需要從底部對齊三張高度不同的圖。</p>
+<p>如果是<em>從底部對齊</em>的話，我很快就想到用 <code>position: absolute;</code> 實做：</p>
+<ol>
+<li>首先在母元素設置 <code>position: relative;</code>，以給接下來的 <code>position: absolute;</code> 一個參照位置。</li>
+<li>然後在子元素設置 <code>position: absolute;</code> 讓它參照母元素對齊。</li>
+<li>最後用 <code>bottom: 0;</code> 讓它從底部開始設定位置。完成。</li>
+</ol>
+<p>但事情卻不是這樣：我發現圖片如果全都用 <code>position: absolute;</code> 的話，整個母元素就會全部崩潰，像第二個框那樣。</p>
+<p>……可我用瀏覽器<a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_CSS">設定個別元素的 CSS</a>，它不會崩掉啊？</p>
+<p>等等，如果是<em>個別元素</em>的話，那&lt;strong&gt;要是我不給其中一個子元素用 <code>position: absolute;</code> 會怎樣？&lt;/strong&gt;於是我給圖片高度最高的子元素設 <code>position: static;</code>，圖片就真的像第三個框那樣沒垮了。</p>
+<p>但是為什麼呢？我不明白，只好回家寫寫東西。</p>
+<h2>為什麼</h2>
+<p>後來回家想解這個謎，就去看 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/position">MDN 的說明</a>。接著看到 <code>absolute</code> 是這麼寫的：</p>
+<blockquote>
+<p>The element is removed from the normal document flow, and no space is created for the element in the page layout. It is positioned relative to its closest positioned ancestor, if any; otherwise, it is placed relative to the initial containing block.</p>
+</blockquote>
+<p>簡單來說 <code>absolute</code> 屬性會從一般的文件排版剔除、不給它留下任何空間；並參照上一個不用 <code>position: static;</code> 的母元素。否則就參照網頁本身。</p>
+<p>我想重點是在&lt;strong&gt;不給它留下任何空間（no space is created for the element）&lt;/strong&gt;吧：沒有空間的元素，自然就像 <code>float</code> 那樣整個崩掉。因此，在設立多個 <code>absolute</code> 屬性對齊時，你需要一個 <code>position: static;</code> 的元素穩住，要不然所有屬性都跳脫一般的排版流，它就會崩給你看。</p>
+<p>另外，也因為 MDN 說是<em>不用 <code>position: static;</code> 的母元素</em>，所以如果 <code>position: absolute;</code> 的母元素是 <code>absolute</code> 或 <code>fixed</code> 也行。</p>
+<h2>最後</h2>
+<p>最後寫文章時，我突然想到這名言：</p>
+<blockquote>
+<p>この幻想郷では常識に囚われてはいけないのですね！ -- &lt;cite&gt;東風谷早苗&lt;/cite&gt;</p>
+</blockquote>
+<p>畢竟一個常識滿滿的普通人來到一個新世界，就換他沒常識了。</p>
+<h2>參考</h2>
+<ul>
+<li><a href="https://stackoverflow.com/questions/585945">How to align content of a div to the bottom</a></li>
+<li><a href="http://learnlayout.com/position.html">position in CSS Layout</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/position">position in MDN</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

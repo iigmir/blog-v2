@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>RSS feed</h1>
+<p>&lt;blockqote&gt;
+「還有人用 <a href="https://zh.wikipedia.org/wiki/RSS">RSS</a> 嗎？」&lt;br /&gt;
+「沒了吧」
+&lt;/blockqote&gt;</p>
+<p>好啦，雖然看起來沒人用，但我還是想寫一下 RSS feed。一來了解技術、二來這是部落格的重要功能、第三就是看了點文章後，有點想「力挽狂瀾」的熱血。至於什麼文章，可以移到後面的 Ref 來看。</p>
+<p>最基礎來說，RSS feed 檔案是 <a href="https://zh.wikipedia.org/wiki/XML">XML</a> 檔案。然後用 <a href="https://stackoverflow.com/questions/1975442/how-does-rss-reader-know-that-a-feed-is-updated">Conditional GET</a> 推送請求。</p>
+<p>總之，要做的話，就要做出這段 XML。看起來，用 <a href="https://zh.wikipedia.org/wiki/Atom_(%E6%A8%99%E6%BA%96)">Atom</a> 格式比較新。接著，因為 RSS 就是個 XML，所以出乎意料的簡單，連 gem 也不需要。</p>
+<p>那如果要<a href="https://zh.wikipedia.org/wiki/Atom_(%E6%A8%99%E6%BA%96)">維基百科</a>那樣的格式，要怎麼做呢？</p>
+<p>首先，你需要有一個專門放 RSS feed 的 controller：</p>
+<pre><code class="language-ruby"># In app/controllers/foobar_controller.rb
+def index
+    respond_to do |format|
+        format.atom
+    end
+end
+</code></pre>
+<p>接著建立一個 Builder 檔案以產生 XML：</p>
+<pre><code class="language-ruby"># In app/views/foobar/index.atom.builder
+atom_feed({'xml:lang' =&gt; 'zh-TW'}) do |feed|
+    feed.title(&quot;Example Feed&quot;)
+    feed.subtitle(&quot;A subtitle.&quot;)
+    feed.author do |a|
+        a.name(&quot;John Doe&quot;)
+        a.email(&quot;johndoe@example.com&quot;)
+    end
+end
+</code></pre>
+<p>我們還要給個 entry……</p>
+<pre><code class="language-ruby"># In app/views/foobar/index.atom.builder
+atom_feed({'xml:lang' =&gt; 'zh-TW'}) do |feed|
+    feed.entry(article) do |entry|
+        entry.title(article.title)
+        entry.link(&quot;http://example.org/2003/12/13/atom03&quot;)
+        entry.summary(&quot;Some text.&quot;)
+    end
+end
+</code></pre>
+<p>總之，針對 <code>&lt;property&gt;value&lt;/property&gt;</code> 的東西，你要在 builder 這樣寫成 <code>feed.property(&quot;value&quot;)</code> 這樣。把必要的東西寫好，接著用 URL 地址貼上訂閱器。收工。</p>
+<p>Ref:</p>
+<ul>
+<li>有關為什麼要用 RSS feed：
+<ol>
+<li><a href="http://www.playpcesor.com/2017/06/facebook-page-rss.html">訂閱 Facebook 粉絲專頁 RSS 的方法，幫你脫離臉書訊息控制</a></li>
+<li><a href="http://www.playpcesor.com/2015/05/rss-feedly.html">社群時代，你還在手工訂閱嗎？</a></li>
+<li><a href="https://blog.hungching.com/2015/01/rss-is-better-than-social-media.html">為什麼你應該捨棄臉書改用 RSS？克服資訊偏食的理由和方法</a></li>
+<li>建立個人 RSS 中心： <a href="https://blog.hungching.com/2015/02/how-to-get-full-text-rss-feed.html">1</a> <a href="https://blog.hungching.com/2015/02/social-media-page-to-rss.html">2</a></li>
+</ol>
+</li>
+<li>有關技術詳情：
+<ol>
+<li><a href="http://www.lugolabs.com/articles/80-build-a-rss-feed-in-ruby-on-rails">Build a RSS feed in Ruby on Rails</a></li>
+<li><a href="https://richonrails.com/articles/adding-an-atom-feed-to-your-application">Adding an Atom Feed to Your Application</a></li>
+<li><a href="http://api.rubyonrails.org/classes/ActionView/Helpers/AtomFeedHelper.html">ActionView::Helpers::AtomFeedHelper</a></li>
+</ol>
+</li>
+</ul>
+
+    </main>
+</body>
+</html>

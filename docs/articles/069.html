@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>How to write Vue syntax in v-html</h1>
+<p>WARNING: <code>v-html</code> may cause <a href="https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting">XSS</a>. Make sure <code>v-html</code> is from reliable source. <strong>NEVER render <code>v-html</code>'s contents by client input!</strong></p>
+<p>I recently got a task: Render a Vue program by special syntax that's provided by server side. For example, if the server provides: <code>{link target=&quot;question1&quot;}</code>, I should let this syntax became something like this: <code>&lt;a v-on:click='target(&quot;question1&quot;)'&gt;&lt;/a&gt;</code>.</p>
+<p>I changed this syntax successfully, but, how to trigger the event? When finding the help, I find a question from Stack Overflow that's talking about <a href="https://stackoverflow.com/a/45494778/7162445">how to use Vue components in v-html</a>.</p>
+<p>The answer provides a workaround: use <code>Vue.compile()</code> to compile the given codes, then clear some caches, and fill it to some internal rendering variables. Finally, <code>Vue.render()</code> all of it.</p>
+<p>Finally, how to trigger it? Easy, just add an event in <code>methods</code> instance. Looks like something like this:</p>
+<pre><code class="language-vue">// The whole reference:
+// https://stackoverflow.com/a/45494778/7162445
+import Vue from &quot;vue&quot;;
+
+export default {
+    props: {
+        template: {
+            type: String,
+            default() {
+                return &quot;&quot;;
+            }
+        }
+    },
+    data() {
+        return {
+            templateRender: null,
+            staticRenderFns: [],
+        };
+    },
+    render( h ) {
+        if ( !this.templateRender ) {
+            return h( &quot;div&quot;, &quot;加載中...&quot; );
+        }
+        // If there is a template, I'll show it
+        return this.templateRender();
+    },
+    watch: {
+        // Every time the template prop changes, I recompile it to update the DOM
+        template: {
+            immediate: true,
+            // makes the watcher fire on first render, too.
+            handler() {
+                let res = Vue.compile( this.template );
+                this.templateRender = res.render;
+                // staticRenderFns belong into $options,
+                // appearantly
+                this.$options.staticRenderFns = [];
+                // clean the cache of static elements
+                // this is a cache with the results from the staticRenderFns
+                this._staticTrees = [];
+                // Fill it with the new staticRenderFns
+                for ( let i in res.staticRenderFns ) {
+                    //staticRenderFns.push(res.staticRenderFns[i]);
+                    this.$options.staticRenderFns.push( res.staticRenderFns[i]);
+                }
+            }
+        }
+    },
+    methods: {
+        target(input) {
+            // Do whatever events
+        }
+    },
+};
+</code></pre>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>CORS 筆記</h1>
+<p>嗯，我要串接 xkcd 的 <a href="https://xkcd.com/json.html">API</a>，但要命&lt;span hidden&gt;，這 API 伺服器好像沒有給到<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin">我需要的東西</a>這真要了我的命……&lt;/span&gt;…我花了好幾小時在處理 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS</a> 問題……</p>
+<p>總之，我沒辦法串接 xkcd 的 API 了。真可惜，不過講點 CORS 好了。</p>
+<hr>
+<p>一般來說，瀏覽器會禁止來自其他網域的資源，除非有取得網域資源的權限。這份權限就稱作 CORS。而 CORS 有兩種授權方法：simple 與 preflighted：simple 可以直接對伺服器請求，而 preflighted 則需要徵求伺服器同意。</p>
+<p>以下條件全部集滿，才能發動 simple 授權，否則將為 preflighted 授權：</p>
+<ol>
+<li>HTTP 方法只能是 <code>GET</code>、<code>HEAD</code>、<code>POST</code> 其中之一。</li>
+<li>HTTP 標頭只有 <code>Connection</code>、<code>User-Agent</code>、<a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header">forbidden header name</a>、<a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header">CORS-safelisted request-header</a> 標頭。</li>
+<li>HTTP <code>Content-Type</code> 標頭只能是 <code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code> 其中之一。</li>
+</ol>
+<p>simple 授權會在請求標頭內多出 <code>Origin</code> 標頭，回應則多出 <code>Access-Control-Allow-Origin</code> 標頭；&lt;br /&gt;
+preflighted 授權則會先發動 <code>OPTIONS</code> 請求，待回應後再發起含有 <code>Origin</code> 標頭的請求。</p>
+<hr>
+<p>jQuery AJAX 雖然有 <code>type : &quot;jsonp&quot;</code> API 能用，但那樣會讓純 JSON 檔案出問題。所以還是要想辦法完成 CORS…axios 大概也是這樣……</p>
+<hr>
+<blockquote>
+<p>最糟糕的其實是把遞歸寫壞，結果瀏覽器載到死掉……</p>
+</blockquote>
+<ul>
+<li><a href="https://support.mozilla.org/en-US/questions/1152971">CORS complain even when headers are sent</a></li>
+<li><a href="https://developer.mozilla.org/zh-TW/docs/Web/HTTP/CORS">跨來源資源共享</a></li>
+<li><a href="https://github.com/axios/axios/issues/475">axios issue#475</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

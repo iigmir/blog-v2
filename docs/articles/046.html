@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>在 Ｍac 安裝 PHP 套件</h1>
+<h2>序言</h2>
+<p>要我說的話，最適合 Web 開發的作業系統順序是：Linux &gt; macOS &gt; Windows。</p>
+<p>雖然 macOS 是基於 UNIX 的作業系統，但他終究是 macOS 而不是 Linux 發行版。設定起來，自然不如 Linux 順心而自然。</p>
+<h2>開始前</h2>
+<p>在接下去以前，你的 Ｍac 要有...</p>
+<ol>
+<li><a href="https://brew.sh">Homebrew</a></li>
+<li>內含 &lt;abbr title=&quot;PHP Extension Community Library&quot;&gt;PECL&lt;/abbr&gt; 的 PHP</li>
+</ol>
+<p>你可以輸入以下指令，檢查套件是否有是否安裝：</p>
+<p>&lt;pre&gt;
+pecl help version # PECL 與 PHP 版本
+brew -v # Homebrew 版本
+&lt;/pre&gt;</p>
+<p><a href="https://icyapril.com/php/programming/2016/08/14/installing-pecl-on-osx.html">這裡有如何安裝內含 PECL 的 PHP 教學</a>...至於如何安裝 Homebrew，官網都有指引......而 PECL 是一種套件管理工具，任務大致上與 <a href="https://getcomposer.org/">Composer</a> 差不多，不過 PECL 管了一些更底層（用 C 語言寫的...）的套件，所以 Composer 裝不了。</p>
+<p>這次的主角是 <a href="https://pecl.php.net/package/igbinary">igbinary</a>。</p>
+<h2>安裝</h2>
+<p>安裝起來還不簡單，<code>sudo pecl install igbinary</code> 不就好了？</p>
+<p>這麼想的你就錯了： <code>ERROR: failed to mkdir /usr/include/php/ext/igbinary</code></p>
+<p>sudo 也不行是啥巫術？簡直就像有 <a href="https://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> 之類的東西在作怪。</p>
+<p>......爬文才發現，macOS 還真的有類似 SELinux 的東西：<a href="https://support.apple.com/HT204899">System Integrity Protection</a>。</p>
+<p>好吧，那就關掉吧。</p>
+<h2>關掉 SIP</h2>
+<p>重新開機，看到蘋果商標後，同時按下 &lt;kbd&gt;Command&lt;/kbd&gt; + &lt;kbd&gt;R&lt;/kbd&gt; 以進入恢復模式。</p>
+<p>接著點選終端機，並輸入 <code>csrutil disable</code> 並重新開機。</p>
+<h2>再安裝</h2>
+<p>這次就可以直接輸入 <code>sudo pecl install igbinary</code> 了。記得安裝完以後重啟伺服器軟體。</p>
+<h2>後記</h2>
+<blockquote>
+<p>「很多人 Mac 最後不是賣掉，就是灌 Windows。」 &lt;br /&gt;
+「喔，我倒不會。最差的情況是灌 Ubuntu 而已。」</p>
+</blockquote>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://hiraku.tw/2015/09/3969/">一些升級 El Capitan 之後要注意的事項</a></li>
+<li><a href="https://stackoverflow.com/questions/43955366/cant-install-imagick-php-extension-on-mac">can't install imagick php extension on mac</a></li>
+<li><a href="https://apple.stackexchange.com/questions/301976/mac-os-x-wont-let-me-mkdir-usr-share-tomcat6-even-as-root">Mac OS/X won't let me mkdir /usr/share/tomcat6, even as root</a></li>
+<li><a href="https://stackoverflow.com/questions/33309005/sudo-mkdir-in-usr-operation-not-permitted-el-capitan">sudo mkdir in /usr/, Operation not permitted. El Capitan</a></li>
+<li><a href="https://jason.pureconcepts.net/2012/10/install-pear-pecl-mac-os-x/">Install PEAR and PECL on Mac OS X</a></li>
+<li><a href="https://icyapril.com/php/programming/2016/08/14/installing-pecl-on-osx.html">Installing PECL on Mac OS X with Homebrew</a></li>
+<li><a href="https://stackoverflow.com/questions/34199824/what-is-the-difference-between-pear-and-composer">What is the difference between PEAR and Composer?</a></li>
+<li><a href="https://www.zhihu.com/question/50826568">如何捋清楚php的pecl和pear，composer三者的区别与联系？</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

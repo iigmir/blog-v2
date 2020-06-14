@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>會自己送出去的按鈕</h1>
+<p>今天在為網站後台加按鈕以方便編輯的時候，發生了一件很久以前就有過的悲劇：button 按下去會直接送出去，<strong>而不是執行其他動作</strong>！</p>
+<p>「完蛋了」──正當我這麼想的時候，<a href="https://stackoverflow.com/questions/6727251/button-to-without-submit">stack overflow 救了我一命</a>──大概的意思就是說，<code>button</code> 透過設定，預設的類型為 <code>submit</code>。</p>
+<p>那，如果我不想讓 <code>button</code> 送出呢？那就要讓 <code>button</code> 歸為 <code>button</code>。</p>
+<p>怎麼做？<a href="http://www.wibibi.com/info.php?tid=117">按照網站所說</a>，有兩個辦法：</p>
+<ol>
+<li>button type=&quot;button&quot;</li>
+<li>input type=&quot;button&quot;</li>
+</ol>
+<p>第一個方法用下去會出問題，第二個就成功了！</p>
+<p>於是，一天又平安的度過了。</p>
+<hr>
+<p>2017/08/31 增筆：問題其實和<a href="https://developer.mozilla.org/zh-TW/docs/Web/HTML/Element/input/submit">前端的 JavaScript 行為</a>有關：</p>
+<blockquote>
+<p>請記住，如果表單內只有一個按鈕元素（例如  &lt;code&gt;&lt;button&gt;My button&lt;/button&gt;&lt;/code&gt;）的話，瀏覽器會自動把它視為提交按鈕。你要在其他按鈕之外，明確宣告一個提交按鈕。</p>
+</blockquote>
+
+    </main>
+</body>
+</html>

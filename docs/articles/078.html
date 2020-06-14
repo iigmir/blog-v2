@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>嘗試靜態文章生產器</h1>
+<p>事情是這樣的：我希望網站能啟動<a href="https://support.mozilla.org/en-US/kb/firefox-reader-view-clutter-free-web-pages">閱讀模式</a>。觀察了一下，發現只有靜態文章──也就是一開始文章就印在 HTML 上面──才能啟動閱讀模式。SPA 模式連開都開不了。</p>
+<p>沒辦法，只好去找靜態文章了。</p>
+<h2>需求</h2>
+<p>我有幾個需求：</p>
+<ol>
+<li>能動：靜態文章生產器，需要透過 <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown</a> 語法，順利變成 HTML 檔案。而且針對相當幅度的文章，可以<strong>開啟閱讀模式</strong>。</li>
+<li>簡單好操作：只要 Markdown 貼到特定的目錄，就可以直接完成靜態文章的生成。而不用多費心其他問題。像是路由，最好就是放在 <code>articles</code> 目錄以後就透過 <code>/articles/00x</code> 呈現這樣。</li>
+<li>在 Markdown 語法正確的前提下，不要讓我修改 Markdown 的文章。</li>
+<li>自動產生（次要可選）：只要透過網路請求，就能產出文章。而不用貼到專案去。</li>
+</ol>
+<h2>方案</h2>
+<p>一開始我當然考慮了 <a href="https://vuepress.vuejs.org">VuePress</a> 這軟體。不過在開發模式裡面，它根本不能開啟閱讀模式，一開始就不行了。</p>
+<p>好吧，那試試 React 好了。那就試試 <a href="https://docusaurus.io">docusaurus</a> 吧。但寫到一半才發現，路由也要設定。這就不符合我第二個需求了。</p>
+<p>「那就去看看 hexo 吧……」我這麼想，然後看了看文章，發現它還不錯：雖然架構有些複雜，但還算好理解。所以就試試看吧。後來也發現蠻好寫的，看起來不錯。</p>
+<p>但等到要處理時，問題就來了：</p>
+<pre><code class="language-bash">$ npm run server
+
+&gt; hexo-site@0.0.0 server xxx/xxx/xxx/
+&gt; hexo server
+INFO  Start processing
+ERROR Process failed: _posts/010.md
+YAMLException: end of the stream or a document separator is expected at line 9, column 4:
+    Ref:
+       ^
+    at generateError (xxx/xxx/xxx/node_modules/js-yaml/lib/js-yaml/loader.js:167:10)
+    at throwError (xxx/xxx/xxx/node_modules/js-yaml/lib/js-yaml/loader.js:173:9)
+    at readDocument (xxx/xxx/xxx/node_modules/js-yaml/lib/js-yaml/loader.js:1545:5)
+</code></pre>
+<p>看了一下 010.md 的文章，我不認為語法有什麼錯誤。上網搜吶，都說與冒號有關：</p>
+<ul>
+<li><a href="https://github.com/hexojs/hexo/issues/2386">Github: 使用hexo g命令后出错</a></li>
+<li><a href="https://github.com/hexojs/hexo/issues/1192">Github: hexo generate 出现错误</a></li>
+<li><a href="https://blog.csdn.net/Aoman_Hao/article/details/105036108">hexo博客生成报错YAMLException: can not read a block mapping entry</a></li>
+<li><a href="https://blog.csdn.net/yongf2014/article/details/50016783">hexo博文写作之博客生成generate常见错误集锦</a></li>
+<li><a href="https://pengzhenghao.github.io/blog/2018/03/19/20180319bug2/">标题中冒号后面的空格会引发Hexo错误 | Space after colon is not allowed appear in a post title of Hexo | YAMLException: incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line at line 1, column 44</a></li>
+<li><a href="https://blog.endureblaze.cn/posts/b36c6159/#YAMLException-can-not-read-a-block-mapping-entry-a-multiline-key-may-not-be-an-implicit-key-at-line-6-column-1">记一些 Hexo 报错</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/138287672">美化博客踩到的坑</a></li>
+</ul>
+<p>老實說，我不認為這算什麼錯誤，所以不太想改這些文章。所以最後 hexo 因為一與三而被淘汰。</p>
+<h2>未來解法</h2>
+<p>我很快就發現，目前的大多數靜態文章生產器，可能都不太符合我的需求。這樣的話只好暫時放棄這次的嘗試，然後我未來可能有兩個解法：</p>
+<ol>
+<li>要嘛自己寫一個用戶端的靜態文章生產器，</li>
+<li>要嘛使用後端技術產生。</li>
+</ol>
+<p>但不管哪個都很麻煩。</p>
+<h2>專案網址</h2>
+<ul>
+<li><a href="https://github.com/iigmir/docusaurus-blog">docusaurus-blog</a></li>
+<li><a href="https://github.com/iigmir/hexo-blog-draft">hexo-blog-draft</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

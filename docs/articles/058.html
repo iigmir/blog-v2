@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>Bulid Vue project from start</h1>
+<p>我最近看到<a href="https://blog.csdn.net/tjj3027/article/details/79885335">從零開始建立 Vue 專案的文章</a>。頗有趣的。只是我不懂為什麼要叫開發環境......所謂的「開發環境」，難道不是指如何把編輯器弄成自己喜歡的樣子之類的嗎？</p>
+<p>總之幾點筆記：</p>
+<p><code>vue-cli</code> 的基礎就是 webpack：這玩意就是可以把各種想得到的東西，都用 webpack 包在一起：HTML、CSS、JavaScript、JPG、OGG、AVI......各種東西，只要想得到，都能包起來。怎麼做到把東西湊在一起的？就是靠 <a href="https://webpack.js.org/concepts/loaders">loader</a>。</p>
+<p>而在 <code>.vue</code> 檔案可以這麼寫：<code>template lang=&quot;pug&quot;</code> 然後用 pug 把程式寫出來——這背後的原理正是 vue 使用 pug-loader 解析用 pug 寫出來的程式。因此，要用 pug 的話，必須事先裝好 pug-loader。其他處理器也是一樣。</p>
+<p>開發時我碰上一個 Module build failed: Unknown word 的問題：</p>
+<pre><code>ERROR in ./src/components/...
+Module build failed (from ./node_modules/postcss-loader/src/index.js):
+SyntaxError
+
+(2:1) Unknown word
+</code></pre>
+<p>看了<a href="https://blog.csdn.net/tjj3027/article/details/79885335">无法读取css文件</a>才發現 webpack 撰寫的 loader 順序，也會影響 webpack 的處理順序。我看了一下順序：</p>
+<pre><code class="language-javascript">use: [
+    &quot;postcss-loader&quot;,
+    &quot;style-loader&quot;,
+    &quot;css-loader&quot;,
+],
+</code></pre>
+<p>再按照網頁說明改的話：</p>
+<pre><code class="language-javascript">use: [
+    &quot;style-loader&quot;,
+    &quot;css-loader&quot;,
+    &quot;postcss-loader&quot;,
+],
+</code></pre>
+<p>就成功了。雖然有點詭異就是了。</p>
+<p>Reference:</p>
+<ul>
+<li><a href="https://vuejs.org/v2/guide/single-file-components.html">Single File Components</a></li>
+<li><a href="https://vue-loader.vuejs.org/guide/pre-processors.html">Using Pre-Processors</a></li>
+<li><a href="https://qiita.com/shuuhei/items/4852210d362d2e9022d7">vue.jsでpugとpostcssつかう</a></li>
+</ul>
+
+    </main>
+</body>
+</html>

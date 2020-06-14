@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <h1>vuex 的故事</h1>
+<p><a href="https://vuex.vuejs.org">vuex</a> 是基於 <a href="https://facebook.github.io/flux/docs/overview.html">flux</a> 架構的理念而誕生，並針對 <a href="https://vuejs.org">Vue</a> 優化的專門程式。</p>
+<p>那麼，為什麼要使用 flux 架構？</p>
+<p>讓我們想像一下網頁的導覽頁面吧：導覽頁面基本上重複性很高，卻又一定會用到。這就意味著，我要在網頁複製貼上很多很多次。你不嫌煩，我都嫌煩呀。</p>
+<p>「不是說寫程式就是不要複製貼上嗎？那為什麼我寫 HTML 的時候，就每次都要這麼做啊？」</p>
+<p>如果用 iframe 寫呢？&lt;br /&gt;
+嗯，iframe 這玩意難調又難看。相信我，誰看了誰調了，都只能說哥哥母湯喔。&lt;br /&gt;
+所以怎麼辦？</p>
+<p>基於組件（component）的 JavaScript 框架因此誕生了。 一開始由 <a href="https://reactjs.org/docs/react-component.html">React</a> 開先河，而 Vue component 借鑿了 React。</p>
+<hr>
+<p>能建立各種組件是很好啦，但如果，組件之間要共享某些變數怎麼辦？</p>
+<p>例如說「會員帳號」這個文字，如果我同時要在登入頁面、主頁面、還有會員名單，甚至管理後台，怎麼辦？</p>
+<p>在組件內都建立一次 AJAX 請求？你會不會太過分？&lt;br /&gt;
+在組件內呼叫父組件或子組件？那樣肯定很難維護。&lt;br /&gt;
+另外，你還無法預期資料哪裡來，一切問題都會很難抓到。</p>
+<p>就不能把所有變數放在同一個地方，讓所有會用上的組件，能統一管理？</p>
+<p>這就是 flux 架構想解決的問題：統一變數與狀態的管理和變動，讓各組件能方便取用，並修改變數狀態。而 vuex 就是針對 Vue 量身訂做的 flux 架構。</p>
+<blockquote>
+<p>「為什麼要用到 vuex？」 &lt;br /&gt;
+「你叫爺爺去和哥哥拿筆電後給你，又成何體統？」</p>
+</blockquote>
+<hr>
+<p>再講一次，vuex 是基於 flux 架構的理念而誕生，而 flux 架構是為了<strong>統一變數與狀態的管理和變動</strong>。</p>
+<p>接下來，我們必須談到幾個名詞。首先就是單向數據流（unidirectional data flow）：顧名思義，所有變數只能透過一定的方法，單方面地變更。這樣的話，變數更新才有一定的方向可尋。</p>
+<p>具體來說如何變動？噢，各程式的實作不同，但通常會這樣走：</p>
+<ol>
+<li><strong>放變數、資料的地方叫做狀態</strong>（state）——嗯，我不太喜歡用 state 這個名詞稱之，太過誤導了。不過只能這樣。</li>
+<li>視圖（view）組件接收狀態的東西。視圖可以<strong>接收並呈現</strong>狀態的變更，但不能更改狀態。</li>
+<li>如果要視圖變更狀態，唯一的辦法就是<strong>要求視圖觸發行為</strong>（action）。行為是接收「更改狀態」命令的唯一<em>窗口</em>。</li>
+<li>雖然行為要接收來自視圖要求更改狀態的命令，但行為並不是真正負責更改狀態的地方，這是因為要考慮各種狀態變更，或是非同步這種麻煩的資料輸入之類的。因此，我們需要讓行為整理好命令所需的動作後，<strong>把整理好的資料，提交給調度</strong>（Dispatcher）。&lt;br /&gt;<strong>只有調度才能更改狀態</strong>。</li>
+</ol>
+<p>以 Vue 來說，view 當然是我們看到的網頁（如 <code>.vue</code> <code>.html</code> 等等）。這裡面除了 Dispatcher 會被稱作 mutation 以外，其他的都一樣。另外，getters 是 state 的封裝。</p>
+<hr>
+<p>現在開始實作吧。我們要判斷用戶有沒有登入，有登入就顯示文章。</p>
+<p>首先，就是把 <a href="https://github.com/iigmir/vuex_practice/blob/master/src/vuex_store.js">vuex</a> 寫進來。</p>
+<p>接著從<a href="https://github.com/iigmir/vuex_practice/blob/master/src/components/login.vue">登入頁面</a>開始作：我在表單裡面寫了 <code>letslogin</code> 來確認資料正常與否，並觸發 vuex 裡面的 <code>ajax_login</code> action。</p>
+<p><code>ajax_login</code> 會作什麼呢？</p>
+<p>首先，<code>ajax_login</code> 會觸發 <a href="https://yesno.wtf/api">Yes Or No API</a> 以模擬登入的成功或失敗。成功的話 <code>commit</code> 就會發動 <code>mutations</code> 的函式。也就是說，<code>commit(&quot;login&quot;,login_info.account)</code> 會發動 <code>mutations</code> 的 <code>login</code> 函式。</p>
+<p>在 <code>mutations</code> 的 <code>login</code> 函式裡面，就可以更改 <code>state</code> 的狀態了。最後，<code>state</code> 把改動後的變數交給 view，一切就完成了。</p>
+<hr>
+<p>故事講完啦。謝謝各位。<a href="https://github.com/iigmir/vuex_practice">實作專案在這裡</a>。</p>
+<h2>More reading</h2>
+<ul>
+<li><a href="https://www.zhihu.com/question/20653055">Iframe 有什么好处，有什么坏处？......</a></li>
+<li><a href="https://stackoverflow.com/questions/23178505/good-reasons-why-not-to-use-iframes-in-page-content">Good Reasons why not to use Iframes in page content</a></li>
+<li><a href="http://www.rwblackburn.com/iframe-evil/">The iFrame Is Evil!</a></li>
+<li><a href="https://blog.techbridge.cc/2017/09/16/frontend-backend-mvc/">前後端分離與 SPA</a></li>
+<li><a href="https://medium.com/@hulitw/introduction-mvc-spa-and-ssr-545c941669e9">跟著小明一起搞懂技術名詞：MVC、SPA 與 SSR</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192962">Flux 的基本概念</a></li>
+<li><a href="https://redux.js.org/basics/data-flow">redux</a></li>
+<li><a href="https://medium.com/4cats-io/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA-flux-44a48c320e11">深入淺出 Flux</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/32462675">为什么43%前端开发者想学Vue.js</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/24728725">Flux架构模式</a></li>
+<li><a href="https://www.zhihu.com/question/48759748/answer/112823337">vuex中为什么把把异步操作封装在action，把同步操作放在mutations？</a></li>
+<li><a href="https://www.zhihu.com/question/33864532">如何理解 Facebook 的 flux 应用架构？</a></li>
+<li><a href="https://www.zhihu.com/question/32239901/answer/55213224">Flux todoMVC 为什么要费那么多力气实现一个功能!!!!,这样写的好处是神马？</a></li>
+</ul>
+
+    </main>
+</body>
+</html>
