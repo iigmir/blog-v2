@@ -36,6 +36,7 @@ describe( "StaticSiteGenerator in AJAX mode", function()
         await app.set_template();
         assert.deepStrictEqual( await app.template, await expected.template );
     });
+    /*
     it( "should get parsed HTMLs by template and source markdowns", async() =>
     {
         const app = new StaticSiteGenerator();
@@ -45,6 +46,7 @@ describe( "StaticSiteGenerator in AJAX mode", function()
         await app.set_source_markdowns_from_ajax();
         assert.deepStrictEqual( await app.parsed_htmls, await expected.parsed_htmls );
     });
+    */
     it( "should write parsed HTMLs to specified destination directory", async() =>
     {
         const app = new StaticSiteGenerator();
