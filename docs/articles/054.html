@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css">
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
-    <main>
+    <main class="articles container">
         <h1>Group and sort for SVG elements</h1>
 <p>I recently develop SVG and encounter a problem: I need to let my text above my shape. Because there are many texts on page, I cannot simply use <code>z-index</code> CSS property. When finding how to sort elements, I found <a href="https://codepen.io/aeternia/pen/qazrgQ">a pen on codepen</a>.</p>
 <p>It uses <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g">g element</a>, which offer elements an container to contain elements, and sort their priority.</p>

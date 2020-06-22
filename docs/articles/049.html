@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css">
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
-    <main>
+    <main class="articles container">
         <h1>FastCGI sent in stderr: &quot;Primary script unknown&quot;</h1>
 <p>解決完  <a href="https://iismmx-rails-blog.herokuapp.com/articles/80">nginx worker_connections are not enough</a>  後，我依舊要解決問題。這次是在 php 檔案只出現 File not found 字樣，但檔案明明就有。排查 Log 以後，發現以下錯誤：</p>
 <p>&lt;pre&gt;[error] 18762#0: *12 FastCGI sent in stderr: &quot;Primary script unknown&quot; while reading response header from upstream, client: 127.0.0.1, server: localhost, request: &quot;GET /phpinfo.php HTTP/1.1&quot;, upstream: &quot;fastcgi://127.0.0.1:9000&quot;, host: &quot;127.0.0.1&quot;, referrer: &quot;http://127.0.0.1/&quot;&lt;/pre&gt;</p>

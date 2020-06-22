@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css">
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
-    <main>
+    <main class="articles container">
         <h1>Git 回滾啟示錄</h1>
 <p>公司同事在操作 Git 時不小心犯錯，把相當數量的程式——我猜有數千個——蓋過去，變成舊的了。想當然，整個專案就大爆炸。</p>
 <p>當時的處理方法，是把所有的檔案手動比對，並直接覆蓋。但那數千個檔案的提交，依舊出現在歷史上面。結果就是上游方看到提交史，直接拒絕了我們的 Pull Request。</p>

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css">
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
-    <main>
+    <main class="articles container">
         <h1>Callback Hell：一點迷宮</h1>
 <p>AJAX，非同步 JavaScript 及 XML（Asynchronous JavaScript and XML，AJAX）的「非同步」，指的是電腦處理某東西時，不用馬上完成，而是等到某個時候再處理。至於「某個時候」是什麼時候，要視情況而定。</p>
 <p>AJAX 就是把請求先送到伺服器，等到某個時候再處理。在 AJAX，「某個時候」就是指伺服器有所回應時，無論它成功或失敗。用 jQuery 來看，就是這樣：</p>

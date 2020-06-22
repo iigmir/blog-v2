@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css">
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
-    <main>
+    <main class="articles container">
         <h1>2018/01/12 面試題目</h1>
 <h2>筆試</h2>
 <ol>
@@ -19,10 +21,10 @@ y += typeof(foo());
 }
 console.log(y);
 // 請問會出現什麼？&lt;/pre&gt;</li>
-<li>&lt;pre&gt;var salary = &quot;1000<!-- THE MD PARSER PARSES HERE -->quot;;
+<li>&lt;pre&gt;var salary = &quot;1000<the-article />quot;;
 (function(){
 console.log(&quot;I have &quot; + salary);
-var salary = &quot;5000<!-- THE MD PARSER PARSES HERE -->quot;;
+var salary = &quot;5000<the-article />quot;;
 console.log(&quot;Now got &quot; + salary);
 }());
 // 請問會出現什麼？&lt;/pre&gt;</li>
@@ -67,10 +69,10 @@ alert(&quot;You clicked &quot; + i);
 1.5. MDN 的 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a> 與 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></li>
 <li>以後再寫寫我的看法與結論？</li>
 <li><code>Error: foo is not defined</code>：也許我看錯了。</li>
-<li><code>I have undefined</code>, <code>Now got 5000$</code>：我忘記了<a href="https://developer.mozilla.org/zh-TW/docs/Glossary/Hoisting">提昇</a>的概念：它會讓所有 function 放到最上面執行，但針對變數就不會。這個程式與以下程式碼一樣：&lt;br /&gt;&lt;pre&gt;var salary = &quot;1000<!-- THE MD PARSER PARSES HERE -->quot;;
+<li><code>I have undefined</code>, <code>Now got 5000$</code>：我忘記了<a href="https://developer.mozilla.org/zh-TW/docs/Glossary/Hoisting">提昇</a>的概念：它會讓所有 function 放到最上面執行，但針對變數就不會。這個程式與以下程式碼一樣：&lt;br /&gt;&lt;pre&gt;var salary = &quot;1000<the-article />quot;;
 function foo(){
 console.log(&quot;I have &quot; + salary);
-var salary = &quot;5000<!-- THE MD PARSER PARSES HERE -->quot;;
+var salary = &quot;5000<the-article />quot;;
 console.log(&quot;Now got &quot; + salary);
 };
 foo();&lt;/pre&gt;</li>
