@@ -1,6 +1,6 @@
 {
     "mode": "localfile",
-    "source_directory": "test/articles",
+    "source_directory": "test/test-suits/articles",
     "template_file": "test/test-suits/template.spec.html",
     "destination_directory": "test/test-suits/docs",
     "replaced_text": "<!-- THE MD PARSER PARSES HERE -->"
