@@ -37,7 +37,7 @@ describe( "FileSystemModule", () =>
         });
         app.delete_file( "test/fs-module-suits/testing.txt" );
         await assert.rejects((
-            async() => await app.read_file( "test/fs-module-suits/testing.txt" )
+            async() => await app.read_file( "../test/fs-module-suits/testing.txt" )
         )());
     });
 });
