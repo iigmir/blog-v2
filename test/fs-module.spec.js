@@ -13,7 +13,7 @@ describe( "FileSystemModule", () =>
     {
         const app = new FileSystemModule();
         let test = await app.read_directory( "test/fs-module-suits" );
-        assert.deepEqual( test.length, 3 );
+        assert.deepEqual( test.length >= 2, true );
     });
     it( "should read the JSON file if it's vaild", async() =>
     {
