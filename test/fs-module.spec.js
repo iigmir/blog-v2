@@ -28,4 +28,16 @@ describe( "FileSystemModule", () =>
             async() => await app.read_json( "test/fs-module-suits/read-file.txt" )
         )());
     });
+    it( "should delete files", async() =>
+    {
+        const app = new FileSystemModule();
+        app.write_file({
+            path: "test/fs-module-suits/testing.txt",
+            data: "This file should delete immediately",
+        });
+        app.delete_file( "test/fs-module-suits/testing.txt" );
+        await assert.rejects((
+            async() => await app.read_file( "test/fs-module-suits/testing.txt" )
+        )());
+    });
 });
