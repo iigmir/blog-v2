@@ -1,8 +1,0 @@
-{
-    "mode": "custom",
-    "source_directory": "",
-    "template_file": "",
-    "destination_directory": "",
-    "replaced_text": "",
-    "custom_script": "test/custom-mode-suits/index.js"
-}
