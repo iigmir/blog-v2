@@ -1,4 +1,4 @@
-const StaticSiteGenerator = require( "../lib/index.js" );
+const StaticSiteGenerator = require( "../lib/StaticSiteGenerator.js" );
 const assert = require( "assert" );
 
 const config_path = "test/test-suits/config.json";

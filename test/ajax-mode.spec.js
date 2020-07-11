@@ -1,4 +1,4 @@
-const StaticSiteGenerator = require( "../lib/index.js" );
+const StaticSiteGenerator = require( "../lib/StaticSiteGenerator.js" );
 const expected = require( "./ajax-mode-suits/expect-cases.js" );
 const assert = require( "assert" );
 
