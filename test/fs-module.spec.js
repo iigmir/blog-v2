@@ -1,5 +1,5 @@
 const assert = require( "assert" );
-const FileSystemModule = require( "../lib/FileSystemModule.js" );
+const FileSystemModule = require( "../lib/utils/FileSystemModule.js" );
 
 describe( "FileSystemModule", () =>
 {
