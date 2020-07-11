@@ -1,8 +1,8 @@
-const StaticSiteGenerator = require( "./lib/index.js" );
+const BlogArticleGenerator = require( "./lib/BlogArticleGenerator.js" );
 
 const main = async() =>
 {
-    const app = new StaticSiteGenerator();
+    const app = new BlogArticleGenerator();
     await app.main( "config.json" );
 };
 main();
