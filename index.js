@@ -1,8 +1,8 @@
-const BlogArticleGenerator = require( "./lib/BlogArticleGenerator.js" );
+const BlogAJAXGenerator = require( "./lib/BlogAJAXGenerator.js" );
 
 const main = async() =>
 {
-    const app = new BlogArticleGenerator();
+    const app = new BlogAJAXGenerator();
     await app.main( "config.json" );
 };
 main();
