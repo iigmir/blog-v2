@@ -11,5 +11,12 @@
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "internalConsoleOptions": "openOnSessionStart"
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Main function debugging",
+            "program": "${workspaceFolder}/index.js",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
     ]
 }
