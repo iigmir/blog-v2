@@ -4,6 +4,7 @@ module.exports = {
         "es2020": true,
         "node": true,
         "mocha": true,
+        "jquery": true,
     },
     "extends": "eslint:recommended",
     "parser": "babel-eslint",
