@@ -9,5 +9,5 @@
     "source_directory": "src/Homepage",
     "template_file": "",
     "destination_directory": "docs",
-    "replaced_text": ""
+    "replaced_text": "custom-tag"
 }]
