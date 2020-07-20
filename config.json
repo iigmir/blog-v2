@@ -4,4 +4,10 @@
     "template_file": "src/template.html",
     "destination_directory": "docs/articles",
     "replaced_text": "<the-article />"
+},{
+    "mode": "template",
+    "source_directory": "src/Homepage",
+    "template_file": "",
+    "destination_directory": "docs",
+    "replaced_text": ""
 }]
