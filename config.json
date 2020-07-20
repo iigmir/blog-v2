@@ -1,7 +1,7 @@
-{
+[{
     "mode": "ajax",
     "source_directory": "https://api.github.com/repos/iigmir/blog-source/contents/new-articles",
     "template_file": "src/template.html",
     "destination_directory": "docs/articles",
     "replaced_text": "<the-article />"
-}
+}]
