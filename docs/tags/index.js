@@ -1,7 +1,65 @@
-// eslint-disable-next-line no-undef
+class TagsData
+{
+    articles = [];
+    tags = [];
+    store_articles( value = [])
+    {
+        this.articles = value;
+    }
+    store_tags( value = [])
+    {
+        this.tags = value;
+    }
+}
+
+class DOMRenderUtilities
+{
+    modal = {};
+    tag_template( input_tag = { tag_name: "", id: 0 })
+    {
+        return `<a href="javascript: void(0)" class="button" data-i-btn-id="${ input_tag.id }">
+            ${ input_tag.tag_name }
+        </a>`;
+    }
+    tags( input = [])
+    {
+        if ( input.length < 1 )
+        {
+            return "";
+        }
+        return input.map( item => this.tag_template( item )).join( "" );
+    }
+    tags_to_the_dom({ dom_target = "#whatever", render_data = [] })
+    {
+        document.querySelector( dom_target ).innerHTML = this.tags( render_data ); 
+    }
+    modal({ dom = EventTarget })
+    {
+        console.log( dom, this );
+    }
+    init_modal( dom_target = "#modal" )
+    {
+        this.modal = document.querySelector( dom_target );
+    }
+    bind_modal({ link_target = "#doms" })
+    {
+        const func = ( item = [] ) =>
+        {
+            // the.modal({ tag: "", modal: "", dom })
+            item.addEventListener( "click", dom =>
+            {
+                console.log( dom );
+                debugger;
+            });
+        };
+        [ ...document.querySelectorAll( link_target ) ].forEach( item => func( item, this ));
+    }
+}
+
 $( document ).ready(() =>
 {
-    const init_tags = async() =>
+    let tags_data = new TagsData();
+    const init_tags = async( tags_data = TagsData ) =>
     {
         let articles = await $.ajax({
             url: "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/new-category-ids.json"
@@ -11,6 +69,10 @@ $( document ).ready(() =>
         });
         try
         {
+            // Store value to TagsData object
+            tags_data.store_articles( JSON.parse( articles ));
+            tags_data.store_tags( JSON.parse( tags ));
+            // Return value
             return {
                 articles: JSON.parse( articles ),
                 tags: JSON.parse( tags ),
@@ -21,15 +83,16 @@ $( document ).ready(() =>
             return { articles, tags };
         }
     };
-    const render_tags = ( data = []) =>
+    const render_act = ({ tags_data = TagsData }) =>
     {
-        const tag_template = ( input_tag = { tag_name: "", id: 0 }) =>
-            `<a href="javascript: void(0)" class="button" data-i-btn-id="${ input_tag.id }">
-                ${ input_tag.tag_name }
-            </a>`
-        ;
-        // eslint-disable-next-line no-undef
-        document.getElementById( "tags-app" ).innerHTML = data.tags.map( d => tag_template( d )).join( "" );
+        const render = new DOMRenderUtilities();
+        render.init_modal();
+        render.tags_to_the_dom({
+            dom_target: "#tags-app",
+            render_data: tags_data.tags
+        });
+        render.bind_modal({ link_target: "a[data-i-btn-id]" });
     };
-    init_tags().then( data => render_tags( data ));
+    // show
+    init_tags( tags_data ).then( data => render_act({ data, tags_data }));
 });

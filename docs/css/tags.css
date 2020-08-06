@@ -1,0 +1,41 @@
+/* layout */
+.button
+{
+    margin: 0.5rem;
+}
+.modal
+{
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.narrow.container
+{
+    margin: 1rem auto;
+    max-width: 960px;
+    padding: 2.0rem;
+    position: relative;
+    width: 100%;
+}
+.centre.container
+{
+    border-radius: 0.5rem;
+}
+.show.modal
+{
+    display: block;
+}
+
+/* colour */
+.modal
+{
+    background-color: rgba(250, 250, 250, 0.4);
+}
+.centre.container
+{
+    background-color: rgba(250, 250, 250, 1);
+}
