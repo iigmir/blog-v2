@@ -28,6 +28,7 @@ $( document ).ready(() =>
                 ${ input_tag.tag_name }
             </a>`
         ;
-        const tag_templates = 
+        // eslint-disable-next-line no-undef
+        document.getElementById( "tags-app" ).innerHTML = data.tags.map( d => tag_template( d )).join( "" );
     });
 });
