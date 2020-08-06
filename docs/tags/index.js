@@ -14,39 +14,47 @@ class TagsData
 
 class DOMRenderUtilities
 {
-    tag_template( input_tag = { tag_name: "", id: 0 })
+    _tag_template( input_tag = { tag_name: "", id: 0 })
     {
         return `<a href="javascript: void(0)" class="button" data-i-btn-id="${ input_tag.id }">
             ${ input_tag.tag_name }
         </a>`;
     }
-    tags( input = [])
+    _tags( input = [])
     {
         if ( input.length < 1 )
         {
             return "";
         }
-        return input.map( item => this.tag_template( item )).join( "" );
+        return input.map( item => this._tag_template( item )).join( "" );
     }
     tags_to({ the_dom_target = "#whatever", with_datas = [] })
     {
-        document.querySelector( the_dom_target ).innerHTML = this.tags( with_datas ); 
+        document.querySelector( the_dom_target ).innerHTML = this._tags( with_datas ); 
     }
-    modal_dom = {};
-    modal_to( the_target = "#modal" )
+    MODAL_DOM = {};
+    _bind_modal_event()
     {
-        this.modal_dom = document.querySelector( the_target );
+        // this.MODAL_DOM.class
+        // TODO: Add a modal closing event.
+        // So that the user can close the modal.
+        console.log( this.MODAL_DOM );
     }
-    bind_modal( dom_target = "#doms" )
+    modal_to( the_dom_target = "#modal" )
+    {
+        this.MODAL_DOM = document.querySelector( the_dom_target );
+        this._bind_modal_event();
+    }
+    tags_to_the_modal( tags_dom_target = "#doms" )
     {
         const func = ( item = []) =>
         {
             item.addEventListener( "click", dom =>
             {
-                console.log( dom );
+                console.log( dom, this );
             });
         };
-        [ ...document.querySelectorAll( dom_target ) ].forEach( item => func( item ));
+        [ ...document.querySelectorAll( tags_dom_target ) ].forEach( item => func( item ));
     }
 }
 
@@ -85,7 +93,7 @@ $( document ).ready(() =>
             the_dom_target: "#tags-app",
             with_datas: tags_data.tags
         });
-        render.bind_modal( "a[data-i-btn-id]" );
+        render.tags_to_the_modal( "a[data-i-btn-id]" );
     };
     // show
     init_tags( tags_data ).then( data => render_act({ data, tags_data }));
