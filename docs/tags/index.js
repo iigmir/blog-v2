@@ -21,7 +21,7 @@ $( document ).ready(() =>
             return { articles, tags };
         }
     };
-    init_tags().then( data =>
+    const render_tags = ( data = []) =>
     {
         const tag_template = ( input_tag = { tag_name: "", id: 0 }) =>
             `<a href="javascript: void(0)" class="button" data-i-btn-id="${ input_tag.id }">
@@ -30,5 +30,6 @@ $( document ).ready(() =>
         ;
         // eslint-disable-next-line no-undef
         document.getElementById( "tags-app" ).innerHTML = data.tags.map( d => tag_template( d )).join( "" );
-    });
+    };
+    init_tags().then( data => render_tags( data ));
 });
