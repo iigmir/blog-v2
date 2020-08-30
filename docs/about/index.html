@@ -7,14 +7,76 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css">
     <link rel="stylesheet" href="../css/index.css">
     <link rel="shortcut icon" href="favicon.ico" />
+    <style>table p { margin-bottom: 1rem; }</style>
 </head>
 <body>
     <main class="articles container">
         <h1>關於我</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="./articles">Articles</a></li>
+                <li class="item"><a href="./about">About Me</a></li>
+                <li class="item"><a href="./tags">Tags</a></li>
+            </ul>
+        </nav>
         <h2>你是誰？</h2>
         <p>我啊，是個 JS 有些心得的前端開發吧。喜歡簡單的東西，但做起來卻發現往往很複雜。興趣是電腦、閱讀、寫作。</p>
         <h2>寫過啥？做過啥？</h2>
-        <p>嗯，<a href="https://github.com/iigmir">Github 奉上</a>。然後寫過一些公司的專案。</p>
+        <p>嗯。<a href="https://github.com/iigmir">Github 奉上</a>。然後寫過一些公司的專案。</p>
+        <h3>工作專案</h3>
+        <p>工作的很多專案，其實我都不會貼在網路上。所以這裡省略。</p>
+        <h3>爬蟲</h3>
+        <p>我還蠻喜歡抓網路資料的。雖然作法可能不是一般業界人那樣，但還是寫了不少。</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>名字</th>
+                    <th>功能</th>
+                    <th>網址</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Takami</td>
+                    <td>
+                        <p>為了抓 <a href="https://love-live.fandom.com/wiki/Main_Page">LoveLive!</a> 的歌，所以寫了這個玩意。</p>
+                        <p>可以說是寫爬蟲的起點吧。</p>
+                    </td>
+                    <td>
+                        <a href="https://github.com/iigmir/Takami">iigmir / Takami</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>tw-tv-measure-by-xkm</td>
+                    <td>
+                        <p>用後端網路框架 Ruby on Rails 抓 <a href="www1.xkm.com.tw">艾克曼</a> 的收視率並編寫成 API。</p>
+                    </td>
+                    <td>
+                        <a href="https://github.com/iigmir/tw-tv-measure-by-xkm">iigmir / 
+                            tw-tv-measure-by-xkm</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>kknews-crawl-once</td>
+                    <td>
+                        <p>抓惡名昭彰的……內容農場<a href="https://kknews.cc">每日頭條</a>的消息。</p>
+                        <p>當初是為了動漫方便，卻發現內容農場為了 SEO，讓網頁變得超好爬（苦笑）</p>
+                    </td>
+                    <td>
+                        <a href="https://github.com/iigmir/kknews-crawl-once">iigmir / kknews-crawl-once</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>kotonoha-daisuke</td>
+                    <td>
+                        <p>抓<a href="https://dq.yam.com">地球圖輯隊</a>的內容。</p>
+                    </td>
+                    <td>
+                        <a href="https://github.com/iigmir/kotonoha-daisuke">iigmir / kotonoha-daisuke</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </main>
 </body>
 </html>
