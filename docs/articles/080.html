@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+</head>
+<body>
+    <main class="articles container">
+        <h1>Electron Vue：被玩</h1>
+<h2>前言</h2>
+<p>其實我應該要更早寫文章的……但我自己寫的靜態文章問題很多，反而累死自己。看來沒有一條輕鬆路啊。</p>
+<p>不管了先講講最近的開發吧。</p>
+<h2>那個叫嘟嘟的公司</h2>
+<p><a href="http://www.dudusoft.com/">嘟嘟軟件</a>（<a href="https://web.archive.org/web/20090417062143/http://www.dudusoft.com/">Archive</a>）是個很久以前就倒掉的軟體公司。看來他們沒撐到中國的網路產業爆發期吧。其中一個他們寫的軟體，就是「嘟嘟美食菜谱」。</p>
+<p>最近我在電腦裡，找到了「嘟嘟美食菜谱」這個軟體。這裡不得不說 Windows 很厲害，十幾年前的軟體，到了當年完全不存在的作業系統還能跑；但網站就不好了：嘟嘟軟件的網站早就荒廢十幾年了。</p>
+<p>這時我無意發現，嘟嘟美食菜谱的菜單，是用 HTML 技術呈現的。再從 EXE 檔裡面抓東西看看，果然裡面有個 XML 檔案，裡面的內容都在那邊。我這時就在想：「乾脆用現代的 HTML 技術接接看吧？」</p>
+<p>所以……就這樣現啦。</p>
+<h2>GUI &amp; HTML</h2>
+<p>說起 HTML 技術呈現的軟體，怎麼能不提到 <a href="https://www.electronjs.org">Electron</a> 呢？加上我既然會寫 Vue，自然會考慮這款。</p>
+<p>我有看過其他語言的圖形介面構建軟體：要寫圖形介面軟體的話，當然用該作業系統的語言最方便（如 Windows 就是 C#、macOS 則是 Swift）。不過……我不想在我的電腦裡面放 Visual Studio 那麼肥大的軟體（苦笑）、我也不是想在其他語言的 library 搞很多東西：像是我在 <a href="https://www.wxpython.org">wxPython</a> 折騰了大概半小時後，決定放棄。最後，我就選定 Electron 了。</p>
+<p><a href="https://nwjs.io">NW.js</a> 也是很有趣的軟體，但我之前開發過了，現在就給 Electron 機會吧。</p>
+<h2>Electron &amp; Nightmare</h2>
+<p>但選好了 Electron 才是惡夢的開始……</p>
+<pre><code class="language-bash">vue init simulatedgreg/electron-vue gui-hw
+</code></pre>
+<p>我複製的是 <a href="https://github.com/SimulatedGREG/electron-vue">simulatedgreg/electron-vue</a> 專案。一句話：**不要複製這個模板！作者已經沒有更新了！**過程且聽我到來：</p>
+<p>一開始就發現 procress：首先一啟動就是 <code>ReferenceError: process is not defined</code> 丟給我。後來才發現<a href="https://github.com/SimulatedGREG/electron-vue/issues/871">要改 src/index.ejs 那邊</a>：</p>
+<pre><code class="language-html">&lt;!-- Before --&gt;
+&lt;% if (!process.browser) { %&gt;
+    &lt;script&gt;
+        if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+    &lt;/script&gt;
+&lt;% } %&gt;
+
+&lt;!-- After --&gt;
+&lt;% if (!htmlWebpackPlugin.options.isBrowser &amp;&amp; !htmlWebpackPlugin.options.isDevelopment) { %&gt;
+    &lt;script&gt;
+        window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+    &lt;/script&gt;
+&lt;% } %&gt;
+</code></pre>
+<p>接下來我發現 Vue 的開發工具也有問題：好像一直會出現警告視窗，但我也找了很久、卻沒什麼好辦法。</p>
+<h2>Abandonware &amp; Abandonware</h2>
+<p>查了一下 devDependencies 那邊，我驚恐地發現 electron 太老舊了：人家都到 v10 了，但這個版本卻還在 v2！所以，我決定用 <a href="https://www.npmjs.com/package/npm-check-updates">ncu</a> 來看看有哪些該更新：一看不得了，有 40~50 多個套件要更新！</p>
+<p>「那就先更新關鍵的軟體吧……」我這麼想著，卻發現這麼多軟體，更新起來也是錯誤一堆：完全弄不懂哪些要更新、哪些問題出在哪裡、如何解決之類的問題。就在我漸漸厭倦解決問題時，發現 electron-vue 有些 issue 在討論軟體更新的問題：</p>
+<ul>
+<li><a href="https://github.com/SimulatedGREG/electron-vue/issues/1027">#1027</a></li>
+<li><a href="https://github.com/SimulatedGREG/electron-vue/issues/1026">#1026</a></li>
+</ul>
+<p>我看了血吐上天：原來作者已經不更新好久了！幹！</p>
+<p>但我能說什麼？</p>
+<p>不仔細看更新狀態、又沒辦法更新軟體，然後就被玩活該啊。</p>
+<p>唉，只好再試試 <a href="https://github.com/nklayman/vue-cli-plugin-electron-builder">vue-cli-plugin-electron-builder</a> 吧。</p>
+<h2>TL;DR</h2>
+<ol>
+<li><strong>不要使用 <a href="https://github.com/SimulatedGREG/electron-vue">simulatedgreg/electron-vue</a> 這個模板！作者已經沒有更新了！</strong></li>
+<li>抓人家的軟體前，要檢查軟體的更新與開發狀態。除非你能明確限定它的用途、或是能搞定更新問題。</li>
+<li>開發軟體還是要用順手的。</li>
+<li>ncu 在偵測軟體更新上很好用。</li>
+</ol>
+
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
