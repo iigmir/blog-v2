@@ -4,4 +4,10 @@
     "template_file": "src/template.html",
     "destination_directory": "docs/articles",
     "replaced_text": "<the-article />"
+},{
+    "mode": "ajax-index",
+    "source_directory": "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/new-category-ids.json",
+    "template_file": "src/template.html",
+    "destination_directory": "docs/articles/index.html",
+    "replaced_text": "<the-article />"
 }]
