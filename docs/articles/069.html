@@ -10,6 +10,14 @@
 </head>
 <body>
     <main class="articles container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
         <h1>How to write Vue syntax in v-html</h1>
 <p>WARNING: <code>v-html</code> may cause <a href="https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting">XSS</a>. Make sure <code>v-html</code> is from reliable source. <strong>NEVER render <code>v-html</code>'s contents by client input!</strong></p>
 <p>I recently got a task: Render a Vue program by special syntax that's provided by server side. For example, if the server provides: <code>{link target=&quot;question1&quot;}</code>, I should let this syntax became something like this: <code>&lt;a v-on:click='target(&quot;question1&quot;)'&gt;&lt;/a&gt;</code>.</p>

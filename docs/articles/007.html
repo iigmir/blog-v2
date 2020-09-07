@@ -10,6 +10,14 @@
 </head>
 <body>
     <main class="articles container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
         <h1>會自己送出去的按鈕</h1>
 <p>今天在為網站後台加按鈕以方便編輯的時候，發生了一件很久以前就有過的悲劇：button 按下去會直接送出去，<strong>而不是執行其他動作</strong>！</p>
 <p>「完蛋了」──正當我這麼想的時候，<a href="https://stackoverflow.com/questions/6727251/button-to-without-submit">stack overflow 救了我一命</a>──大概的意思就是說，<code>button</code> 透過設定，預設的類型為 <code>submit</code>。</p>

@@ -6,7 +6,10 @@ const main = ( array = []) => (
     `<ul>
         ${
     array
-        .map( item => render_list_items( item.id + ".html", item.title ))
+        .map( item => render_list_items(
+            `${ String( item.id ).padStart( 3, "0" ) }.html`,
+            item.title
+        ))
         .join( "" )
     }
     </ul>`
