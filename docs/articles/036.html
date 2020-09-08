@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>Firefox 匯入/匯出搜尋引擎套件</h1>
+        <article class="article">
+            <h1>Firefox 匯入/匯出搜尋引擎套件</h1>
 <p>我是 Firefox 用戶，很久以前自己加了很多搜尋引擎套件（套件的運作原理，請參考 <a href="https://developer.mozilla.org/zh-TW/docs/Web/OpenSearch">MDN</a> 的說明）來用。</p>
 <p>Firefox 更新以後，目前在 AMO 的搜尋引擎套件目前不是很多、自己加的功能也找不到、另外我還需要備份並移植搜尋引擎套件到其他電腦上……這意味著，我需要找到可以匯入/匯出搜尋引擎套件的方法。</p>
 <p>放這些搜尋引擎套件的檔案在 <code>\%userprofile%\AppData\Roaming\Mozilla\Firefox\Profiles\（個人檔案路徑）\search.json.mozlz4</code>。請注意這個 <code>search.json.mozlz4</code>，它是一個被壓縮的檔案，所以你不能直接用文字編輯器開啟、複製、貼上。</p>
@@ -37,6 +39,7 @@
 <li><a href="https://support.mozilla.org/zh-TW/questions/1120564">I want to know where the search engines are located and change the name of a search engine</a></li>
 </ul>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>

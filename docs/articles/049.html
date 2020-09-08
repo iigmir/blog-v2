@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>FastCGI sent in stderr: &quot;Primary script unknown&quot;</h1>
+        <article class="article">
+            <h1>FastCGI sent in stderr: &quot;Primary script unknown&quot;</h1>
 <p>解決完  <a href="https://iismmx-rails-blog.herokuapp.com/articles/80">nginx worker_connections are not enough</a>  後，我依舊要解決問題。這次是在 php 檔案只出現 File not found 字樣，但檔案明明就有。排查 Log 以後，發現以下錯誤：</p>
 <p>&lt;pre&gt;[error] 18762#0: *12 FastCGI sent in stderr: &quot;Primary script unknown&quot; while reading response header from upstream, client: 127.0.0.1, server: localhost, request: &quot;GET /phpinfo.php HTTP/1.1&quot;, upstream: &quot;fastcgi://127.0.0.1:9000&quot;, host: &quot;127.0.0.1&quot;, referrer: &quot;http://127.0.0.1/&quot;&lt;/pre&gt;</p>
 <p>去 <a href="https://serverfault.com/a/754378">Server Fault</a> 以後，發現可以在 Log 宣告變數：</p>
@@ -32,6 +34,7 @@
 <p>重啟後成功，收工！</p>
 <p>Ref: <a href="https://serverfault.com/questions/517190/nginx-1-fastcgi-sent-in-stderr-primary-script-unknown">Nginx 1 FastCGI sent in stderr: “Primary script unknown”</a></p>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>

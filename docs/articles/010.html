@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>Form refreshed after AJAX</h1>
+        <article class="article">
+            <h1>Form refreshed after AJAX</h1>
 <p>在 rails 接上 AJAX 的時候，有個頗為糟糕的問題：那就是載入頁面以後，頁面會自動消失。我檢查一下後發現，是因為 AJAX 請求發生以後，瀏覽器又重新向頁面發送請求，所以頁面看起來像被重整。</p>
 <p>再查了一下 stack overflow 網站，問題的原因通常會這麼敘述：「因為登錄頁面用了 <code>form</code> 元素：它會在 AJAX 事件發生的時候自動傳送（submit）」</p>
 <p>解決辦法......好像和阻止立即傳送有關。不過，怎麼試也沒用，暫時先擱置好了。</p>
@@ -33,6 +35,7 @@
 <p>2018/01/01  後記：
 當年的問題，最後發現與 <a href="https://github.com/turbolinks/turbolinks-classic">turbolinks</a> 這個套件有關。解決辦法，就是去掉它：也就是去掉 <code>'data-turbolinks-track': 'reload'</code>。</p>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>

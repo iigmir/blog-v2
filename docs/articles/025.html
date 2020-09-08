@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>旭川の配線は、少しに無茶苦茶です。</h1>
+        <article class="article">
+            <h1>旭川の配線は、少しに無茶苦茶です。</h1>
 <p>&lt;p&gt;今天為了修改部落格的一點 CSS 架構，所以又去參考了一下&lt;a href=&quot;https://ihower.tw/rails/assets-pipeline.html&quot;&gt;實戰聖經的 Asset Pipeline 章節&lt;/a&gt;。&lt;/p&gt;
 &lt;blockquote&gt;Rails 產生 controller 檔案時，也會產生一個同名的 &lt;code&gt;.coffee&lt;/code&gt; 和 &lt;code&gt;.scss&lt;/code&gt; 檔案，這沒有什麼實際的用途，它並不是說該 controller 的頁面才會執行該 js 和 css。建議可以砍掉這個檔案，自己安排 js 和 css 的檔案即可。&lt;/blockquote&gt;
 &lt;p&gt;這段話也不能說錯。不過，事實上 rails 是可以讓只有某 controller 的頁面下，執行對應 JS 和 CSS 的。&lt;/p&gt;
@@ -44,6 +46,7 @@ Add <code>Rails.application.config.assets.precompile += %w( articles.js )</code>
 &lt;/li&gt;
 &lt;/ul&gt;</p>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>

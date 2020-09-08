@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>關於後端只傳 JSON，接著讓前端自己渲染的那些事</h1>
+        <article class="article">
+            <h1>關於後端只傳 JSON，接著讓前端自己渲染的那些事</h1>
 <p><a href="https://github.com/iigmir/json_rails">專案網站</a></p>
 <p>要維護一個網路框架，常常要和各種 helper 打交道。這些抽象的 helper 語法很好用，但也有問題：一來前端不一定懂、二來後端也可能對前端有誤會。</p>
 <p>這些語法和前端掛在一起、會變得極度混亂。接著維護上也會出現問題：到了後來，儘管大家覺得某個網頁的問題很多，但因為後端語法和前端混在一起，所以沒有人敢動：誰動誰就死、誰就來承擔一切。</p>
@@ -30,6 +32,7 @@
 <p>只是我突然想到，就算是只用 JSON 傳資料，前後端從此就能切分清楚了嗎──要是隨著行事邏輯的複雜，JSON 的資料多了以後，做各種判斷、下各種樣式，會比較容易嗎……？而且，要不要考慮停了 JavaScript 的用戶，也是個問題。</p>
 <p>請求發多少、速度多快，可能也是要考慮的要點。</p>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>

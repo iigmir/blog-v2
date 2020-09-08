@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>Wordpress on the docker</h1>
+        <article class="article">
+            <h1>Wordpress on the docker</h1>
 <p>docker 真的是讓我又愛又恨啊.....一方面，我再也不需要自己架開發環境了很爽，但另一方面 docker 也有很多詭異的路徑與開發問題。</p>
 <p>我真的感覺到，一個完整的範例很重要：哪怕只是複製貼上，那也是搞清楚哪些是內部 API、哪些是可以自訂的的第一步哇。</p>
 <p>總之，<a href="https://davidyeiser.com/tutorial/docker-wordpress-theme-setup">Docker + WordPress Setup</a>這篇很重要啊，至少讓我知道如果要自訂某個目錄的內容，就要在 docker-compose.yml 用 volume 這指。還有可以用 docker-compose up 把東西弄出來。</p>
@@ -35,6 +37,7 @@
 <p>最近寫的時候，我才發現不是 docker 的問題，而是我 Wordpress 沒有開 pretty permalinks 選項。我一直沒有發現他其實在選項裡面。</p>
 <p><a href="https://premium.wpmudev.org/blog/wordpress-permalinks">The Ultimate Guide to WordPress Permalinks</a></p>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>

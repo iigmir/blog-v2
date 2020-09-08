@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>How to write Vue syntax in v-html</h1>
+        <article class="article">
+            <h1>How to write Vue syntax in v-html</h1>
 <p>WARNING: <code>v-html</code> may cause <a href="https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting">XSS</a>. Make sure <code>v-html</code> is from reliable source. <strong>NEVER render <code>v-html</code>'s contents by client input!</strong></p>
 <p>I recently got a task: Render a Vue program by special syntax that's provided by server side. For example, if the server provides: <code>{link target=&quot;question1&quot;}</code>, I should let this syntax became something like this: <code>&lt;a v-on:click='target(&quot;question1&quot;)'&gt;&lt;/a&gt;</code>.</p>
 <p>I changed this syntax successfully, but, how to trigger the event? When finding the help, I find a question from Stack Overflow that's talking about <a href="https://stackoverflow.com/a/45494778/7162445">how to use Vue components in v-html</a>.</p>
@@ -80,6 +82,7 @@ export default {
 };
 </code></pre>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>

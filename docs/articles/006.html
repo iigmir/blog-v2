@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>Update controller</h1>
+        <article class="article">
+            <h1>Update controller</h1>
 <p>早期開發這個部落格的時候，要開發更新功能。</p>
 <p>如何開發更新功能？在 Ruby on Rails 以致所有 MVC 架構的世界，你應該要：</p>
 <ol>
@@ -29,6 +31,7 @@
 <p>當我開發到控制器的時候，我發現 <code>Article.update( art_params )</code> 與 <code>railbridge 的 @job = Job.find(params[:id])</code> 乍看之下的效果一樣，不明白差別。但是接著，我很快的就發現 <code>Article.update( art_params )</code> 會更新所有文章。</p>
 <p><a href="https://github.com/iigmir/iismmx-rails-blog/commit/bd74bf7d19b237fd742aa73461b3cdd6b872c782#diff-a9812d4e3b1838fb7f02de4aa31d8033">所以我寫了這份註解。</a></p>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>

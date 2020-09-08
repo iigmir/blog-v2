@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <main class="articles container">
+    <main class="articles content container">
         <h1>內頁導航</h1>
         <nav class="navigator">
             <ul class="list">
@@ -18,7 +19,8 @@
                 <li class="item"><a href="../tags">Tags</a></li>
             </ul>
         </nav>
-        <h1>神戶的管路</h1>
+        <article class="article">
+            <h1>神戶的管路</h1>
 <p>我一直是 <a href="https://imperavi.com/kube">Kube</a> 的愛用者：它簡易但靈活的架構、不預設或強加任何前提，深深吸引著對任何事都有定見的我。也或許是因為對任何事都有定見，我頗為抗拒 Bootstrap 的……不過 Kube 自己也宣稱了，它比較適合專業的前端使用，所以斟酌吧。</p>
 <p>嘛，正片開始。</p>
 <p>我<a href="https://github.com/imperavi/kube">從 Github 下載 Kube</a> 到 rails 以後，就要開始開發了。一開始，我是用 <code>dist/scss/kube.scss</code> 檔案去開發。不過，常常都發現沒有任何樣式套進去，即使我加上了 class 也一樣。</p>
@@ -34,6 +36,7 @@
 <p>瞭解以後的我，把 application.css 的 require_tree . 改成 require kube，讓 application.css 只載入搬出來的 kube.scss。然後，就成功了。
 <a href="http://gogojimmy.net/2012/07/03/understand-assets-pipline/">Another reference</a></p>
 
+        </article>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
