@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>BootstrapVue: What if I want to refactor scoped field slots in tables</h1>
+<h2>First: The problem</h2>
+<p>Have you used <a href="https://bootstrap-vue.org">BootstrapVue</a> before? If so, you may have known that you can control what a cell should look like in a table by using <a href="https://bootstrap-vue.org/docs/components/table#scoped-field-slots">scoped field slots</a>.</p>
+<p>Simply said, you can use <code>&amp;lt;template #cell(prop)=&quot;&quot;&amp;gt;</code> on <code>&amp;lt;b-table&amp;gt;</code> template; and add a <code>[&quot;prop&quot;]</code> item to <code>fields</code> property. Like <a href="https://bootstrap-vue.org/docs/components/table#scoped-field-slots">example</a> shows:</p>
+<pre><code class="language-vue">&amp;lt;template&amp;gt;
+    &amp;lt;div&amp;gt;
+        &amp;lt;b-table small :fields=&quot;fields&quot; :items=&quot;items&quot; responsive=&quot;sm&quot;&amp;gt;
+            &amp;lt;!-- A virtual column --&amp;gt;
+            &amp;lt;template #cell(index)=&quot;data&quot;&amp;gt;
+                {{ data.index + 1 }}
+            &amp;lt;/template&amp;gt;
+
+            &amp;lt;!-- A custom formatted column --&amp;gt;
+            &amp;lt;template #cell(name)=&quot;data&quot;&amp;gt;
+                &amp;lt;b class=&quot;text-info&quot;&amp;gt;{{ data.value.last.toUpperCase() }}&amp;lt;/b&amp;gt;, &amp;lt;b&amp;gt;{{ data.value.first }}&amp;lt;/b&amp;gt;
+            &amp;lt;/template&amp;gt;
+
+            &amp;lt;!-- A virtual composite column --&amp;gt;
+            &amp;lt;template #cell(nameage)=&quot;data&quot;&amp;gt;
+                {{ data.item.name.first }} is {{ data.item.age }} years old
+            &amp;lt;/template&amp;gt;
+
+            &amp;lt;!-- Optional default data cell scoped slot --&amp;gt;
+            &amp;lt;template #cell()=&quot;data&quot;&amp;gt;
+                &amp;lt;i&amp;gt;{{ data.value }}&amp;lt;/i&amp;gt;
+            &amp;lt;/template&amp;gt;
+        &amp;lt;/b-table&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/template&amp;gt;
+
+&amp;lt;script&amp;gt;
+export default {
+    data() {
+        return {
+            fields: [
+                // A virtual column that doesn't exist in items
+                'index',
+                // A column that needs custom formatting
+                { key: 'name', label: 'Full Name' },
+                // A regular column
+                'age',
+                // A regular column
+                'sex',
+                // A virtual column made up from two fields
+                { key: 'nameage', label: 'First name and age' }
+            ],
+            items: [
+                { name: { first: 'John', last: 'Doe' }, sex: 'Male', age: 42 },
+                { name: { first: 'Jane', last: 'Doe' }, sex: 'Female', age: 36 },
+                { name: { first: 'Rubin', last: 'Kincade' }, sex: 'Male', age: 73 },
+                { name: { first: 'Shirley', last: 'Partridge' }, sex: 'Female', age: 62 }
+            ]
+        }
+    }
+}
+&amp;lt;/script&amp;gt;
+</code></pre>
+<p>But what if your scoped field slots of a table are <a href="https://www.youtube.com/watch?v=mH0_XpSHkZo">more and more</a>? How to maintain it when you have more than thirty scoped field slots of the table?</p>
+<p>I found that I can't use <code>v-bind</code> and <code>v-for</code> to make slots into an iterable array. Therefore, I should consider <a href="https://vuejs.org/v2/guide/render-function.html">the <code>render</code> function</a>.</p>
+<h2>Second: What exactly the <code>render</code> function is</h2>
+<p>Like <a href="https://reactjs.org">React</a>, Vue uses <a href="https://vuejs.org/v2/guide/render-function.html#Nodes-Trees-and-the-Virtual-DOM">Virtual DOM</a> to build the whole website structure from version 2.</p>
+<p>So this code:</p>
+<pre><code class="language-vue">&amp;lt;i class=&quot;foo&quot;&amp;gt;{{ value }}&amp;lt;/i&amp;gt;
+</code></pre>
+<p>Will be complied to:</p>
+<pre><code class="language-js">function (createElement) {
+    return createElement(&quot;i&quot;, { class: [&quot;foo&quot;] }, this.value);
+}
+</code></pre>
+<h2>Third: Exercise</h2>
+<p>But how about the table I mentioned before? Will the code in the first paragraph:</p>
+<pre><code class="language-vue">&amp;lt;template&amp;gt;
+    &amp;lt;div&amp;gt;
+        &amp;lt;b-table&amp;gt;
+            &amp;lt;template #cell(index)=&quot;data&quot;&amp;gt;
+                {{ data.index + 1 }}
+            &amp;lt;/template&amp;gt;
+        &amp;lt;/b-table&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/template&amp;gt;
+
+&amp;lt;/script&amp;gt;
+</code></pre>
+<p>look like this?</p>
+<pre><code class="language-js">createElement(&quot;div&quot;, [
+    createElement(&quot;b-table&quot;, { /* bypass */ }, [
+        createElement(&quot;template&quot;, { &quot;#cell(index)&quot;: &quot;data&quot; }, data.index + 1)
+    ])
+]);
+</code></pre>
+<p>Hint: type <code>npm run build</code> to see the result.</p>
+<h2>Fourth: The answer</h2>
+<p>The answer is <strong>NO</strong>.</p>
+<p>Actually, the code from the complied file is more like this:</p>
+<pre><code class="language-js">t(&quot;div&quot;, [
+    t(&quot;b-table&quot;, {
+        scopedSlots: e._u([
+            {
+                key: &quot;cell(index)&quot;,
+                fn: function (n) { return [e._v(&quot; &quot; + e._s(n.index + 1) + &quot; &quot;)] }
+            },
+        ])
+    })
+], 1)
+</code></pre>
+<p>The compressed code shows that the <code>#</code> sign in a component property means <code>v-slot</code>, which complied in the <code>scopedSlots</code> property.</p>
+<p>And now, you know what it should look like when putting them in the render function based on <a href="https://vuejs.org/v2/guide/render-function.html#The-Data-Object-In-Depth">the manual</a>:</p>
+<pre><code class="language-js">{
+    render: function (createElement) {
+        return createElement(&quot;div&quot;, [
+            createElement(&quot;b-table&quot;, {
+                scopedSlots: {
+                    &quot;cell(index)&quot;: data =&gt; createElement(&quot;span&quot;, data.index + 1)
+                }
+            })
+        ])
+    }
+}
+</code></pre>
+<p>Now you can use <a href="https://vuejs.org/v2/guide/render-function.html">&quot;the full programmatic power of JavaScript&quot;</a>:</p>
+<pre><code class="language-js">{
+    render: function (createElement) {
+        const scopedSlots = {
+            &quot;cell(index)&quot;: data =&gt; createElement(&quot;span&quot;, data.index + 1)
+        };
+        return createElement(&quot;div&quot;, [
+            createElement(&quot;b-table&quot;, { scopedSlots })
+        ])
+    }
+}
+</code></pre>
+<p>If you are in interested now, how about turning an array to <code>scopedSlots</code> by using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries"><code>Object.fromEntries()</code></a> method?</p>
+<h2>Summary: TL;DR</h2>
+<ol>
+<li>You can use scoped field slots to render what a cell in a table should look.</li>
+<li>The <code>#</code> sign in a component property is a shorten alias of the <code>v-slot</code> statement. Therefore, <code>#cell(index)</code> is a shorten alias of <code>v-slot:cell(index)</code>.</li>
+<li>If you need to loop scoped field slots, consider using the <code>render</code> function.</li>
+<li>Vue uses virtual DOM to compile codes, so does the <code>render</code> function.</li>
+<li><code>v-slot</code> uses the <code>scopedSlots</code> property in the <code>render</code> function, so <code>v-slot:cell(index)</code> will be complied to <code>scopedSlots: { &quot;cell(index)&quot;: () =&gt; {} }</code>.</li>
+</ol>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
