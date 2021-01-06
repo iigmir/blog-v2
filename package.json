@@ -10,7 +10,7 @@
   "author": "iigmir",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "markdown-it": "^11.0.0"
   },
   "devDependencies": {
