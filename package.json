@@ -10,5 +10,12 @@
   "author": "iigmir",
   "license": "ISC",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.29.0",
+    "jsdom": "^16.6.0",
+    "markdown-it": "^12.0.6",
+    "mocha": "^9.0.1"
+  }
 }
