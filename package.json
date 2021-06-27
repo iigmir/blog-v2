@@ -9,14 +9,6 @@
   },
   "author": "iigmir",
   "license": "ISC",
-  "dependencies": {
-    "axios": "^0.21.1",
-    "markdown-it": "^11.0.0"
-  },
-  "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.6.0",
-    "jsdom": "^16.4.0",
-    "mocha": "^8.1.1"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
