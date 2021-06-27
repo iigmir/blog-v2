@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>如何在 Vue 觀察 DOM： MutationObserver</h1>
+<p>我腦袋枯竭，不想寫文章……最近怎麼了？</p>
+<h2>問題</h2>
+<p>總之，當你想觀察 Vue 內部的 DOM 屬性時，你可能會這麼寫：</p>
+<pre><code class="language-vue">&lt;template&gt;
+    &lt;main&gt;
+        &lt;nav ref=&quot;foo&quot;&gt;
+            &lt;!-- DOMs --&gt;
+        &lt;/nav&gt;
+    &lt;/main&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+    watch: {
+        &quot;$refs.foo&quot;(newval) {
+            // Do something...
+        },
+    },
+}
+&lt;/script&gt;
+</code></pre>
+<p>**這麼做會失敗。**因為 Vue 的響應式原理是 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">Object.defineProperty</a>，沒有實做到 DOM 的層面。</p>
+<p>我覺得我有點北七。</p>
+<h2>解答</h2>
+<p>那麼該怎麼做？答案是使用<a href="https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver">MutationObserver</a>──這個 API 可以追蹤特定的 DOM 更動，並提供該 DOM 具體的資訊。</p>
+<p>你需要丟幾個東西給 <code>MutationObserver</code>：</p>
+<ol>
+<li>目標 DOM。</li>
+<li>監聽時的動作。</li>
+<li>設定。</li>
+</ol>
+<p>所以我們試試看這樣：</p>
+<pre><code class="language-vue">&lt;template&gt;
+    &lt;main&gt;
+        &lt;nav ref=&quot;foo&quot;&gt;
+            &lt;img src=&quot;https://example.com/bar.png&quot; /&gt;
+            &lt;div ref=&quot;baz&quot;&gt;{{ text }}&lt;/div&gt;
+        &lt;/nav&gt;
+    &lt;/main&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+    data() {
+        return { observer: null, text: &quot;&quot; };
+    },
+    methods: {
+        change_it() { this.flag = !this.flag; },
+        active_observer() {
+            const callback = (mutationsList, observer) =&gt; {
+                // 在這裡，mutationsList 會傳一個被變動的 DOM 狀態陣列
+                // 而 observer 則回傳被呼叫的 MutationObserver 本身
+                // 詳細參見： https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/MutationObserver
+            };
+            const dom = this.$refs.foo;
+            const cfg = { attributes: true, childList: true, subtree: true };
+            this.observer = new MutationObserver( callback );
+            this.observer.observe( dom, cfg );
+        }
+    },
+    mounted() {
+        this.active_observer();
+    },
+    beforeDestroy() {
+        if( this.observer ) {
+            this.observer.disconnect();
+        }
+    },
+};
+&lt;/script&gt;
+</code></pre>
+<p>記住，觀察 DOM 只能放在 <code>mounted</code> 裡面。</p>
+<p>這樣做以後，這個組件內的 DOM 變化，被綁定的 <code>observer</code> 狀態，就可以告訴我們，有什麼 DOM 變動了：像是可以用 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect">getBoundingClientRect</a> API 來監測 DOM 的位置。</p>
+<h2>無法解決的問題</h2>
+<p>這樣就大功告成了，但有一些問題……</p>
+<p>首先，如果某個 DOM 本身尚未存在，那個 DOM 將只會是 <code>null</code>，而 <code>MutationObserver</code> 愛莫能助。</p>
+<p>所以如果把範例的 <code>this.active_observer();</code> 放在剛建立組件的 <code>created</code> 而非已經形成 DOM 實體的 <code>mounted</code> 裡面，就會出現以下錯誤：</p>
+<p>TypeError: MutationObserver.observe: Argument 1 is not an object.</p>
+<p>所以你必須確保在開始呼叫 MutationObserver 前，該 DOM 就一定存在。</p>
+<hr>
+<p>另一個問題要回頭看看範例的 HTML：</p>
+<pre><code class="language-vue">&lt;template&gt;
+    &lt;main&gt;
+        &lt;nav ref=&quot;foo&quot;&gt;
+            &lt;img ref=&quot;bar&quot; src=&quot;https://example.com/bar.png&quot; /&gt;
+            &lt;div ref=&quot;baz&quot;&gt;{{ text }}&lt;/div&gt;
+        &lt;/nav&gt;
+    &lt;/main&gt;
+&lt;/template&gt;
+</code></pre>
+<p>雖然我們可以觀察 <code>ref=&quot;baz&quot;</code> 的 DOM，但如果要觀察 <code>ref=&quot;bar&quot;</code> 的圖片載入、還有它對 <code>ref=&quot;foo&quot;</code> 的影響，那 <code>MutationObserver</code> 就派不上用場了。</p>
+<p>這樣要怎麼辦呢？</p>
+<p>我會改天說明的。</p>
+<h2>結語</h2>
+<ol>
+<li>你不能用 Vue 的 <code>watch</code> instance 來觀察 DOM 屬性的變化，因為 Vue 響應式設計原理並沒有觀察 DOM 屬性。</li>
+<li>所以，如果要觀察 DOM 屬性，你需要使用 <code>MutationObserver</code>。</li>
+<li>要使用 <code>MutationObserver</code> 的話，你需要確保被監聽的 DOM 自始存在；而且 <code>MutationObserver</code> 無法觀察圖片載入與否。</li>
+</ol>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

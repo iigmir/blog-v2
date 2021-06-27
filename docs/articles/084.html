@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>Bypassing Java on jpexs-decompiler</h1>
+<p>I wish I can crack or bypass passwords set on Winrar like Yoyodiy, but I just can't.</p>
+<p>Okay, enough Smalltalk, let's talk about how to run <a href="https://github.com/jindrapetrik/jpexs-decompiler">JPEXS Decompiler</a> if your Java implementation is OpenJDK instead of the Java Development Kit(JDK).</p>
+<h2>The problem</h2>
+<p>I install OpenJDK as my computer's Java implementation. However, JPEXS Decompiler said I don't have Java which deeply puzzled me.</p>
+<h2>Monitoring</h2>
+<p>To understand why it had happened, I need to watch actions during the bug occurred.</p>
+<p>Firstly the message box said &quot;This application requires a Java Runtime Environment 1.8.0&quot;, then the application opens a website: <a href="https://java.com/en/download">https://java.com/en/download</a>.</p>
+<p>Luckily jpexs-decompiler opens its source to <a href="https://github.com/jindrapetrik/jpexs-decompiler">Github</a> to find what happened with source code.</p>
+<h2>Troubleshooting: Searching</h2>
+<p>After downloading the whole project, I firstly search the text &quot;This application requires a Java Runtime Environment 1.8.0&quot; to find out which variables use this text, but the string doesn't exist.</p>
+<p>Strange, but there's always a way: I later try to search the text &quot;java.com/en&quot;, and bingo, nsis_plugins/JREDyna_Inetc.nsh use this text. Therefore, I try to research which functions call this text.</p>
+<p>A function in nsis_plugins/JREDyna_Inetc.nsh make me interested during searching: Function DetectJRE.</p>
+<p>I guess the function have something I need to know.</p>
+<h2>Troubleshooting: Registry Windows</h2>
+<p>Interesting codes are around line 300:</p>
+<pre><code class="language-nsh">;DetectJRE64:
+  SetRegView 64
+  ; first, check for an installed JRE
+  ReadRegStr $1 HKLM &quot;SOFTWARE\JavaSoft\Java Runtime Environment&quot; &quot;CurrentVersion&quot;
+  StrCmp $1 &quot;&quot; DetectJDK64
+  ReadRegStr $2 HKLM &quot;SOFTWARE\JavaSoft\Java Runtime Environment\$1&quot; &quot;JavaHome&quot;
+  StrCmp $2 &quot;&quot; DetectJDK64
+  Goto GetJRE
+
+; bypass
+  
+  IfFileExists &quot;$2\bin\java.exe&quot; 0 NoFound
+</code></pre>
+<p>What is <code>ReadRegStr</code> here? <a href="https://nsis.sourceforge.io/Reference/SetRegView">The manual</a> said it reads strings on Registry program.</p>
+<p>HKLM here means HKEY_LOCAL_MACHINE, so it means the function reads keys on <code>HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment</code>. There are two keys in the function need to check: <code>CurrentVersion</code> and <code>''version''\JavaHome</code>.</p>
+<p>&quot;How about making a route to my OpenJDK?&quot; I think, then I add my OpenJDK path to <code>''version''\JavaHome</code>.</p>
+<p>It is a success. But how?</p>
+<h3>How to do it</h3>
+<p>Firstly open the registry editor.</p>
+<p>Then open the <code>HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment</code> key. Generally, most people install Java from Oracle which includes the JDK, and JDK will generate registry key here; But we are using OpenJDK, and the <code>HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment</code> key doesn't exist. We need to add a new string and specify our path.</p>
+<ul>
+<li><code>CurrentVersion</code> can type whatever over <code>1.8.0</code>, but better check on <code>java -version</code>.</li>
+<li>After checking our Java version, let's add the version key and a string called <code>JavaHome</code>. Check out <code>(get-command java).Path</code> and copy the path before <code>\bin\java.exe</code>. For example, if your Java is in <code>C:\java\bin\java.exe</code>, then <code>JavaHome</code> should be <code>C:\java</code>.</li>
+</ul>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

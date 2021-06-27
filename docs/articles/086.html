@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>短文：前後端怎麼傳？</h1>
+<p>這是一篇非常簡單的廢文。主要是為了呼應前面的文章。</p>
+<h2>TL;DR</h2>
+<p>一般來說，<strong>請不要讓後端直接給前端 HTML 文字</strong>。</p>
+<h2>理由</h2>
+<ol>
+<li>前端的呈現與處理不一定 OK</li>
+<li>後端改 HTML 也很麻煩</li>
+<li>伺服器的資源不是這樣用的</li>
+<li>這麼做會有 XSS 的疑慮</li>
+</ol>
+<p>後端最好只應該給呈現所必要的資訊。</p>
+<h2>舉個栗子</h2>
+<p>例如說：如果需要把資料變成表格，盡量避免後端這樣給：</p>
+<pre><code class="language-html">&amp;lt;table&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Foo&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;1&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Bar&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;2&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+</code></pre>
+<p>如果要後端這樣給，你知道什麼是什麼嗎？當你發現自己需要 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/thead"><code>&amp;lt;thead&amp;gt;</code></a> 時怎麼辦？就算後端願意處理，後端的 API 也會越傳越肥。</p>
+<p>因此……你應該要後端這麼傳：</p>
+<pre><code class="language-json">[{&quot;name&quot;:&quot;Foo&quot;,&quot;value&quot;:&quot;1&quot;},{&quot;name&quot;:&quot;Bar&quot;,&quot;value&quot;:&quot;2&quot;}]
+</code></pre>
+<p>這樣前端就比較好決定怎麼呈現了；後端也只要給一個簡單的結構。清潔溜溜。</p>
+<p>對了對了，記得 <code>Content-Type</code> Header 要給 <code>application/json</code> 喔。</p>
+<h2>例外</h2>
+<p>有原則就有例外。有些情況應該給 HTML 字串：</p>
+<ol>
+<li>如果這是用戶輸入，必須照實呈現時。</li>
+<li>如果來自這是所見即所得編輯器（WYSIWYG）的輸入時。</li>
+</ol>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

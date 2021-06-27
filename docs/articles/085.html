@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>直接用字串渲染 DOM？</h1>
+<h2>緣起</h2>
+<p>故事是這樣的：有一串像是 HTML 的文字給你，然後你要用它渲染成 HTML。這要怎麼做呢？</p>
+<p>這個情境很好用：如果後端要給你 HTML 文字、或是想玩玩爬蟲或其他功能的話，其實都很關鍵。</p>
+<p>題外話，後端要給 HTML 文字，之後寫一篇來講。</p>
+<h2>機制</h2>
+<p>那麼瀏覽器有沒有呢？還真有：<a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMParser"><code>DOMParser</code></a>。這個物件能把輸入的字串變成有效的 HTML DOM 文件。</p>
+<p>接著我們可以這樣做：<code>parseFromString(string, type)</code>──</p>
+<ul>
+<li><code>string</code> 就是輸入的字串。</li>
+<li>而 <code>type</code> 可以決定渲染的類別。如果要渲染 HTML 字串的話，使用 <code>&quot;text/html&quot;</code> 就好。</li>
+</ul>
+<p>例如 MDN 提供的：</p>
+<pre><code class="language-js">const parser = new DOMParser();
+const htmlString = &quot;&lt;strong&gt;Beware of the leopard&lt;/strong&gt;&quot;;
+const doc3 = parser.parseFromString(htmlString, &quot;text/html&quot;);
+console.log(doc3.body.firstChild.textContent);
+</code></pre>
+<p>這個範例可以顯示 <code>Beware of the leopard</code> 這文字。</p>
+<h2>實做</h2>
+<p>現在，假設我們想要 <a href="https://developer.mozilla.org">MDN</a> 站內的連結，都顯示簡介。</p>
+<p>我們先寫一個請求站內 HTML 字串的函式：</p>
+<pre><code class="language-js">const get_html_string = async (url) =&gt;
+{
+    const request = await fetch(url).then(res =&gt; res.text());
+    return request;
+};
+</code></pre>
+<p>這樣就可以用非同步的方法，去請求站內 HTML 字串了。</p>
+<p>如果是站外的連結，因為有 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS</a> 的問題，所以可能比較不太可能。</p>
+<p>總之，再繼續從 <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController">https://developer.mozilla.org/en-US/docs/Web/API/AbortController</a> 觀察我們需要的文字。</p>
+<p>（圖……再看看吧）</p>
+<p>觀察下來，我們需要的是「The AbortController interface represents a controller object that allows you to abort one or more Web requests as and when desired.」這段文字。觀察一下，就用 <code>document.querySelector(&quot;.main-page-content p&quot;).innerText</code> 取得吧。</p>
+<pre><code class="language-js">const parse_string = (html) =&gt;
+{   // `?.` 可以讓 undefined 的物件被略過
+    const doc = new DOMParser().parseFromString(html, &quot;text/html&quot;);
+    return doc.querySelector(&quot;.main-page-content p&quot;)?.innerText ?? &quot;&quot;;
+};
+</code></pre>
+<p>然後把他們接在一起：</p>
+<pre><code class="language-js">const main = async (url) =&gt;
+{
+    const html = await get_html_string(url);
+    const the_string = parse_string(html);
+    return parse_string(html);
+};
+</code></pre>
+<p>再把文字綁定在 title 屬性：</p>
+<pre><code class="language-js">const add_title = async(dom) =&gt;
+{
+    const t = await main(dom.href);
+    dom.title = t;
+};
+</code></pre>
+<p>最後只要把所有合條件的連結，都呼叫 <code>add_title</code> 就可以囉：</p>
+<pre><code class="language-js">const links = [...document.querySelectorAll(&quot;a&quot;)].filter(a=&gt; /developer.mozilla.org/g.test(a.href) );
+links.forEach( add_title(dom) );
+</code></pre>
+<h3>實做 TL;DR</h3>
+<p>合起來就是這樣：</p>
+<pre><code class="language-js">const get_html_string = async (url) =&gt;
+{
+    const request = await fetch(url).then(res =&gt; res.text());
+    return request;
+};
+
+const parse_string = (html) =&gt;
+{   // `?.` 可以讓 undefined 的物件被略過
+    const doc = new DOMParser().parseFromString(html, &quot;text/html&quot;);
+    return doc.querySelector(&quot;.main-page-content p&quot;)?.innerText ?? &quot;&quot;;
+};
+
+const main = async (url) =&gt;
+{
+    const html = await get_html_string(url);
+    const the_string = parse_string(html);
+    return the_string;
+};
+
+const add_title = async(dom) =&gt;
+{
+    const t = await main(dom.href);
+    dom.title = t;
+};
+
+const links = [...document.querySelectorAll(&quot;a&quot;)].filter( a =&gt;
+    /developer.mozilla.org/g.test(a.href)
+);
+links.forEach( dom =&gt; add_title(dom) );
+</code></pre>
+<p>這程式還有很多問題，不過先到此為止。</p>
+<h2>其他</h2>
+<h3>那 <a href="https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting">XSS</a> 呢？</h3>
+<p>XSS：只要把 HTML 貼到文件內並執行 JavaScript 的話，執行的 JavaScript 可以被加料，然後搞爛你的電腦。</p>
+<p>我看了一下，結論是 <code>DOMParser</code> 有沙盒機制能阻止 XSS。只要不白目的把東西貼到 innerHTML 的話，看起來應該是可以的。</p>
+<h3>node.js 能不能用？</h3>
+<p>看來不行。<a href="https://stackoverflow.com/questions/11398419">因為有很多機制要處理</a>。</p>
+<p>另，我個人推薦裡面列出的 <a href="https://www.npmjs.com/package/jsdom">jsdom</a> 套件。</p>
+<h2>結語</h2>
+<p>直接用字串渲染為 DOM 的話，你可以用 <code>DOMParser</code> API。這個 API 用途廣泛，是個相當不錯的前端功能。</p>
+<h2>參考資料</h2>
+<ul>
+<li>MDN
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMParser">MDN: DOMParser</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMParser/parseFromString">MDN: DOMParser.parseFromString()</a></li>
+</ul>
+</li>
+<li><a href="https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#dom-parsing-and-serialization">WHATWG: DOM parsing</a></li>
+<li><a href="https://stackoverflow.com/questions/11398419">Trying to use the DOMParser with node js</a></li>
+<li>Security
+<ul>
+<li><a href="https://security.stackexchange.com/questions/123744">Is it safe to use DOMParser to parse client side XML files?</a></li>
+<li><a href="https://security.stackexchange.com/questions/50970">Is it safe to use createHTMLDocument to sanitize HTML?</a></li>
+<li><a href="https://stackoverflow.com/questions/37554623">Can a “new DOMParser.parseFromString” be safer than “createElement”?</a></li>
+<li><a href="https://gomakethings.com/how-saferinnerhtml-works/">How saferInnerHTML() works</a></li>
+</ul>
+</li>
+</ul>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

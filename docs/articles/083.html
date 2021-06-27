@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>Arch Linux installation note</h1>
+<p>The <a href="https://wiki.archlinux.org/index.php/Installation_guide">Installation guide</a> is useful.</p>
+<p>This installation note will do install minimal things can let a VirtualBox virtual machine runs.</p>
+<p>You will need an Oracle VirtualBox, some disk spaces, and, of course, an Arch Linux ISO.</p>
+<h2>Before install</h2>
+<p>In Oracle VirtualBox, the default booting mode for a virtual machine is, BIOS unless EFI mode enabled(which will not be introduced in this article).</p>
+<p>Add the Arch Linux ISO file to the virtual machine we just created. After seeing a command line, type following commands:</p>
+<pre><code class="language-bash">ping archlinux.org # To confirm that the virtual machine can link to the Internet.
+timedatectl set-ntp true # To enable NTP which set the clock automatically.
+</code></pre>
+<h3>Set partitions</h3>
+<p>As the virtual machine uses BIOS, we need to have a <a href="https://wiki.archlinux.org/index.php/Partitioning#Master_Boot_Record">MBR table</a>. Type <code>fdisk -l</code> to check the disk partitions, then use <code>cfdisk</code> to make a partition. In cfdisk, choose dos if we want to make an MBR table.</p>
+<p>The most important things for cfdisk are:</p>
+<ol>
+<li>Have a swap partition with <code>Linux swap/Solaris</code> type.</li>
+<li>Have a bootable main partition with <code>Linux</code> type.</li>
+<li>Write this partition table to the disk.</li>
+</ol>
+<p>Type <code>fdisk -l</code> to check the disk partitions again. You should watch at least two partitions: One is swap and the other one is the main data.</p>
+<p>When everything's fine, format the disk now:</p>
+<pre><code class="language-bash">mkfs.ext4 /dev/root_partition
+mkswap /dev/swap_partition
+</code></pre>
+<h2>Install</h2>
+<h3>Mount</h3>
+<p>To let the ISO know where should software installed, we need to mount.</p>
+<pre><code class="language-bash">swapon /dev/swap_partition
+mount /dev/root_partition /mnt
+</code></pre>
+<p>The disk is now ready to install.</p>
+<h3>Install packages</h3>
+<p>Install packages to our mounting point:</p>
+<pre><code class="language-bash">pacstrap /mnt base linux linux-firmware vim man-db man-pages dhcpcd
+</code></pre>
+<h3>Configure</h3>
+<p>Now we need to set some configs.</p>
+<pre><code class="language-bash">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab # Decide mounting stuffs I guess
+arch-chroot /mnt # Change root into the new system by the manual
+ln -sf /usr/share/zoneinfo/Asia/Taipei /etc/localtime # Set timezone to Asia/Taipei
+hwclock --systohc # Set the clock
+passwd # Add a password to the user root
+</code></pre>
+<h3>Make a boot loader: GRUB</h3>
+<p>A boot loader will inform the OS how to turn our computer on.</p>
+<p>Before approaching, you know we are still using MBR, right?</p>
+<pre><code class="language-bash">pacman -S grub
+fdisk -l
+grub-install --target=i386-pc /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+<h3>Reboot</h3>
+<p>Finally! we can shutdown or reboot, then check our Arch Linux.</p>
+<p>If the Arch Linux working successfully, good; Otherwise, we will need to access by ISO to troubleshoot.</p>
+<h2>What if the installation failed</h2>
+<p>Assume that we still have the ISO disk file.</p>
+<ol>
+<li>Boot from CD</li>
+<li><code>mount /dev/root_partition /mnt</code>. If fails, the problem is from the partition setting.</li>
+<li><code>arch-chroot /mnt</code>.</li>
+<li>Check if there's something missed. Mostly I fail on the boot loader.</li>
+</ol>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
