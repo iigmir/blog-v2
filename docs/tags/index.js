@@ -28,10 +28,13 @@ class DOMRenderUtilities
     MODAL_DOM = {};
     _bind_modal_event()
     {
-        // this.MODAL_DOM.class
-        // TODO: Add a modal closing event.
-        // So that the user can close the modal.
-        console.log( this.MODAL_DOM );
+        this.MODAL_DOM.addEventListener( "click", ( event ) =>
+        {
+            if( event.target === event.currentTarget )
+            {
+                event.target.classList.toggle( "show" );
+            }
+        });
     }
     _tags( input = [])
     {
