@@ -3,6 +3,11 @@ body
     margin: 0;
 }
 
+a
+{
+    text-decoration: underline;
+}
+
 /* Head navgator */
 .navigator .list
 {
@@ -58,7 +63,7 @@ body
     {
         --bg-colour: #121212;
         --text-colour: #a3b1ff;
-        --article-link-colour: #a3b1ff;
+        --article-link-colour: #cbcbff;
         --hover-link-colour: #d898fe;
         --active-link-colour: darkorange;
     }
