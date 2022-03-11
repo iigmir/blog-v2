@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>如何給 Vue 的單元測試填充模塊檔？</h1>
+<h2>TL;DR</h2>
+<p>Jest 有個 <code>jest.mock</code> 可以給 Vue 的單元測試，填充各種模塊檔。方法有兩種：</p>
+<ol>
+<li>在模塊檔的目錄建立 <code>__mocks__</code> 給 Jest 用。然後 <code>jest.mock(&quot;模塊檔位置&quot;)</code></li>
+<li>在測試檔給 <code>jest.mock</code> 的函式帶參數 <code>jest.mock(&quot;模塊檔位置&quot;, &quot;模塊檔結構模擬&quot;)</code></li>
+</ol>
+<h2>問題</h2>
+<p>今天寫測試，寫了像是這樣的東東：</p>
+<pre><code class="language-vue">&lt;template&gt;
+    &lt;main&gt;
+        &lt;p v-show=&quot;show&quot;&gt;{{ text }}&lt;/p&gt;
+    &lt;/main&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import { SomeAJAXAction } from &quot;@/api/foobar.js&quot;;
+
+export default {
+    name: &quot;FooBar2000&quot;,
+    props: {
+        text: {
+            type: String,
+            default: &quot;An example&quot;,
+        }
+    },
+    data: () =&gt; ({
+        show: true,
+    }),
+    async created() {
+        const res = await SomeAJAXAction( /* Some AJAX params */ );
+        this.show = res.data.data;
+    },
+}
+&lt;/script&gt;
+</code></pre>
+<p>想說寫測試嘛，好像是 <a href="https://jestjs.io">Jest</a> 嗎？應該是這樣寫吧：</p>
+<pre><code class="language-js">// test/unit/FooBar2000.soec.js
+import { shallowMount } from &quot;@vue/test-utils&quot;;
+import FooBar2000 from &quot;@/components/FooBar2000.vue&quot;; // 慣例上 @/ 等於 src/
+
+describe(&quot;FooBar2000&quot;, () =&gt; {
+    it(&quot;should render given text&quot;, () =&gt; {
+        wrapper = shallowMount(Home);
+        expect(wrapper.vm.text).toBe(&quot;An example&quot;);
+    });
+});
+</code></pre>
+<p>但出現一些麻煩的錯誤。</p>
+<h3>錯誤</h3>
+<p>關於錯誤的具體情況省略，簡單來說，就是 AJAX 函式 <code>SomeAJAXAction</code> 需要瀏覽器的 <code>window</code> 屬性。但測試檔案因為是跑 node.js 的，當然不可能有 <code>window</code> 屬性。</p>
+<p>我有試過填充 <code>window</code> 屬性，但幾乎沒有用。那怎麼辦呢？</p>
+<p>「何不直接填充 <code>SomeAJAXAction</code> 函式？」</p>
+<p>但怎麼做呢？</p>
+<h2>解決</h2>
+<p>正好 Vue.js Developers <a href="https://vuejsdevelopers.com/2019/09/16/mock-dependencies-jest-unit-test">有人寫下了解法</a>。參考文章的作法，我這麼寫：</p>
+<pre><code class="language-js">// src/api/__mocks__/foobar.js
+export default {
+    SomeAJAXAction: () =&gt; ({ data: { data: true } })
+};
+</code></pre>
+<pre><code class="language-js">// test/unit/FooBar2000.soec.js
+import { shallowMount } from &quot;@vue/test-utils&quot;;
+import FooBar2000 from &quot;@/components/FooBar2000.vue&quot;;
+
+jest.mock(&quot;@/api/foobar.js&quot;);
+
+describe(&quot;FooBar2000&quot;, () =&gt; {
+    it(&quot;should render given text&quot;, () =&gt; {
+        wrapper = shallowMount(Home);
+        expect(wrapper.vm.text).toBe(&quot;An example&quot;);
+    });
+});
+</code></pre>
+<p>然後跑了測試，果然過了！Jest 真的會吃 <code>__mocks__</code> 檔案下的東西！</p>
+<h3>其他辦法</h3>
+<p>那麼有其他辦法嗎？有。還真的有。Jest 的說明手冊寫在 <a href="https://jestjs.io/docs/mock-functions#mocking-partials">Mocking Partials at Mock Functions</a>。</p>
+<p>按照說明，我刪掉了 <code>src/api/__mocks__/foobar.js</code> 的檔案，把程式搬到測試：</p>
+<pre><code class="language-js">// test/unit/FooBar2000.soec.js
+import { shallowMount } from &quot;@vue/test-utils&quot;;
+import FooBar2000 from &quot;@/components/FooBar2000.vue&quot;;
+
+jest.mock(&quot;@/api/foobar.js&quot;, {
+    SomeAJAXAction: () =&gt; ({ data: { data: true } })
+});
+
+describe(&quot;FooBar2000&quot;, () =&gt; {
+    it(&quot;should render given text&quot;, () =&gt; {
+        wrapper = shallowMount(Home);
+        expect(wrapper.vm.text).toBe(&quot;An example&quot;);
+    });
+});
+</code></pre>
+<p>這樣也通喔！</p>
+<p>你甚至能給 AJAX Library 這麼引：</p>
+<pre><code class="language-vue">&lt;script&gt;
+import axios from &quot;axios&quot;;
+export default {
+    async created() {
+        const res = await axios({
+            url: &quot;/some/api&quot;,
+            method: &quot;GET&quot;,
+            params: {
+                foo: &quot;bar&quot;,
+            },
+        });
+    },
+}
+&lt;/script&gt;
+</code></pre>
+<pre><code class="language-js">// test/unit/FooBar2000.soec.js
+import { shallowMount } from &quot;@vue/test-utils&quot;;
+import FooBar2000 from &quot;@/components/FooBar2000.vue&quot;;
+import axios from &quot;axios&quot;;
+
+jest.mock(&quot;axios&quot;);
+
+describe(&quot;FooBar2000&quot;, () =&gt; {
+    it(&quot;should render given text&quot;, () =&gt; {
+        axios.mockResolvedValue({ data: true });
+    });
+});
+</code></pre>
+<h2>參考</h2>
+<ul>
+<li>jest mock window
+<ul>
+<li><a href="https://stackoverflow.com/questions/41885841/how-can-i-mock-the-javascript-window-object-using-jest">https://stackoverflow.com/questions/41885841/how-can-i-mock-the-javascript-window-object-using-jest</a></li>
+<li><a href="https://thewebdev.info/2022/02/24/how-to-mock-the-javascript-window-object-using-jest/">https://thewebdev.info/2022/02/24/how-to-mock-the-javascript-window-object-using-jest/</a></li>
+</ul>
+</li>
+<li>jest mock module
+<ul>
+<li><a href="https://vuejsdevelopers.com/2019/09/16/mock-dependencies-jest-unit-test">https://vuejsdevelopers.com/2019/09/16/mock-dependencies-jest-unit-test</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10243571">https://ithelp.ithome.com.tw/articles/10243571</a></li>
+<li><a href="https://jestjs.io/docs/mock-functions">https://jestjs.io/docs/mock-functions</a></li>
+</ul>
+</li>
+</ul>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

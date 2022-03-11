@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>An interview form about Vue.JS</h1>
+<p>I had a text-based interview weeks ago which is for Vue.JS developers. The whole interview costs me two hours while the interviewer expects only in ten minutes. I don't passed anyway.</p>
+<p>I don't remember what exactly questions are. I only have answers. Therefore, the question may not exactly what the interviewer asks.</p>
+<h2>Questions</h2>
+<h3>Question 1: How do you communicate two components in Vue.JS?</h3>
+<p>We will firstly consider the prop/emit way, which is usually used in Vue.</p>
+<p>For the case (a), we will use something called <a href="https://vuejs.org/v2/api/#props">&quot;props&quot;</a> to pass data in <em>component 1</em>, which received data from its parent <em>component 2</em>.
+For the case (b), we will use [the &quot;$emit&quot; event](https://vuejs.org/v2/api/#vm-emit  to pass datas in <em>component 1</em>, which will sent datas to its parent <em>component 2</em>.
+For the case (c), we can still use the prop/emit system -- Emit data from <em>component 1</em> to <em>component 3</em>, then pass datas to <em>component 2</em> by using props.</p>
+<p>However, in the case (c), the prop/emit system will become tricky when developing, and making the app harder to mintor and debug. In such cases, we want to use a centralised mechanism to make data sharing more easier when more shared datas existed in more components. Therefore, using Vues would helpl sharing data in components.</p>
+<p>The mechanism is that: when <em>component 1</em> -- doesn't matter which the case is -- changes data, it will trigger <a href="https://vuex.vuejs.org/guide/actions.html">&quot;action&quot;</a> to Vuex, then the &quot;action&quot; will trigger <a href="https://vuex.vuejs.org/guide/mutations.html">&quot;mutations&quot;</a>, which set <a href="https://vuex.vuejs.org/guide/state.html">&quot;state&quot;</a>. Finally, <em>component 2</em> can get data from Vuex either using &quot;state&quot; or <a href="https://vuex.vuejs.org/guide/getters.html">&quot;getter&quot;</a>.</p>
+<h2>Question 2: How do you assign an event to capture mutiple DOMs?</h2>
+<p>(Example code the question provides)</p>
+<pre><code class="language-html">&lt;div id=&quot;parent&quot;&gt;
+    &lt;div id=&quot;children&quot;&gt;&lt;/div&gt;
+    &lt;div id=&quot;children&quot;&gt;&lt;/div&gt;
+    &lt;div id=&quot;children&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<hr>
+<pre><code class="language-js">document.querySelector(&quot;#parent&quot;).addEventListener(&quot;click&quot;, () =&gt; { /* some actions */ });
+</code></pre>
+<p>Reference:</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener</a></li>
+</ul>
+<h2>Question 3: How do you assign different delays to different elements?</h2>
+<ol>
+<li>I will use <a href="https://developer.mozilla.org/en-US/docs/Web/API/setTimeout">window.setTimeout</a> with different delays in both Vue and JavaScript.</li>
+<li>I will use different <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/animation-duration">animation-duration</a> in a pure CSS.</li>
+</ol>
+<h2>Question 4: How Vuex works? What's the difference between <code>action</code> and <code>mutation</code> ?</h2>
+<p>In Vuex, <code>actions</code> will commit <code>mutations</code>, which sets <code>state</code>. In addition, actions can do asynchronous operations, which means we call AJAX call in actions instead of mutations.</p>
+<p>In best practice, we <code>dispatch</code> actions, do asynchronous operations like AJAX call in it. Then, we <code>commit</code> mutations with data from actions, and set the state in mutations. It doesn't matter where to handle data, but always do asynchronous operations in actions.</p>
+<h2>Question 5: How do you get APIs when Nuxt rendering SSR?</h2>
+<p>We mostly use the <code>fetch</code> property in SSR Nuxt.</p>
+<p>Reference:</p>
+<ul>
+<li><a href="https://nuxtjs.org/docs/features/data-fetching/">https://nuxtjs.org/docs/features/data-fetching/</a></li>
+</ul>
+<h2>Question 6: How do you implement your authentication process? Token? Cookie? Why?</h2>
+<p>I perfer using access token. In particular, <a href="https://jwt.io">JWT token</a>. I will use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">localStorage</a> to store a JWT token, which stores essential data for a server. Then, I will attach the token to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization">the Authorization header</a> in requests.</p>
+<p>The reason I perfer such process is that:</p>
+<ol>
+<li>API sites I used are mostly crossed-domain, which is not suitable for cookies.</li>
+<li>Access token is more acceptable solution in modern web development.</li>
+<li>JWT token is more familiar for server side developers.</li>
+</ol>
+<p>Here's a good article worth to read:</p>
+<ul>
+<li><a href="https://hackernoon.com/using-session-cookies-vs-jwt-for-authentication-sd2v3vci">https://hackernoon.com/using-session-cookies-vs-jwt-for-authentication-sd2v3vci</a></li>
+</ul>
+<h2>Question 7: What's the difference between <code>computed</code> and <code>watch</code> in Vue.JS?</h2>
+<p>Both <code>computed</code> and <code>watch</code> are something can watch states changing, but is better to use the computed property if I want to get handeled data(For example, get user's age when birth year given has changed) since it's more easy to understand. However, I will to use the watch property if I need to do actions when the state has been changed like calling an AJAX.</p>
+<p>Reference:</p>
+<ul>
+<li><a href="https://vuejs.org/v2/guide/computed.html#Computed-vs-Watched-Property">https://vuejs.org/v2/guide/computed.html#Computed-vs-Watched-Property</a></li>
+</ul>
+<h2>Question 8: How many components do you see?</h2>
+<p>(I miss the image, so you can bypass the answer)</p>
+<hr>
+<p>I see at least 8 major components.</p>
+<ol>
+<li>The navbar on the top.
+1.1. The title on the left of the navbar.
+1.2. The menu options on the right of the navbar.</li>
+<li>The main content with a container on the rest of the page.
+2.1. The title(The TasteWP Blog) on the main content.
+2.2. There are two parts under the title on the main content.
+2.2.1. Two content introduction components on the left. With some minor components picture, subtitle, contnt, and tags in it.
+2.2.2. Some infomation component on the right.</li>
+</ol>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
