@@ -1,12 +1,12 @@
 [{
     "mode": "ajax",
-    "source_directory": "https://api.github.com/repos/iigmir/blog-source/contents/new-articles",
+    "source_directory": "https://api.github.com/repos/iigmir/blog-source/contents/articles",
     "template_file": "src/template.html",
     "destination_directory": "docs/articles",
     "replaced_text": "<the-article />"
 },{
     "mode": "ajax-index",
-    "source_directory": "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/new-category-ids.json",
+    "source_directory": "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/articles.json",
     "template_file": "src/template.html",
     "destination_directory": "docs/articles/index.html",
     "replaced_text": "<the-article />"

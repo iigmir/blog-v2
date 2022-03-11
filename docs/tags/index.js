@@ -79,7 +79,7 @@ $( document ).ready(() =>
     const init_tags = async( tags_data = TagsData ) =>
     {
         let articles = await $.ajax({
-            url: "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/new-category-ids.json"
+            url: "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/articles.json"
         });
         let tags = await $.ajax({
             url: "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/categories.json"
