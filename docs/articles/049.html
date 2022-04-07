@@ -21,11 +21,11 @@
         </nav>
         <article class="article">
             <h1>FastCGI sent in stderr: &quot;Primary script unknown&quot;</h1>
-<p>解決完  <a href="https://iismmx-rails-blog.herokuapp.com/articles/80">nginx worker_connections are not enough</a>  後，我依舊要解決問題。這次是在 php 檔案只出現 File not found 字樣，但檔案明明就有。排查 Log 以後，發現以下錯誤：</p>
+<p>解決完 <a href="https://iismmx-rails-blog.herokuapp.com/articles/80">nginx worker_connections are not enough</a> 後，我依舊要解決問題。這次是在 php 檔案只出現 File not found 字樣，但檔案明明就有。排查 Log 以後，發現以下錯誤：</p>
 <p>&lt;pre&gt;[error] 18762#0: *12 FastCGI sent in stderr: &quot;Primary script unknown&quot; while reading response header from upstream, client: 127.0.0.1, server: localhost, request: &quot;GET /phpinfo.php HTTP/1.1&quot;, upstream: &quot;fastcgi://127.0.0.1:9000&quot;, host: &quot;127.0.0.1&quot;, referrer: &quot;http://127.0.0.1/&quot;&lt;/pre&gt;</p>
 <p>去 <a href="https://serverfault.com/a/754378">Server Fault</a> 以後，發現可以在 Log 宣告變數：</p>
 <p>&lt;pre&gt;log_format scripts '$document_root$fastcgi_script_name &gt; $request' #請放在 http 區塊&lt;/pre&gt;</p>
-<p>這個意思是，建立一種紀錄模式稱為 <code>scripts</code>，裡面會紀錄 <code>$document_root</code> <code>$fastcgi_script_name</code> <code>$request</code> 三個變數，以及 <code>&amp;gt;</code> 符號。接著在 nginx.conf 的 <code>server</code> 區塊寫下：</p>
+<p>這個意思是，建立一種紀錄模式稱為 <code>scripts</code>，裡面會紀錄 <code>$document_root</code> <code>$fastcgi_script_name</code> <code>$request</code> 三個變數，以及 <code>&gt;</code> 符號。接著在 nginx.conf 的 <code>server</code> 區塊寫下：</p>
 <p>&lt;pre&gt;access_log /my/logs/path.log scripts; #/my/logs/path.log 要修改為 nginx 可執行的路徑&lt;/pre&gt;</p>
 <p>他會在 <code>/my/logs/path.log</code> 的檔案內，紀錄先前寫好的 <code>scripts</code> 模式。接著去 <code>/my/logs/path.log</code> 裡查查看：</p>
 <p>&lt;pre&gt;/usr/local/Cellar/nginx/1.13.12/html/phpinfo.php &gt; GET /phpinfo.php HTTP/1.1&lt;/pre&gt;</p>

@@ -30,25 +30,23 @@
 <p>那麼，它怎麼玩呢？難道是給 JSON API 嗎？</p>
 <p>網路告訴我它直接給了 <code>.ogg</code> 檔案播放，沒有 <code>.json</code> 檔案被傳送。這意味著，按鈕裡面很可能直接包含來源網址。</p>
 <p>那我們把網頁原始碼打開來看吧：</p>
-<pre><code class="language-html">&amp;lt;span class=&quot;ogg_custom aqours&quot;&amp;gt;
-    &amp;lt;div id=&quot;ogg_player_1&quot; class=&quot;ogg_player&quot;&amp;gt;
-        &amp;lt;div&amp;gt;
-            &amp;lt;button onclick=&quot;if (typeof(wgOggPlayer)&amp;nbsp;!= 'undefined') wgOggPlayer.init(false, {&amp;quot;id&amp;quot;:&amp;quot;ogg_player_1&amp;quot;,&amp;quot;videoUrl&amp;quot;:&amp;quot;https://vignette.wikia.nocookie.net/love-live/images/e/e6/Aozora_Jumping_Heart.ogg/revision/latest?cb=20160716075746&amp;quot;,&amp;quot;width&amp;quot;:180,&amp;quot;height&amp;quot;:35,&amp;quot;length&amp;quot;:284,&amp;quot;linkUrl&amp;quot;:&amp;quot;/wiki/File:Aozora_Jumping_Heart.ogg&amp;quot;,&amp;quot;isVideo&amp;quot;:false});&quot; style=&quot;width: 180px; text-align: center&quot; title=&quot;Play sound&quot;&amp;gt;&amp;lt;img src=&quot;/extensions/OggHandler/play.png&quot; alt=&quot;Play sound&quot; width=&quot;22&quot; height=&quot;22&quot;&amp;gt;&amp;lt;/button&amp;gt;
-        &amp;lt;/div&amp;gt;
-        &amp;lt;div&amp;gt;
-            &amp;lt;a href=&quot;/wiki/File:Aozora_Jumping_Heart.ogg&quot; class=&quot;image&quot; title=&quot;About this file&quot;&amp;gt;&amp;lt;img src=&quot;/extensions/OggHandler/info.png&quot; alt=&quot;Aozora Jumping Heart&quot; width=&quot;22&quot; height=&quot;22&quot;&amp;gt;&amp;lt;/a&amp;gt;
-        &amp;lt;/div&amp;gt;
-    &amp;lt;/div&amp;gt;
-&amp;lt;/span&amp;gt;
+<pre><code class="language-html">&lt;span class=&quot;ogg_custom aqours&quot;&gt;
+    &lt;div id=&quot;ogg_player_1&quot; class=&quot;ogg_player&quot;&gt;
+        &lt;div&gt;
+            &lt;button onclick=&quot;if (typeof(wgOggPlayer)&amp;nbsp;!= 'undefined') wgOggPlayer.init(false, {&amp;quot;id&amp;quot;:&amp;quot;ogg_player_1&amp;quot;,&amp;quot;videoUrl&amp;quot;:&amp;quot;https://vignette.wikia.nocookie.net/love-live/images/e/e6/Aozora_Jumping_Heart.ogg/revision/latest?cb=20160716075746&amp;quot;,&amp;quot;width&amp;quot;:180,&amp;quot;height&amp;quot;:35,&amp;quot;length&amp;quot;:284,&amp;quot;linkUrl&amp;quot;:&amp;quot;/wiki/File:Aozora_Jumping_Heart.ogg&amp;quot;,&amp;quot;isVideo&amp;quot;:false});&quot; style=&quot;width: 180px; text-align: center&quot; title=&quot;Play sound&quot;&gt;&lt;img src=&quot;/extensions/OggHandler/play.png&quot; alt=&quot;Play sound&quot; width=&quot;22&quot; height=&quot;22&quot;&gt;&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;a href=&quot;/wiki/File:Aozora_Jumping_Heart.ogg&quot; class=&quot;image&quot; title=&quot;About this file&quot;&gt;&lt;img src=&quot;/extensions/OggHandler/info.png&quot; alt=&quot;Aozora Jumping Heart&quot; width=&quot;22&quot; height=&quot;22&quot;&gt;&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/span&gt;
 </code></pre>
 <p>注意一下 <code>&lt;button&gt;</code> 裡面的標籤：</p>
 <pre><code class="language-html">onclick=&quot;if (typeof(wgOggPlayer) != 'undefined') wgOggPlayer.init(false, {&quot;id&quot;:&quot;oggplayer1&quot;,&quot;videoUrl&quot;:&quot;https://vignette.wikia.nocookie.net/love-live/images/e/e6/AozoraJumpingHeart.ogg/revision/latest?cb=20160716075746&quot;,&quot;width&quot;:180,&quot;height&quot;:35,&quot;length&quot;:284,&quot;linkUrl&quot;:&quot;/wiki/File:AozoraJumpingHeart.ogg&quot;,&quot;isVideo&quot;:false});&quot;
 </code></pre>
 <p>裡面放了個有趣的執行程式：<code>wgOggPlayer.init()</code>。如果你用除錯器（在開發工具內，針對 <code>onclick</code> 屬性的程式碼輸入 <code>debugger</code>，也就是 <code>onclick=&quot; debugger; if (typeof(</code>，除錯器就會在開發工具啟動時開始跑除錯器）去追蹤這段程式碼，它會把你帶往一個 JavaScript 的頁面。</p>
-<p>那個程式要幹嘛不重要，重要的是裡面有個東西叫做 <code>videoUrl</code>，它有我們需要的東西：
-&lt;pre&gt;
-https://vignette.wikia.nocookie.net/love-live/images/e/e6/AozoraJumpingHeart.ogg/revision/latest?cb=20160716075746
-&lt;/pre&gt;</p>
+<p>那個程式要幹嘛不重要，重要的是裡面有個東西叫做 <code>videoUrl</code>，它有我們需要的東西：</p>
+<p><code>https://vignette.wikia.nocookie.net/love-live/images/e/e6/AozoraJumpingHeart.ogg/revision/latest?cb=20160716075746</code></p>
 <p>於是，我們知道了。追這個 <code>&lt;button&gt;</code> 標籤裡面的東西準沒錯。</p>
 <p>不過，它好像不能用 jQuery 的 <code>$(&quot;button&quot;)</code> 叫出來啊……怎麼辦呢？</p>
 <p>你想到了嗎？<code>$(&quot;span.ogg_custom &quot;).html()</code> 啊。這樣就能以字串的形式，叫出裡面的 HTML 了。抓到以後，用<a href="http://regexr.com">正規表達式</a>抓文字不就好了？</p>

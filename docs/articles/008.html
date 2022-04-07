@@ -29,28 +29,24 @@
 </blockquote>
 <p>於是我查了一下 Disqus 怎麼用。還蠻簡單的，套個 HTML 與 JavaScript 的腳本就成。</p>
 <p>但你看一下，上面的註解，有個有趣的東西……</p>
-<p>&lt;pre&gt;
-/**</p>
-<ul>
-<li>RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.</li>
-<li>LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+<pre><code class="language-js">/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 /*
 var disqus_config = function () {
 this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
 this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
 };
 */
-&lt;/pre&gt;</li>
-</ul>
+</code></pre>
 <p>嗯，按照官方文件所說，這段小腳本可以避免意見重複發送。我似乎應該做這個東西吧？
 我運氣也不錯，很快就看到 Jason Lung 的文章：</p>
-<p>&lt;pre&gt;
-var disqus_config = function ()
+<pre><code class="language-js">var disqus_config = function ()
 {
-this.page.url = &quot;&lt;%= url_for([@post, {only_path: false}]) %&gt;&quot;
-this.page.identifier = &quot;&lt;%= @post.id %&gt;&quot;;
+    this.page.url = &quot;&lt;%= url_for([@post, {only_path: false}]) %&gt;&quot;
+    this.page.identifier = &quot;&lt;%= @post.id %&gt;&quot;;
 };
-&lt;/pre&gt;</p>
+</code></pre>
 <p>複製貼上，下一秒就完成囉。抄簡單der</p>
 <p>……才怪。</p>
 <blockquote>
@@ -80,13 +76,12 @@ this.page.identifier = &quot;&lt;%= @post.id %&gt;&quot;;
 </li>
 </ol>
 <p>所以要把上面那段程式碼修正為：</p>
-<p>&lt;pre&gt;
-var disqus_config = function ()
+<pre><code class="language-js">var disqus_config = function () 
 {   // https://iismmx-rails-blog.herokuapp.com 是我的網站 URL。複製貼上的話，應該把 URL 變成自己的網站。
-this.page.url = &quot;https://iismmx-rails-blog.herokuapp.com&lt;%= url_for([@post, {only_path: false}]) %&gt;&quot;;
-this.page.identifier = &quot;&lt;%= @post.id %&gt;&quot;;
+    this.page.url = &quot;https://iismmx-rails-blog.herokuapp.com&lt;%= url_for([@post, {only_path: false}]) %&gt;&quot;;
+    this.page.identifier = &quot;&lt;%= @post.id %&gt;&quot;;
 };
-&lt;/pre&gt;</p>
+</code></pre>
 <p>這樣就行了。一個留言後台終於完成了。</p>
 <p>等一下……我甚至連留言的資料庫都不用寫了嘛…………！！</p>
 

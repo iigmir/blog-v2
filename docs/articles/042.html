@@ -29,32 +29,36 @@
 <h2>Vue 做什麼的？</h2>
 <p>在 jQuery 的時代，資料呈現是以 DOM element 為單位：這種情況下，如果要更換資料，就會以 DOM element 操作為主。
 例如我想要輸入 input 時把資料呈現的話，在 jQuery 就會這樣寫：</p>
-<p>&lt;pre&gt;
-&lt;div id=&quot;app&quot;&gt;
-&lt;input class=&quot;foo&quot;&gt;&lt;br /&gt;
-&lt;span class=&quot;bar&quot;&gt;&lt;/span&gt;&lt;br /&gt;
-&lt;span class=&quot;baz&quot;&gt;&lt;/span&gt;
-&lt;/div&gt;</p>
-<p>$(&quot;.foo&quot;).keypress(function()
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+    &lt;input class=&quot;foo&quot;&gt;&lt;br /&gt;
+    &lt;span class=&quot;bar&quot;&gt;&lt;/span&gt;&lt;br /&gt;
+    &lt;span class=&quot;baz&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+$(&quot;.foo&quot;).keypress(function()
 {
-var the_text = $(&quot;.foo&quot;).val();
-$(&quot;.bar&quot;).text(the_text);
-$(&quot;.baz&quot;).text( &quot;輸入了&quot; + the_text);
+    var the_text = $(&quot;.foo&quot;).val();
+    $(&quot;.bar&quot;).text(the_text);
+    $(&quot;.baz&quot;).text( &quot;輸入了&quot; + the_text);
 });
-&lt;/pre&gt;</p>
+&lt;/script&gt;
+</code></pre>
 <p>但萬一我要改動 DOM element 的話，就會是惡夢一場。</p>
 <p>在雙向綁定的 Vue 就不同了，你可以這樣寫：</p>
-<p>&lt;pre&gt;
-&lt;div id=&quot;app&quot;&gt;
-&lt;input clas=&quot;foo&quot; v-model=&quot;foo_m&quot;&gt;&lt;br /&gt;
-&lt;span class=&quot;bar&quot;&gt; {{ foo_m }} &lt;/span&gt;&lt;br /&gt;
-&lt;span class=&quot;baz&quot;&gt; {{ &quot;輸入了&quot; + foo_m }} &lt;/span&gt;
-&lt;/div&gt;</p>
-<p>var app = new Vue({
-data:{ foo_m : &quot;&quot; },
-method:{  }
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+    &lt;input clas=&quot;foo&quot; v-model=&quot;foo_m&quot;&gt;&lt;br /&gt;
+    &lt;span class=&quot;bar&quot;&gt; {{ foo_m }} &lt;/span&gt;&lt;br /&gt;
+    &lt;span class=&quot;baz&quot;&gt; {{ &quot;輸入了&quot; + foo_m }} &lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+var app = new Vue({
+    data:{ foo_m : &quot;&quot; },
+    method:{  }
 })
-&lt;/pre&gt;</p>
+&lt;/script&gt;
+</code></pre>
 <p>整個程式碼就會整潔許多。</p>
 <ul>
 <li><a href="https://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000/00147574857851718682c42639f466a934ad9d4f485d1f2000">廖雪峰的官方网站：双向绑定</a></li>
@@ -73,22 +77,22 @@ method:{  }
 </ul>
 <h2>如果我給一個 JSON API，你如何把它變成網頁表格的資料？</h2>
 <p>假設在 Vue 的話：</p>
-<pre><code class="language-html">&amp;lt;table&gt;
-    &amp;lt;thead&gt;
-        &amp;lt;tr&gt;
-            &amp;lt;td&gt;ID&amp;lt;/td&gt;
-            &amp;lt;td&gt;Name&amp;lt;/td&gt;
-            &amp;lt;td&gt;Account&amp;lt;/td&gt;
-        &amp;lt;/tr&gt;
-    &amp;lt;/thead&gt;
-    &amp;lt;tbody&gt;
-        &amp;lt;tr v-for=&quot;(value, key, index) in i_ajax&quot; :key=&quot;i.id&quot;&gt;
-            &amp;lt;td&gt; {{ index }} &amp;lt;/td&gt;
-            &amp;lt;td&gt; {{ value.name }} &amp;lt;/td&gt;
-            &amp;lt;td&gt; {{ value.account }} &amp;lt;/td&gt;
-        &amp;lt;/tr&gt;
-    &amp;lt;/tbody&gt;
-&amp;lt;/table&gt;
+<pre><code class="language-html">&lt;table&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;td&gt;ID&lt;/td&gt;
+            &lt;td&gt;Name&lt;/td&gt;
+            &lt;td&gt;Account&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr v-for=&quot;(value, key, index) in i_ajax&quot; :key=&quot;i.id&quot;&gt;
+            &lt;td&gt; {{ index }} &lt;/td&gt;
+            &lt;td&gt; {{ value.name }} &lt;/td&gt;
+            &lt;td&gt; {{ value.account }} &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
 </code></pre>
 <ul>
 <li><a href="https://vuejs.org/v2/guide/list.html">List Rendering</a></li>
@@ -119,7 +123,8 @@ method:{  }
 <p>我會找官方手冊，接著找 Stack Overflow。完全沒有，就會去中文即時通訊軟體如 Line Telegram 之類的，因為它們能很快得到需要的回應。</p>
 <h2>你使用什麼版控？</h2>
 <blockquote>
-<p>「Git，你們該不會用 SVN？」 &lt;br /&gt; 「我的確是 SVN，不過我可以用 Git」</p>
+<p>「Git，你們該不會用 SVN？」<br>
+「我的確是 SVN，不過我可以用 Git」</p>
 </blockquote>
 <h2>針對 RWD 你會用手刻？還是框架？</h2>
 <p>針對 RWD 我會以框架優先：因為框架速度快、大家都懂、也好維護。真的沒有辦法（例如查遍手冊都沒有正確用法）時，才會考慮手刻。</p>

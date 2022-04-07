@@ -25,14 +25,15 @@
 <p>工作碰上一個問題，就是我在模擬一份資料。這份資料長度不明，但我會需要自己新增屬性。問題在於，如果我想更改狀態，啥都沒有。因為想先快回家，所以這個問題只好留著不解決（我的頭……）。</p>
 <h2>你怎麼了？</h2>
 <p>程式如下：</p>
-<pre><code class="language-vue">&amp;lt;div v-for=&quot;(odd, idx) in i.odds&quot;&amp;gt;
-    &amp;lt;div id=&quot;app&quot; v-bind:class=&quot;{ active : foobar( input ) , box : true }&quot;&amp;gt;
-        &amp;lt;div v-on:click=&quot;fbz( input )&quot;&amp;gt; &lt;!-- active --&gt;
-            &amp;lt;p&gt; {{ idx + 1 }} &amp;lt;/p&amp;gt;
-            &amp;lt;p class=&quot;&quot;&gt; {{ odd }} &amp;lt;/p&amp;gt;
-        &amp;lt;/div&gt;
-    &amp;lt;/div&gt;
-&amp;lt;/div&gt;
+<pre><code class="language-vue">&lt;div v-for=&quot;(odd, idx) in i.odds&quot;&gt;
+    &lt;div id=&quot;app&quot; v-bind:class=&quot;{ active : foobar( input ) , box : true }&quot;&gt;
+        &lt;div v-on:click=&quot;fbz( input )&quot;&gt; &lt;!-- active --&gt;
+            &lt;p&gt; {{ idx + 1 }} &lt;/p&gt;
+            &lt;p class=&quot;&quot;&gt; {{ odd }} &lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
 var app =  new Vue({
     el:&quot;#app&quot;,
     data: { odds:[] },
@@ -63,7 +64,7 @@ var app =  new Vue({
 <p>另外我也很好奇：Vue 官方說明之所以有這麼詭異的問題，是「受现代 JavaScript 的限制 (以及废弃 Object.observe)」。但，那個「限制」是什麼？可能要看 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get">getter</a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set">setter</a> 了。</p>
 <h2>那怎麼辦？</h2>
 <p>在 <code>mounted</code> 新增屬性時設定 <a href="https://vuejs.org/v2/api/#Vue-set-target-key-value"><code>.$set</code></a>。上例就是改為 <code>app.odds.forEach( (el,idx) =&gt; { this.$set( this.odds[idx] , 'b', false); )</code>：</p>
-<pre><code class="language-vue">mounted: function() {
+<pre><code class="language-js">mounted: function() {
     // AJAX
     app.odds = AJAX.recived;
     app.odds.forEach( (el,idx) =&gt; { this.$set( this.odds[idx] , 'b', false); } )
@@ -81,8 +82,8 @@ var app =  new Vue({
 <li><a href="https://github.com/vuejs/vue/issues/5565">In a nested v-for, :class binding is not working with mouseover / mouseout events</a></li>
 <li><a href="https://cn.vuejs.org/v2/guide/reactivity.html">深入响应式原理</a></li>
 <li><a href="https://pjchender.blogspot.tw/2017/05/vue-vue-reactivity.html">為什麼畫面沒有隨資料更新 - Vue 響應式原理（Reactivity）</a></li>
-<li><a href="https://www.cnblogs.com/zhuzhenwei918/p/6893496.html"> vue中遇到的坑 --- 变化检测问题（数组相关） </a></li>
-<li><a href="https://www.w3cplus.com/vue/vue-reactivity-and-pitfalls.html"> Vue响应式及其缺陷 </a></li>
+<li><a href="https://www.cnblogs.com/zhuzhenwei918/p/6893496.html">vue中遇到的坑 --- 变化检测问题（数组相关）</a></li>
+<li><a href="https://www.w3cplus.com/vue/vue-reactivity-and-pitfalls.html">Vue响应式及其缺陷</a></li>
 </ul>
 
         </article>

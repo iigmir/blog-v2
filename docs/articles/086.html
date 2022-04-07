@@ -34,9 +34,9 @@
 <p>後端最好只應該給呈現所必要的資訊。</p>
 <h2>舉個栗子</h2>
 <p>例如說：如果需要把資料變成表格，盡量避免後端這樣給：</p>
-<pre><code class="language-html">&amp;lt;table&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Foo&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;1&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Bar&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;2&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+<pre><code class="language-html">&lt;table&gt;&lt;tr&gt;&lt;td&gt;Foo&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Bar&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 </code></pre>
-<p>如果要後端這樣給，你知道什麼是什麼嗎？當你發現自己需要 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/thead"><code>&amp;lt;thead&amp;gt;</code></a> 時怎麼辦？就算後端願意處理，後端的 API 也會越傳越肥。</p>
+<p>如果要後端這樣給，你知道什麼是什麼嗎？當你發現自己需要 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/thead"><code>&lt;thead&gt;</code></a> 時怎麼辦？就算後端願意處理，後端的 API 也會越傳越肥。</p>
 <p>因此……你應該要後端這麼傳：</p>
 <pre><code class="language-json">[{&quot;name&quot;:&quot;Foo&quot;,&quot;value&quot;:&quot;1&quot;},{&quot;name&quot;:&quot;Bar&quot;,&quot;value&quot;:&quot;2&quot;}]
 </code></pre>

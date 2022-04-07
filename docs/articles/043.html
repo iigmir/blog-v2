@@ -21,33 +21,33 @@
         </nav>
         <article class="article">
             <h1>關於後端的 Helper</h1>
-<p>鳩山與福澤在白板面前，討論對網路框架的感想。&lt;br /&gt;
-福澤看似若有所思，接著問鳩山說：「你知道後端 helper 嗎？」&lt;br /&gt;
-鳩山遲了幾秒，決定問福澤：「我不太清楚你對 helper 的定義，是有什麼意思嗎？」&lt;br /&gt;
+<p>鳩山與福澤在白板面前，討論對網路框架的感想。<br>
+福澤看似若有所思，接著問鳩山說：「你知道後端 helper 嗎？」<br>
+鳩山遲了幾秒，決定問福澤：「我不太清楚你對 helper 的定義，是有什麼意思嗎？」<br>
 「好吧，」福澤拿起白板上的白板筆，開始在白板寫起程式碼：</p>
-<pre><code>form_helper({ action:&quot;qwerty&quot; , class:&quot;foobar&quot;}) |f|
+<pre><code class="language-ruby">form_helper({ action:&quot;qwerty&quot; , class:&quot;foobar&quot;}) |f|
     f.text a.bc
     f.number a.cx
     f.submit({value:&quot;Submit&quot;})
 end
 </code></pre>
-<p>「你猜這東西最後會變成什麼嗎？」筆一甫落，福澤就問鳩山這個問題。&lt;br /&gt;
-鳩山看了這個有點抽象、甚至有點不太熟悉的程式碼，決定放棄：「嗯，我有點不清楚。請問它最後會變成什麼樣子？」&lt;br /&gt;
+<p>「你猜這東西最後會變成什麼嗎？」筆一甫落，福澤就問鳩山這個問題。<br>
+鳩山看了這個有點抽象、甚至有點不太熟悉的程式碼，決定放棄：「嗯，我有點不清楚。請問它最後會變成什麼樣子？」<br>
 「好的。」福澤又拿起白板筆，在題目旁邊寫了答案：</p>
-<pre><code class="language-html">&amp;lt;form action=&quot;qwerty&quot; class=&quot;foobar&quot;&amp;gt;
-    &amp;lt;input type=&quot;text&quot; name=&quot;a[bc]&quot;&amp;gt;
-    &amp;lt;input type=&quot;number&quot; name=&quot;a[cx]&quot;&amp;gt;
-    &amp;lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&amp;gt;
-&amp;lt;/form&amp;gt;
+<pre><code class="language-html">&lt;form action=&quot;qwerty&quot; class=&quot;foobar&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;a[bc]&quot;&gt;
+    &lt;input type=&quot;number&quot; name=&quot;a[cx]&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+&lt;/form&gt;
 </code></pre>
 <p>寫 Java 的鳩山看了就發現：「噢...噢...我知道了。原來是這樣子。」</p>
 <p>「這是一種類似 <a href="http://guides.rubyonrails.org/form_helpers.html">rails</a> 的虛擬碼。不過許多網路框架也有這種東西。」福澤開了 <a href="https://www.codeigniter.com/userguide3/helpers/form_helper.html">CodeIgniter</a> 與 <a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/forms">Express</a> 的程式碼網站。</p>
-<p>「事實上，」福澤繼續說：「<a href="https://laravel.com/docs/4.2/html">Laravel 也有這種東西</a>。我們讀了一點文件，也有一點程式基礎，所以能知道這些後端 Helper 可以幹什麼，接著就可以為此少寫很多東西。」&lt;br /&gt;
-「你說得沒錯。」鳩山點頭。&lt;br /&gt;
+<p>「事實上，」福澤繼續說：「<a href="https://laravel.com/docs/4.2/html">Laravel 也有這種東西</a>。我們讀了一點文件，也有一點程式基礎，所以能知道這些後端 Helper 可以幹什麼，接著就可以為此少寫很多東西。」<br>
+「你說得沒錯。」鳩山點頭。<br>
 「不過呢，」福澤話鋒一轉：「不是所有人都知道那是什麼東西，無論那個人是前端或後端。要維護還有劃清責任的話，可能會有問題。」</p>
 <p>室內靜默了幾秒，因為福澤說他口渴，需要喝點茶，順便醞釀氣氛。</p>
-<p>福澤喝完點茶後，開始總結：「基於我前端出身，我其實不太喜歡這種完全不像 HTML 的東西。如果要我發表意見，我其實不贊同使用。」&lt;br /&gt;
-鳩山遲了幾秒，也發表看法：「這方面我也同意，這種東西可能會很難把責任分清楚。我寧願用 JSON API 傳資料、或是後端處理前端傳過來的請求。」&lt;br /&gt;
+<p>福澤喝完點茶後，開始總結：「基於我前端出身，我其實不太喜歡這種完全不像 HTML 的東西。如果要我發表意見，我其實不贊同使用。」<br>
+鳩山遲了幾秒，也發表看法：「這方面我也同意，這種東西可能會很難把責任分清楚。我寧願用 JSON API 傳資料、或是後端處理前端傳過來的請求。」<br>
 福澤摸了摸下巴說：「既然我們有所共識，那我們就不用內建的後端 Helper 吧。」</p>
 <p>做出結論後，兩個人就回到位子上了。</p>
 

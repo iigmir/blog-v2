@@ -23,34 +23,34 @@
             <h1>BootstrapVue: What if I want to refactor scoped field slots in tables</h1>
 <h2>First: The problem</h2>
 <p>Have you used <a href="https://bootstrap-vue.org">BootstrapVue</a> before? If so, you may have known that you can control what a cell should look like in a table by using <a href="https://bootstrap-vue.org/docs/components/table#scoped-field-slots">scoped field slots</a>.</p>
-<p>Simply said, you can use <code>&amp;lt;template #cell(prop)=&quot;&quot;&amp;gt;</code> on <code>&amp;lt;b-table&amp;gt;</code> template; and add a <code>[&quot;prop&quot;]</code> item to <code>fields</code> property. Like <a href="https://bootstrap-vue.org/docs/components/table#scoped-field-slots">example</a> shows:</p>
-<pre><code class="language-vue">&amp;lt;template&amp;gt;
-    &amp;lt;div&amp;gt;
-        &amp;lt;b-table small :fields=&quot;fields&quot; :items=&quot;items&quot; responsive=&quot;sm&quot;&amp;gt;
-            &amp;lt;!-- A virtual column --&amp;gt;
-            &amp;lt;template #cell(index)=&quot;data&quot;&amp;gt;
+<p>Simply said, you can use <code>&lt;template #cell(prop)=&quot;&quot;&gt;</code> on <code>&lt;b-table&gt;</code> template; and add a <code>[&quot;prop&quot;]</code> item to <code>fields</code> property. Like <a href="https://bootstrap-vue.org/docs/components/table#scoped-field-slots">example</a> shows:</p>
+<pre><code class="language-vue">&lt;template&gt;
+    &lt;div&gt;
+        &lt;b-table small :fields=&quot;fields&quot; :items=&quot;items&quot; responsive=&quot;sm&quot;&gt;
+            &lt;!-- A virtual column --&gt;
+            &lt;template #cell(index)=&quot;data&quot;&gt;
                 {{ data.index + 1 }}
-            &amp;lt;/template&amp;gt;
+            &lt;/template&gt;
 
-            &amp;lt;!-- A custom formatted column --&amp;gt;
-            &amp;lt;template #cell(name)=&quot;data&quot;&amp;gt;
-                &amp;lt;b class=&quot;text-info&quot;&amp;gt;{{ data.value.last.toUpperCase() }}&amp;lt;/b&amp;gt;, &amp;lt;b&amp;gt;{{ data.value.first }}&amp;lt;/b&amp;gt;
-            &amp;lt;/template&amp;gt;
+            &lt;!-- A custom formatted column --&gt;
+            &lt;template #cell(name)=&quot;data&quot;&gt;
+                &lt;b class=&quot;text-info&quot;&gt;{{ data.value.last.toUpperCase() }}&lt;/b&gt;, &lt;b&gt;{{ data.value.first }}&lt;/b&gt;
+            &lt;/template&gt;
 
-            &amp;lt;!-- A virtual composite column --&amp;gt;
-            &amp;lt;template #cell(nameage)=&quot;data&quot;&amp;gt;
+            &lt;!-- A virtual composite column --&gt;
+            &lt;template #cell(nameage)=&quot;data&quot;&gt;
                 {{ data.item.name.first }} is {{ data.item.age }} years old
-            &amp;lt;/template&amp;gt;
+            &lt;/template&gt;
 
-            &amp;lt;!-- Optional default data cell scoped slot --&amp;gt;
-            &amp;lt;template #cell()=&quot;data&quot;&amp;gt;
-                &amp;lt;i&amp;gt;{{ data.value }}&amp;lt;/i&amp;gt;
-            &amp;lt;/template&amp;gt;
-        &amp;lt;/b-table&amp;gt;
-    &amp;lt;/div&amp;gt;
-&amp;lt;/template&amp;gt;
+            &lt;!-- Optional default data cell scoped slot --&gt;
+            &lt;template #cell()=&quot;data&quot;&gt;
+                &lt;i&gt;{{ data.value }}&lt;/i&gt;
+            &lt;/template&gt;
+        &lt;/b-table&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
 
-&amp;lt;script&amp;gt;
+&lt;script&gt;
 export default {
     data() {
         return {
@@ -75,14 +75,14 @@ export default {
         }
     }
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre>
 <p>But what if your scoped field slots of a table are <a href="https://www.youtube.com/watch?v=mH0_XpSHkZo">more and more</a>? How to maintain it when you have more than thirty scoped field slots of the table?</p>
 <p>I found that I can't use <code>v-bind</code> and <code>v-for</code> to make slots into an iterable array. Therefore, I should consider <a href="https://vuejs.org/v2/guide/render-function.html">the <code>render</code> function</a>.</p>
 <h2>Second: What exactly the <code>render</code> function is</h2>
 <p>Like <a href="https://reactjs.org">React</a>, Vue uses <a href="https://vuejs.org/v2/guide/render-function.html#Nodes-Trees-and-the-Virtual-DOM">Virtual DOM</a> to build the whole website structure from version 2.</p>
 <p>So this code:</p>
-<pre><code class="language-vue">&amp;lt;i class=&quot;foo&quot;&amp;gt;{{ value }}&amp;lt;/i&amp;gt;
+<pre><code class="language-vue">&lt;i class=&quot;foo&quot;&gt;{{ value }}&lt;/i&gt;
 </code></pre>
 <p>Will be complied to:</p>
 <pre><code class="language-js">function (createElement) {
@@ -91,17 +91,17 @@ export default {
 </code></pre>
 <h2>Third: Exercise</h2>
 <p>But how about the table I mentioned before? Will the code in the first paragraph:</p>
-<pre><code class="language-vue">&amp;lt;template&amp;gt;
-    &amp;lt;div&amp;gt;
-        &amp;lt;b-table&amp;gt;
-            &amp;lt;template #cell(index)=&quot;data&quot;&amp;gt;
+<pre><code class="language-vue">&lt;template&gt;
+    &lt;div&gt;
+        &lt;b-table&gt;
+            &lt;template #cell(index)=&quot;data&quot;&gt;
                 {{ data.index + 1 }}
-            &amp;lt;/template&amp;gt;
-        &amp;lt;/b-table&amp;gt;
-    &amp;lt;/div&amp;gt;
-&amp;lt;/template&amp;gt;
+            &lt;/template&gt;
+        &lt;/b-table&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
 
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre>
 <p>look like this?</p>
 <pre><code class="language-js">createElement(&quot;div&quot;, [
