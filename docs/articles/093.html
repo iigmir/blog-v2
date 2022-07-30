@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>換D槽硬碟的筆記</h1>
+<h2>問題</h2>
+<p>最近，我的電腦會在響了四下後，停在 BIOS 那邊。本來為了修開機順序，我就上網爬文，看看會可能是有什麼問題、解法如何。結果，看見有人提到，可能要檢查電腦硬碟有沒有問題。</p>
+<p>要檢查電腦硬碟，最簡單的方法是 <a href="https://en.wikipedia.org/wiki/S.M.A.R.T.">SMART</a>。如果有興趣的話，我建議抓 <a href="https://crystalmark.info/en/software/crystaldiskinfo/">CrystalDiskInfo</a>. 可愛的水晶雫幫你看硬碟怎不香呢。</p>
+<p>我打開來看……</p>
+<p><img src="https://raw.githubusercontent.com/iigmir/blog-source/master/assets/93/trouble.png" alt="Spin Retry Count 已經有點不行的硬碟"></p>
+<p>哇，不太妙啊。Spin Retry Count 那麼低。水晶雫的臉色也不太好看。不管如何一定要換硬碟了。</p>
+<p>2015 用到現在也是辛苦妳了。</p>
+<h2>換硬碟的步驟</h2>
+<p>首先當然是買個新的硬碟，然後裝上去。我這邊買的是 TOSHIBA DT02ABA200 2TB。</p>
+<p>再來就是把舊硬碟資料通通轉到新硬碟上。這步驟費時甚久。我花了大概四、五小時才完成吧。不想做啊……但還是要做。</p>
+<h3>開機 USB</h3>
+<p>最後就是重開機、然後用 Win10 開機 USB，把開機順序修正。</p>
+<p>不過在那之前，要先做好開機 USB，就類似很久以前的 CD 安裝那樣。好險<a href="https://www.microsoft.com/software-download/windows10">微軟官方</a>有提供 Windows 10 iso 讓我可以這麼做。</p>
+<p>開機 USB 建議用 <a href="https://rufus.ie">Rufus</a>。注意下把開機資料設定為 GPT/MBR 模式。</p>
+<h3>硬碟的位置</h3>
+<p>之後發現到 C 與 D 槽有點切換問題，所以就用前述的開機 USB 打開命令提示字元。</p>
+<p>我在命令提示字元用 <code>diskpart</code> 指令改 C 與 D 槽的名字分配後，就重新開機。然而卻發現電腦好像無法開機……</p>
+<p>沒辦法，只能回去用開機 USB 打開命令提示字元，然後輸入 <code>/fixmbr</code>, <code>/rebuildbcd</code> ...</p>
+<p>最後終於成功了。</p>
+<p><img src="https://raw.githubusercontent.com/iigmir/blog-source/master/assets/93/transferred.png" alt="已經換好的硬碟"></p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://www.reneelab.net/computer-error-0xc000000f.html">啟動電腦時出現0xc000000f錯誤的解決方法</a></li>
+<li><a href="https://www.superuser.com/a/681970">Drive letters swapped after system restore (C: → D:)</a></li>
+</ul>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

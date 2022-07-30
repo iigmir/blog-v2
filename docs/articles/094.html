@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>storage 變化監聽</h1>
+<h2>結論先講</h2>
+<p>想在同一網頁監聽快取的變化，請使用 <a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent">CustomEvent</a>。</p>
+<h2>問題</h2>
+<p>事情是這樣的。電商網站，不是都有購物車保存商品的功能嗎？按下商品，右上角的購物車圖標，就會出現一個數字，像這樣……</p>
+<p>好的，那麼怎做呢？每個網站都不一樣，但基本上，都要用到瀏覽器快取技術。不管那是 <a href="https://developer.mozilla.org/en-US/docs/Glossary/cookie">cookie</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">localStorage</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage">sessionStorage</a>……</p>
+<p>問題來了：<strong>如何監聽快取的數值變化呢？</strong></p>
+<h2>探索：DOM 操作流</h2>
+<p>如果你是用 DOM 操作流的思路，那答案就是：</p>
+<ol>
+<li>選取購物車 DOM。</li>
+<li>修改該 DOM 的數值。</li>
+</ol>
+<p>也就是這樣：</p>
+<pre><code class="language-js">const dom = document.querySelector(&quot;.shopcart&quot;);
+const value = &quot;foobar&quot;;
+
+localStorage.setItem(&quot;shopcart&quot;, value);
+dom.innerText = value;
+</code></pre>
+<p>但如果你用能切分組件、自行操作 DOM 的框架或函式庫，比方說 React, Vue 這種的話，操作 DOM 就會很麻煩、甚至可能會干擾框架的行為。</p>
+<p>在這種情況下，你必須使用事件，操作對應的數值、然後讓框架或函式庫自行操作、呈現數值的變化。</p>
+<p>一開始，我發現有 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event">Window: storage event</a> 似乎能監聽快取變化……但最後發現該事件不能監聽同一頁的快取變化：</p>
+<blockquote>
+<p>Note: This won't work on the same page that is making the changes — it is really a way for other pages on the domain using the storage to sync any changes that are made.</p>
+</blockquote>
+<p>此路不通。那怎麼辦？</p>
+<h2>探索：Event 操作流</h2>
+<p>後來發現，開發者其實可以<a href="https://www.codegrepper.com/code-examples/javascript/listen+to+localstorage+changes">自訂事件</a>，將其綁定在指定 DOM：</p>
+<pre><code class="language-js">const value = &quot;foobar&quot;;
+const event = new CustomEvent( &quot;shopcarted&quot;, { detail: { value } } );
+
+localStorage.setItem( &quot;shopcart&quot;, value );
+window.dispatchEvent( event );
+
+// In React
+class Shopcart extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { cart_value: 0 };
+    }
+    shopcarted() {
+        window.addEventListener( &quot;shopcarted&quot;, (e) =&gt; {
+            this.setState({ cart_value: e.detail.value });
+        });
+    }
+    componentDidMount() {
+        this.shopcarted();
+    }
+    render() {
+        return ( &lt;div className=&quot;shopcart&quot;&gt;{this.state.cart_value}&lt;/div&gt; );
+    }
+}
+</code></pre>
+<p>是的。只要設定好事件，然後在接收方寫好指定的行為，這樣就能監聽快取變化了。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event">https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent">https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent</a></li>
+<li><a href="https://www.codegrepper.com/code-examples/javascript/listen+to+localstorage+changes">https://www.codegrepper.com/code-examples/javascript/listen+to+localstorage+changes</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192175">https://ithelp.ithome.com.tw/articles/10192175</a></li>
+<li><a href="https://realdennis.medium.com/javascript-%E4%BA%8B%E4%BB%B6-event-da8104c5c98c">https://realdennis.medium.com/javascript-事件-event-da8104c5c98c</a></li>
+<li><a href="https://juejin.cn/post/6844904069820055560">https://juejin.cn/post/6844904069820055560</a></li>
+<li><a href="https://stackoverflow.com/a/65348883/7162445">https://stackoverflow.com/a/65348883/7162445</a></li>
+</ul>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
