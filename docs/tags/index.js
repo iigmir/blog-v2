@@ -71,6 +71,13 @@ class DOMRenderUtilities
         };
         [ ...document.querySelectorAll( tags_dom_target ) ].forEach( item => func( item ));
     }
+    close_modal( target = "#modal .close" )
+    {
+        document.querySelector( target ).addEventListener( "click", () =>
+        {
+            document.querySelector( target ).classList.remove( "show" );
+        });
+    }
 }
 
 $( document ).ready(() =>
@@ -121,6 +128,7 @@ $( document ).ready(() =>
             with_datas: tags_data.tags
         });
         render.tags_to_the_modal( "a[data-i-btn-id]", callback );
+        render.close_modal( "#modal .close" );
     };
     // show
     init_tags( tags_data ).then( data => render_act({ data, tags_data }));
