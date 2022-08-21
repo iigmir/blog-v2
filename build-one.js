@@ -3,6 +3,11 @@ const main = (id = "ERROR") =>
 {
     const app = new BlogAJAXGenerator();
     const name = `${ id }.md`;
+    if( id.length < 3 )
+    {
+        console.error("Invalid input");
+        return;
+    }
     app.main({
         "mode": "ajax",
         "source_directory": [ {
