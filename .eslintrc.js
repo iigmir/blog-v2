@@ -31,7 +31,8 @@ module.exports = {
         ],
         "brace-style": [
             "error",
-            "allman"
+            "allman",
+            { "allowSingleLine": true }
         ],
         "space-in-parens": [
             "off",
