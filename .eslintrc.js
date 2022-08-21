@@ -34,9 +34,7 @@ module.exports = {
             "allman"
         ],
         "space-in-parens": [
-            "error",
-            "always",
-            { "exceptions": [ "{}", "[]", "()" ] }
+            "off",
         ],
         "space-before-function-paren": [
             "error",
