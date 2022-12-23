@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>無頭瀏覽器實做筆記</h1>
+<p>無頭瀏覽器（headless browser），簡單來說，就是沒有 GUI 介面的瀏覽器。如果我們的程式需要瀏覽器的功能：比方說不開瀏覽器截圖（比方說，有網站提供預覽功能？）、載入單頁應用（SPA）……那我們就會考慮無頭瀏覽器。</p>
+<p>這裡使用 <a href="https://pptr.dev">puppeteer</a> 為範例。</p>
+<p>感想……唉，太肥了。光抓一次 puppeteer 就要花去幾分鐘的時間，實在是提不起勁玩無頭瀏覽器啊……</p>
+<h2>如何截圖？</h2>
+<pre><code class="language-js">import { launch } from &quot;puppeteer&quot;;
+
+const main = async () =&gt; {
+    // Init
+    const browser = await launch();
+    const page = await browser.newPage();
+    // Settings
+    await page.setViewport({
+        width: 1800,
+        height: 1024,
+        deviceScaleFactor: 1,
+    });
+    await page.goto(&quot;https://github.com/&quot;);
+    await page.screenshot({
+        path: &quot;result.png&quot;,
+    });
+    await browser.close();
+};
+
+main();
+</code></pre>
+<h2>如何輸出載入該網頁的資源，比方說 CSS, JavaScript, 圖片等檔案？</h2>
+<h2>如何輸出 SPA 專案會用到的 JSON 檔案？</h2>
+<p>看了 <a href="https://pixeljets.com/blog/puppeteer-click-get-xhr-response">pixeljets</a> 的範例後才知道訣竅。</p>
+<p>於是我就這麼做了：</p>
+<pre><code class="language-js">import { launch } from &quot;puppeteer&quot;;
+import fs from &quot;fs&quot;;
+
+const main = async () =&gt; {
+    const input = &quot;toyota&quot;;
+    // Browser opreation part
+    const browser = await launch();
+    const page = await browser.newPage();
+    // Init page
+    await page.goto(&quot;https://apiroad.net/ajax-test.html&quot;);
+    // Input form
+    await page.waitForSelector(&quot;form &gt; input[type=text]&quot;);
+    await page.type(&quot;form &gt; input[type=text]&quot;, input);
+    page.click(&quot;#search-button&quot;);
+    // JSON render
+    const cb = the =&gt;
+        the.request().url().includes(&quot;sample-search.php&quot;) &amp;&amp;
+        the.request().method() != &quot;OPTIONS&quot;
+    ;
+    const xhrCatcher = page.waitForResponse( cb );
+    // Get JSON
+    const xhrResponse = await xhrCatcher;
+    const xhrPayload = await xhrResponse.json();
+    console.log( xhrPayload );
+    await browser.close();
+};
+
+main();
+</code></pre>
+<p>先連到網站後，輸入表單並送出資料。而所有回應則使用 <a href="https://pptr.dev/api/puppeteer.page.waitforresponse">waitForResponse</a> 方法，針對連結做對應的過濾判斷，找到與 API 相符的回應後，把回應抓下來。</p>
+<h2>如何以會員身份抓資料？</h2>
+<p>幾個想法：</p>
+<ol>
+<li>Cookie</li>
+<li>JWT Token</li>
+</ol>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

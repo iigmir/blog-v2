@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>如何在 Virtualbox 虛擬機內部讀取 SD 卡等外部硬碟裝置？</h1>
+<p>故事是這樣的：我想在虛擬機，讀取接在電腦上的 SD 卡，所以用 USB 卡讀取。但這次……不太順利，作業系統好像讀不到。</p>
+<p>看了下才發現可以用 raw hard disk 繞過去：也就是直接建立一個參照實體硬碟的虛擬硬碟，然後在虛擬機讀取。</p>
+<p>警告：讀取 raw hard disk 的風險很高，可能會弄壞實體硬碟。尤其<strong>絕對不可以在虛擬機內部，給宿主的作業系統開機</strong>。這會讓宿主的資料嚴重損毀。</p>
+<ol>
+<li>抓到該 SD 卡的標籤名稱。</li>
+<li>在 Virtualbox 目錄開啟命令列界面：不管那是命令提示字元、Powershell、還是 Bash 都可以。</li>
+<li>輸入 <code>VBoxManage internalcommands createrawvmdk -filename {輸出路徑} -rawdisk {標籤名稱}</code></li>
+</ol>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://superuser.com/a/458085">https://superuser.com/a/458085</a></li>
+<li><a href="https://www.virtualbox.org/manual/ch09.html#idp15871152">https://www.virtualbox.org/manual/ch09.html#idp15871152</a></li>
+<li><a href="https://www.arthurtoday.com/2009/12/host-guest.html">https://www.arthurtoday.com/2009/12/host-guest.html</a></li>
+</ul>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
