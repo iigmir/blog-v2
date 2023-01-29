@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>再一次的 Docker ：本地篇</h1>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/NYK_Silvia.jpg/512px-NYK_Silvia.jpg" alt="NYK Silvia">
+&lt;small&gt;Christophe95, <a href="https://commons.wikimedia.org/wiki/File:NYK_Silvia.jpg">NYK Silvia</a> CC BY-SA 4.0 <a href="https://creativecommons.org/licenses/by-sa/4.0">https://creativecommons.org/licenses/by-sa/4.0</a>, via Wikimedia Commons&lt;/small&gt;</p>
+<p><a href="https://www.docker.com">Docker</a>真是難用……但如果軟體開發想進一步，又不得不用。但太多概念搞都搞不清楚。</p>
+<p>然後我發現了 <a href="https://docker-curriculum.com">A Docker Tutorial for Beginners</a> 這個網站，把步驟弄得不錯。筆記就整理一下後，寫在這裡吧。</p>
+<h2>術語</h2>
+<ul>
+<li>影像 (image) - 程式的藍圖，構建容器的基礎。 (The blueprints of our application which form the basis of containers.)</li>
+<li>容器 (containers) - 由影像建立、讓程式運轉的實體。 (Created from Docker images and run the actual application)</li>
+</ul>
+<h2>第一章： Container</h2>
+<p>Docker 為一種虛擬化環境的程式。其發展思想為虛擬機器 (VM, Virtual Machine) 到容器 (container)。</p>
+<p>虛擬機器作為開發的問題，是肥大、速度慢、又載太多東西；而容器則專注於只載入必要的軟體。</p>
+<h2>第二章： Busybox &amp; Hello World</h2>
+<p>文中的 Getting Started 這裡跳過，把時間跳到 Hello World。所以這裡假設 docker 已經安裝完畢。</p>
+<p>網站這麼告訴我們的：</p>
+<pre><code class="language-sh">docker pull busybox
+docker images
+</code></pre>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/BusyBox">Busybox</a>是 Unix 的基本指令列。</li>
+<li><code>docker pull busybox</code>: 下載 <a href="https://hub.docker.com/_/busybox">busybox</a> 影像 (image)。
+<ul>
+<li><a href="https://docs.docker.com/engine/reference/commandline/pull">docker pull</a></li>
+</ul>
+</li>
+<li><code>docker images</code>: 檢查電腦上的所有影像。</li>
+</ul>
+<p>最後來跑這個 Busybox 吧：</p>
+<pre><code class="language-sh">docker run busybox
+</code></pre>
+<p>但什麼也沒有發生。</p>
+<p>為什麼？</p>
+<h3><code>docker run busybox</code> 在做什麼？</h3>
+<p>事實上 docker 是有在做事的。<code>docker run busybox</code> 這個指令做了下面這些事：</p>
+<ol>
+<li>Docker 找 busybox</li>
+<li>找到 busybox 後啟動 containers</li>
+<li>啥也沒幹</li>
+<li>離開</li>
+</ol>
+<p>就不能有趣點嗎？</p>
+<p>那我們讓 busybox 說聲好吧。</p>
+<pre><code class="language-sh">docker run busybox echo &quot;hello from busybox&quot;
+</code></pre>
+<p>很快對不對？如果用虛擬機器的話要多慢呢：</p>
+<ol>
+<li>啟動虛擬機器</li>
+<li>跑指令</li>
+<li>殺掉進程</li>
+</ol>
+<p>然後就是講刪除容器和術語了。術語在凡例章節有講到，刪除容器的話用圖形界面很簡單。因此兩者在此省略。</p>
+<h2>第三章： Webapps with Docker</h2>
+<p><code>docker run --rm -it prakhar1989/static-site</code></p>
+<ul>
+<li><code>--rm</code>: 如果有容器，砍掉它。</li>
+<li><code>-it</code>: 指定終端，命令停工（Windows 的 Ctrl+C）時會比較簡單。</li>
+<li><code>prakhar1989/static-site</code>: <a href="https://hub.docker.com/r/prakhar1989/static-site">https://hub.docker.com/r/prakhar1989/static-site</a></li>
+</ul>
+<p>可……我們宿主端沒辦法進去容器提供的網站啊，怎麼辦呢？問題在於，容器沒有給宿主端進來的<strong>端口</strong>（port）。</p>
+<p>我們要想辦法讓容器開一個端口進來。</p>
+<h3>開埠</h3>
+<pre><code class="language-sh">docker run -d -P --name static-site prakhar1989/static-site
+</code></pre>
+<ul>
+<li><code>-d</code>: 分離終端</li>
+<li><code>-P</code>: 把對外埠口丟給某個隨機的埠口。</li>
+<li><code>--name</code>: 給我們的新容器命名</li>
+</ul>
+<h3>你都在用哪個口呢？</h3>
+<p>用 <code>port</code> 指令看一下：</p>
+<pre><code class="language-sh">docker port my-first-site
+
+443/tcp -&gt; 0.0.0.0:32768
+80/tcp -&gt; 0.0.0.0:32769
+</code></pre>
+<p>連上 <code>http://127.0.0.1:32769</code> 吧。</p>
+<h3>我只想要去那個港……</h3>
+<pre><code class="language-sh">docker run -p 8888:80 prakhar1989/static-site
+</code></pre>
+<h3>最後，停下來</h3>
+<pre><code class="language-sh">docker stop my-first-site
+</code></pre>
+<h2>第四章： Our First Image</h2>
+<p><a href="https://github.com/prakhar1989/docker-curriculum/tree/master/flask-app">Flask</a></p>
+<h3>Dockerfile</h3>
+<blockquote>
+<p>a simple text file that contains a list of commands...</p>
+</blockquote>
+<p><a href="https://docs.docker.com/engine/reference/builder">Dockerfile</a> 是個包含了指令的文字檔。</p>
+<pre><code class="language-sh">docker build -t yourusername/catnip .
+</code></pre>
+<p>等構建完以後，下：</p>
+<pre><code class="language-sh">docker run -p 8888:5000 yourusername/catnip
+</code></pre>
+<blockquote>
+<p>The command we just ran used port 5000 for the server inside the container and exposed this externally on port 8888. Head over to the URL with port 8888, where your app should be live.</p>
+</blockquote>
+<h2>疑難排解</h2>
+<h3><code>failed to solve with frontend dockerfile.v0: failed to read dockerfile: error from sender: open .Trash: operation not permitted</code></h3>
+<p>請在專案目錄下跑 <code>docker build</code> 指令。</p>
+<blockquote>
+<p>The Dockerfile should be inside a folder. Navigate to that folder and then run docker build command. I was also facing the same issue but got resovled when moved the docker file inside a folder</p>
+</blockquote>
+<p>參考：<a href="https://stackoverflow.com/a/71536441">Facing the following error while trying to create a Docker Container using a DockerFile -&gt; &quot;error from sender: open .Trash: operation not permitted&quot;</a></p>
+<h3>能不能在修改某個影像後，重新以 <code>docker build</code> 構建該影像？</h3>
+<p>**不行。**你必須先把舊影像刪掉。</p>
+<hr>
+<p>之所以想到這個問題，是因為每次修改程式後，都要砍掉舊影像、重新以 <code>docker build</code> 構建、再建立影像──這太麻煩了。</p>
+<p>後來發現程式要用 Volume 放進去。這樣每次修改 Volume 的程式，也不會需要每次都重新構建影像。</p>
+<p>可是這很難懂，所以不知道怎麼用。下次吧。</p>
+<h2>參考</h2>
+<ul>
+<li><a href="https://docker-curriculum.com">https://docker-curriculum.com</a></li>
+<li><a href="https://cwhu.medium.com/docker-tutorial-101-c3808b899ac6">https://cwhu.medium.com/docker-tutorial-101-c3808b899ac6</a></li>
+</ul>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

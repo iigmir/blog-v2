@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>再一次的 Docker ：多重容器篇</h1>
+<p>（接續<a href="/113">本地篇</a>和<a href="/114">雲端篇</a>）</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Hanjin_Hamburg_%28ship%2C_2011%29_003.jpg/512px-Hanjin_Hamburg_%28ship%2C_2011%29_003.jpg" alt="Hanjin Hamburg (ship, 2011) 003">
+&lt;small&gt;Craig Wyzik from Olympia, WA, USA, <a href="https://commons.wikimedia.org/wiki/File:Hanjin_Hamburg_(ship,_2011)_003.jpg">File:Hanjin Hamburg (ship, 2011) 003.jpg</a>, CC BY 2.0 <a href="https://creativecommons.org/licenses/by/2.0">https://creativecommons.org/licenses/by/2.0</a>, via Wikimedia Commons&lt;/small&gt;</p>
+<p>Dockerize apps</p>
+<h2>Why multi-container</h2>
+<ul>
+<li>容器的特色為<strong>隔絕</strong>（isolation）。把容器們的<strong>服務</strong>（service）隔絕起來是個好主意。</li>
+</ul>
+<h2>Food Trucks</h2>
+<ul>
+<li><a href="http://github.com/prakhar1989/FoodTrucks">http://github.com/prakhar1989/FoodTrucks</a></li>
+<li><a href="https://www.elastic.co/products/elasticsearch">Elasticsearch</a></li>
+</ul>
+<h3>Two containers</h3>
+<p>這個程式會需要兩個程序的容器：</p>
+<ul>
+<li>Flask</li>
+<li>Elasticsearch (ES)</li>
+</ul>
+<h3>The Elasticsearch Image</h3>
+<p><a href="https://store.docker.com/images/elasticsearch">Official image</a></p>
+<pre><code class="language-sh">docker pull docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+docker run -d --name es -p 9200:9200 -p 9300:9300 -e &quot;discovery.type=single-node&quot; docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+</code></pre>
+<ul>
+<li><code>--name es</code></li>
+<li><code>docker container ls</code></li>
+<li><code>docker container logs es</code></li>
+<li><code>curl 0.0.0.0:9200</code></li>
+</ul>
+<h3>flask and dockerfile</h3>
+<p><a href="https://github.com/prakhar1989/FoodTrucks/blob/master/Dockerfile">Dockerfile</a></p>
+<h3>Type...</h3>
+<pre><code class="language-sh">docker run -P --rm yourusername/foodtrucks-web
+Unable to connect to ES. Retying in 5 secs...
+Unable to connect to ES. Retying in 5 secs...
+Unable to connect to ES. Retying in 5 secs...
+Out of retries. Bailing out...
+</code></pre>
+<p>為什麼上不了呢？</p>
+<h2>Docker Network</h2>
+<p>0.0.0.0 是<strong>宿主端</strong>訪問 ES <em>容器</em>的 IP。其他容器不能靠 0.0.0.0 訪問 ES 容器。</p>
+<blockquote>
+<p>The IP 0.0.0.0 is the IP to access ES <em>container</em> from the <strong>host machine</strong>. Another <em>container</em> will not be able to access this on the same IP address.</p>
+</blockquote>
+<h3>If it's not 0.0.0.0, which IP address will the container accessed?</h3>
+<p>docker 裝好後，一開始就會建立三個網路實體：</p>
+<pre><code class="language-sh">docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+c2c695315b3a        bridge              bridge              local
+a875bec5d6fd        host                host                local
+ead0e804a67b        none                null                local
+</code></pre>
+<ul>
+<li><code>bridge</code>: 橋接。預設網路容器。</li>
+</ul>
+<h3>The problem</h3>
+<ol>
+<li>Flask 容器該怎麼知道 <code>es</code> 就是 <code>172.17.0.2</code> 呢？如果 IP 變動的話，又該怎麼辦呢？</li>
+<li><em>bridge</em> 網路<strong>並不安全</strong>，因為因為所有容器都能訪問它。如何阻絕我們自己的網路呢？</li>
+</ol>
+<p>答案：</p>
+<blockquote>
+<p>Define our own networks while keeping them isolated using the <code>docker network</code> command.</p>
+</blockquote>
+<h3>network create</h3>
+<pre><code class="language-sh">docker network create foodtrucks-net
+docker network ls
+</code></pre>
+<pre><code class="language-sh">docker container stop es
+docker container rm es
+docker run -d --name es --net foodtrucks-net -p 9200:9200 -p 9300:9300 -e &quot;discovery.type=single-node&quot; docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+docker network inspect foodtrucks-net
+docker run -it --rm --net foodtrucks-net yourusername/foodtrucks-web bash
+</code></pre>
+<p>再度試試 <code>http://0.0.0.0:5000</code> 吧。</p>
+<h3>Script</h3>
+<p><a href="https://github.com/prakhar1989/FoodTrucks/blob/master/setup-docker.sh">setup-docker.sh</a></p>
+<pre><code class="language-sh">git clone https://github.com/prakhar1989/FoodTrucks
+cd FoodTrucks
+./setup-docker.sh
+</code></pre>
+<h2>Docker Compose</h2>
+<ul>
+<li>用途：輕鬆建立並執行多個 docker 程式。</li>
+<li>檔案： <code>docker-compose.yml</code></li>
+<li>原本是 <a href="https://news.ycombinator.com/item?id=7132044">Fig</a> 專案演變的。</li>
+<li>用途：
+<ul>
+<li>production</li>
+<li>staging</li>
+<li>development</li>
+<li>testing</li>
+<li>CI workflow</li>
+</ul>
+</li>
+</ul>
+<h3>docker-compose.YML</h3>
+<p><a href="https://docs.docker.com/compose/compose-file">API</a></p>
+<pre><code class="language-yml">services:
+    es:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+        container_name: es
+        environment:
+            - discovery.type=single-node
+        ports:
+            - 9200:9200
+        volumes:
+            - esdata1:/usr/share/elasticsearch/data
+    web:
+        image: yourusername/foodtrucks-web
+        command: python3 app.py
+        depends_on:
+            - es
+        ports:
+            - 5000:5000
+        volumes:
+            - ./flask-app:/opt/flask-app
+</code></pre>
+<ul>
+<li><code>image</code>: <strong>必須</strong>。</li>
+<li><code>volumes</code>: 容器掛載點。程式的所在。</li>
+<li><code>depends_on</code>: 要先開 <code>depends_on</code> 指定的容器，才能開現在這個容器。</li>
+</ul>
+<h3>Startup Docker Compose</h3>
+<ol>
+<li>Go to the directory <code>docker-compose.yml</code> existed.</li>
+<li>Stop and remove old containers by running <code>docker stop</code> and <code>docker rm</code>.</li>
+<li>Run <code>docker-compose up</code>.</li>
+</ol>
+<p>Let's stop the services and re-run in detached mode...</p>
+<ol>
+<li>CTRL+C</li>
+<li><code>docker-compose up -d</code></li>
+<li><code>docker-compose ps</code> and <code>docker network inspect</code></li>
+<li><code>docker-compose down -v</code> to stop the app</li>
+</ol>
+<h2>What Next?</h2>
+<p>我打算實戰、給專案添加合適的 Volume, 再看看能不能上 <a href="https://cloud.google.com">GCP</a>。</p>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>再一次的 Docker ：雲端篇</h1>
+<p>（接續<a href="/113">本地篇</a>。由於筆記很短，所有筆記皆維持原樣不翻譯）</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/HP_L4329.JPG/512px-HP_L4329.JPG" alt="HP L4329">
+&lt;small&gt;Alchemist-hp, <a href="https://commons.wikimedia.org/wiki/File:HP_L4329.JPG">HP L4329</a>, CC BY-SA 3.0 <a href="https://creativecommons.org/licenses/by-sa/3.0">https://creativecommons.org/licenses/by-sa/3.0</a>, via Wikimedia Commons&lt;/small&gt;</p>
+<h2>Deploy to AWS</h2>
+<p>AWS Elastic Beanstalk</p>
+<h3>Docker push</h3>
+<p>Upload your own docker image to Docker Hub.</p>
+<ol>
+<li><code>docker login</code> and type username &amp; password.</li>
+<li><code>docker push yourusername/image_name</code></li>
+</ol>
+<h3>Beanstalk</h3>
+<ul>
+<li>AWS Elastic Beanstalk (EB) is a PaaS (Platform as a Service) offered by AWS</li>
+<li>EB === Heroku === Google App Engine</li>
+<li>You need a functioning AWS account</li>
+</ul>
+<p><a href="http://console.aws.amazon.com">AWS console</a></p>
+<ul>
+<li>Predefined platform: Docker</li>
+</ul>
+<ol>
+<li>Open <code>Dockerrun.aws.json</code>.
+<ul>
+<li><a href="https://github.com/prakhar1989/docker-curriculum/blob/master/flask-app/Dockerrun.aws.json">example</a></li>
+<li><a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_image.html#create_deploy_docker_image_dockerrun">reference</a></li>
+</ul>
+</li>
+<li>Terminate the environment. 下線</li>
+</ol>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
