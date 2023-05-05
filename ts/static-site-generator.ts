@@ -1,21 +1,8 @@
 import error_handling from "./utils/error-handling";
 import { read_config_file } from "./utils/fs";
-
-enum ConfigModeEnum {
-    Local = "local",
-    Ajax = "ajax",
-    AjaxIndex = "ajax-index",
-    Template = "template",
-    Unknown = "unknown"
-}
-
-interface ConfigInterface {
-    mode: ConfigModeEnum,
-    source_directory: string,
-    template_file: string,
-    destination_directory: string,
-    replaced_text: string,
-}
+import { ConfigModeEnum } from "./types/index";
+import type { ConfigInterface } from "./types/index";
+// ConfigModeEnum, 
 
 class StaticSiteData
 {
@@ -65,22 +52,11 @@ const exexute = (site_data: StaticSiteData) =>
 {
     const fn = (config: ConfigInterface) => { exexute_module( config ); };
     site_data.config.forEach( fn );
-    /*
-    const exexute = config => { this.exexute_module( config ); };
-    if( Array.isArray( this.config ) )
-    {
-        this.config.forEach( exexute );
-    }
-    else
-    {
-        exexute( this.config );
-    }
-    */
 }
 
 export const main = (config_path = "src/config.json") =>
 {
     const site_data = new StaticSiteData();
     site_data.set_config( config_path );
-    // exexute( site_data );
+    exexute( site_data );
 };
