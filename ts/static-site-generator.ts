@@ -1,3 +1,6 @@
+import error_handling from "./utils/error-handling";
+import { read_config_file } from "./utils/fs";
+
 enum ConfigModeEnum {
     Local = "local",
     Ajax = "ajax",
@@ -11,9 +14,6 @@ interface ConfigInterface {
     destination_directory: string,
     replaced_text: string,
 }
-
-import error_handling from "./utils/error-handling";
-import { read_config_file } from "./utils/fs";
 
 class StaticSiteData
 {
