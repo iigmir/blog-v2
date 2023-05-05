@@ -4,7 +4,9 @@ import { read_config_file } from "./utils/fs";
 enum ConfigModeEnum {
     Local = "local",
     Ajax = "ajax",
-    Unknown = ""
+    AjaxIndex = "ajax-index",
+    Template = "template",
+    Unknown = "unknown"
 }
 
 interface ConfigInterface {
@@ -41,6 +43,39 @@ class StaticSiteData
             error_handling( error );
         }
     }
+}
+
+const exexute_module = (config: ConfigInterface) =>
+{
+    const get_instance = (mode: ConfigModeEnum) =>
+    {
+        switch (mode) {
+            case ConfigModeEnum.Local: return 1;
+            case ConfigModeEnum.Ajax: return 2;
+            case ConfigModeEnum.AjaxIndex: return 3;
+            case ConfigModeEnum.Template: return 4;
+            default: return ConfigModeEnum.Unknown;
+        }
+    };
+    let app = get_instance( config.mode );
+    // app.main( config );
+}
+
+const exexute = (site_data: StaticSiteData) =>
+{
+    const fn = (config: ConfigInterface) => { exexute_module( config ); };
+    site_data.config.forEach( fn );
+    /*
+    const exexute = config => { this.exexute_module( config ); };
+    if( Array.isArray( this.config ) )
+    {
+        this.config.forEach( exexute );
+    }
+    else
+    {
+        exexute( this.config );
+    }
+    */
 }
 
 export const main = (config_path = "src/config.json") =>
