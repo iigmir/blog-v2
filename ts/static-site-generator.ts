@@ -2,6 +2,7 @@ import error_handling from "./utils/error-handling";
 import { read_config_file } from "./utils/fs";
 import { ConfigModeEnum } from "./types/index";
 import type { ConfigInterface } from "./types/index";
+import { IndexAJAXGenerator, BlogAJAXGenerator, LocalFileGenerator, TemplateGenerator } from "./generators/index";
 
 class StaticSiteData
 {
@@ -35,16 +36,18 @@ const exexute_module = (config: ConfigInterface) =>
 {
     const get_instance = (mode: ConfigModeEnum) =>
     {
+        class Errr { main(err: any) { error_handling(err) } }
         switch (mode) {
-            case ConfigModeEnum.Local: return 1;
-            case ConfigModeEnum.Ajax: return 2;
-            case ConfigModeEnum.AjaxIndex: return 3;
-            case ConfigModeEnum.Template: return 4;
-            default: return ConfigModeEnum.Unknown;
+            case ConfigModeEnum.Local: return LocalFileGenerator;
+            case ConfigModeEnum.Ajax: return BlogAJAXGenerator;
+            case ConfigModeEnum.AjaxIndex: return IndexAJAXGenerator;
+            case ConfigModeEnum.Template: return TemplateGenerator;
+            default: return Errr;
         }
     };
-    let app = get_instance( config.mode );
-    // app.main( config );
+    const App = get_instance( config.mode );
+    const action = new App();
+    action.main( config );
 }
 
 const exexute = (site_data: StaticSiteData) =>
