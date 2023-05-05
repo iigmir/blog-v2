@@ -9,7 +9,7 @@ export const read_source_markdowns = async ({ source_directory = "", directory_f
     {
         return;
     }
-    const read_files = source_file => FileSystemModule.read_file(`${ source_directory }/${ source_file }`);
+    const read_files = (source_file: string) => FileSystemModule.read_file(`${ source_directory }/${ source_file }`);
     const result = await Promise.all( directory_files.map( read_files ) );
     return result;
 }
