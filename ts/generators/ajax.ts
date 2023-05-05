@@ -6,12 +6,10 @@ import { RenderMarkdown, RequestSource } from "../utils/helpers";
 import error_handling from "../utils/error-handling";
 import read_template_file from "../utils/read-template-file";
 
-class BlogAJAXGenerator implements BasicGenerator
+class BlogAJAXGenerator extends BasicGenerator
 {
-    config: ConfigInterface;
     directory_files: string[] = [];
     template: string = "";
-    fs_handler = null;
     ajax_handler = new AJAXDatas();
     /**
      * @returns {Array} - Markdown texts by file

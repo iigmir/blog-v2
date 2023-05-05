@@ -1,6 +1,4 @@
-import type { ConfigInterface } from "../types/index";
-// import FileSystemHandler from "../utils/FileSystemHandler.js";
-// import AJAXHandler from "../utils/AJAXHandler.js";
+import { BasicGenerator } from "../types/generator";
 import error_handling from "../utils/error-handling.js";
 import read_template_file from "../utils/read-template-file.js";
 import new_index_text from "../../src/new-index-text";
@@ -11,9 +9,8 @@ interface ApiSourceItemInterface {
     title: string
 }
 
-class IndexAJAXGenerator
+class IndexAJAXGenerator extends BasicGenerator
 {
-    config: ConfigInterface;
     api_source: ApiSourceItemInterface[] = [];
     template = "";
     /**
