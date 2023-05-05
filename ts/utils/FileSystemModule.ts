@@ -48,7 +48,7 @@ class FileSystemModule
                 }
                 catch ( json_error ) 
                 {
-                    reject( new Error( json_error ));
+                    reject( json_error );
                 }
             })
         );

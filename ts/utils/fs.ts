@@ -1,7 +1,7 @@
 import { readFile } from "fs";
 import FileSystemModule from "./FileSystemModule";
 
-export const file_can_parse = ({ destination_directory, directory_files, parsed_htmls }) =>
+export const file_can_parse = (destination_directory: string, directory_files: string[], parsed_htmls: string[]) =>
 {
     const result = [
         Array.isArray( directory_files ),
@@ -35,12 +35,12 @@ export const md_file_name = ( md_name = "", mode = "local" ) =>
 
 export const write_files_to_destination = ({ dest_dir = "", dir_files = [""], parsed_htmls = [""], mode = "local" }) =>
 {
-    const fcp_payload = {
-        destination_directory: dest_dir,
-        directory_files: dir_files,
-        parsed_htmls: parsed_htmls,
-    };
-    if( file_can_parse( fcp_payload ))
+    // const fcp_payload = {
+    //     destination_directory: dest_dir,
+    //     directory_files: dir_files,
+    //     parsed_htmls: parsed_htmls,
+    // };
+    if( file_can_parse( dest_dir, dir_files, parsed_htmls ))
     {
         const fn = ( md_name = "", md_index = -1 ) =>
         {
@@ -68,7 +68,7 @@ export const read_json = ( file_path = "" ) =>
             }
             catch ( json_error ) 
             {
-                reject( new Error( json_error ) );
+                reject( json_error );
             }
         })
     );
