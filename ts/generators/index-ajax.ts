@@ -1,16 +1,14 @@
-import { BasicGenerator } from "../types/generator";
+import { BasicGenerator, generate_default_config } from "../types/generator";
 import error_handling from "../utils/error-handling.js";
 import read_template_file from "../utils/read-template-file.js";
-import new_index_text from "../../src/new-index-text";
+// ../../src/new-index-text
+import new_index_text from "../new-index-text-ts";
 import { fs_read_source_directory, fs_write_a_file_to_destination } from "../utils/handlers";
+import type { ApiSourceItemInterface, ConfigInterface } from "../types/index";
 
-interface ApiSourceItemInterface {
-    id: string | number
-    title: string
-}
-
-class IndexAJAXGenerator extends BasicGenerator
+class IndexAJAXGenerator implements BasicGenerator
 {
+    config: ConfigInterface = generate_default_config();
     api_source: ApiSourceItemInterface[] = [];
     template = "";
     /**
@@ -62,7 +60,7 @@ class IndexAJAXGenerator extends BasicGenerator
         const res = await read_template_file(this.config.template_file);
         if( typeof(res) === "string" ) this.template = res;
     }
-    async main( config )
+    async main( config: ConfigInterface )
     {
         this.config = config;
         await this.read_api();

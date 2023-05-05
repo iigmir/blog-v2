@@ -3,7 +3,8 @@ export enum ConfigModeEnum {
     Ajax = "ajax",
     AjaxIndex = "ajax-index",
     Template = "template",
-    Unknown = "unknown"
+    Unknown = "unknown",
+    // Unknown = "",
 }
 
 export interface ConfigInterface {
@@ -12,4 +13,9 @@ export interface ConfigInterface {
     template_file: string,
     destination_directory: string,
     replaced_text: string,
+}
+
+export interface ApiSourceItemInterface {
+    id: string | number
+    title: string
 }

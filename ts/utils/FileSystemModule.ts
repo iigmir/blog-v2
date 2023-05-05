@@ -6,12 +6,14 @@ class FileSystemModule
      * @param {String} path - File path
      * @returns {Promise} - If file vaild, the Promise will contain file content, else contain Error object.
      */
-    static read_file( file_path: string ): Promise<string | Error>
+    static read_file( file_path: string ): Promise<any>
     {
         return new Promise(( resolve, reject ) =>
             fs.readFile( file_path, "utf8", ( error, files ) =>
             {
-                if ( error ) reject( error );
+                if ( error ) {
+                    reject( error );
+                }
                 resolve( files );
             })
         );

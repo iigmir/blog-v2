@@ -1,13 +1,14 @@
-import { BasicGenerator } from "../types/generator";
+import { BasicGenerator, generate_default_config } from "../types/generator";
 import { RenderMarkdown } from "../utils/helpers.js";
 import { fs_read_source_directory, read_source_markdowns } from "../utils/handlers";
 import { write_files_to_destination } from "../utils/fs";
 import error_handling from "../utils/error-handling.js";
 import read_template_file from "../utils/read-template-file.js";
+import type { ConfigInterface } from "../types/index";
 
-class LocalFileGenerator extends BasicGenerator
+class LocalFileGenerator implements BasicGenerator
 {
-    // config = {};
+    config = generate_default_config();
     directory_files: string[] = [];
     template = "";
     fs_handler = null;
@@ -32,7 +33,7 @@ class LocalFileGenerator extends BasicGenerator
             const { config, template } = this;
             // No, 'await' has effects on this.source_markdowns. Don't move "await".
             const source_markdowns = await this.source_markdowns;
-            const check_type = (markdowns, replaced_text) => {
+            const check_type = (markdowns: unknown, replaced_text: string) => {
                 if( Array.isArray( markdowns ) ) {
                     if( markdowns.length > 0 && replaced_text ) {
                         return markdowns;
@@ -75,7 +76,7 @@ class LocalFileGenerator extends BasicGenerator
             parsed_htmls,
         });
     }
-    async main( config )
+    async main( config: ConfigInterface )
     {
         this.config = config;
         await this.read_directory();
