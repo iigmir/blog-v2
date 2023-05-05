@@ -56,9 +56,9 @@ const exexute = (site_data: StaticSiteData) =>
     site_data.config.forEach( fn );
 }
 
-export const main = (config_path = "src/config.json") =>
+export const main = async (config_path = "src/config.json") =>
 {
     const site_data = new StaticSiteData();
-    site_data.set_config( config_path );
+    await site_data.set_config( config_path );
     exexute( site_data );
 };
