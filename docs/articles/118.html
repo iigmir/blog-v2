@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>Tae</h1>
+<p>最近在寫 <a href="https://github.com/iigmir/tae">tae</a>. 這是一個能抓取 <a href="https://duckduckgo.com/bangs">Bang</a> 並顯示網址的程式。</p>
+<p>為什麼叫做 <code>tae</code> 呢？首先，因為 <a href="https://bandori.fandom.com/wiki/BanG_Dream!"><strong>BanG</strong> Dream!</a> 有一個叫 <a href="https://bandori.fandom.com/wiki/Hanazono_Tae">Hanazono <strong>Tae</strong></a> 的角色很可愛。再來，因為程式一開始是用 <a href="https://www.typescriptlang.org"><strong>Type</strong>Script</a> 寫的。</p>
+<p>那為什麼不用 TypeScript 了呢？ Well, TypeScript 在抓取未定義的變數時，確實很好用；但說來說去，TypeScript 還是要用編譯器產生；而經手的編譯器越多，越容易出狀況。</p>
+<p>這次的狀況是，我要用一個叫 <a href="https://github.com/sindresorhus/open">open</a> 的專案。結果卻出了狀況，說 open 不能用：</p>
+<pre><code class="language-bash">tae&gt; npm run cli !g Google
+
+&gt; tae@1.0.0 cli
+&gt; node cli.js !g Google
+
+tae\cli.js:2
+const open = require(&quot;open&quot;);
+             ^
+
+Error [ERR_REQUIRE_ESM]: require() of ES Module tae\node_modules\open\index.js from tae\cli.js not supported.
+Instead change the require of index.js in tae\cli.js to a dynamic import() which is available in all CommonJS modules.
+    at Object.&lt;anonymous&gt; (tae\cli.js:2:14) {
+  code: 'ERR_REQUIRE_ESM'
+}
+
+Node.js v19.3.0
+</code></pre>
+<p>那如果我從 <code>tsconfig.json</code> 修改 <code>&quot;module&quot;: &quot;ES2015&quot;</code> 然後 <code>&quot;type&quot;: &quot;module&quot;</code> 呢？又不成了：</p>
+<pre><code class="language-bash">PS tae&gt; npm run cli !g Google
+
+&gt; tae@1.0.0 cli
+&gt; node cli.js !g Google
+
+node:internal/errors:491
+    ErrorCaptureStackTrace(err);
+    ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'tae\build\modules\fs' imported from tae\build\BangList.js
+    at new NodeError (node:internal/errors:400:5)
+    at finalizeResolution (node:internal/modules/esm/resolve:260:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1087:11)
+    at nextResolve (node:internal/modules/esm/loader:161:28)
+    at ESMLoader.resolve (node:internal/modules/esm/loader:834:30)
+    at ESMLoader.getModuleJob (node:internal/modules/esm/loader:415:18)
+    at ModuleWrap.&lt;anonymous&gt; (node:internal/modules/esm/module_job:77:40)
+    at link (node:internal/modules/esm/module_job:76:36) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v19.3.0
+</code></pre>
+<p>簡單來說，TypeScript 編譯時候忘記換副檔名了。結果 nodeJS 不接受 <code>foo/bar</code> 的路徑，非 <code>foo/bar.js</code> 要不可。程式就這樣報錯了。</p>
+<p>沒辦法。這麼麻煩不如直接用原生 JavaScript 寫。</p>
+<hr>
+<p>改用原生 JavaScript 寫之後就完成了嗎？想得美！像是 <code>this</code> 就卡了很久：</p>
+<pre><code class="language-js">const main = (input ＝ false) =&gt; {
+    const foo = new Bar();
+    const ajax = input ? foo.bar : foo.baz;
+    ajax().then( ... );
+}
+</code></pre>
+<p>結果卻發現 <code>ajax</code> 這個參數的 <code>this</code> 並不一定綁 <code>Bar</code> 實體。真惱人。沒法子，索性把請求清理的程式，分開來各自為政。</p>
+<p>總之，真的很煩。</p>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

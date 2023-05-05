@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+</head>
+<body>
+    <main class="articles content container">
+        <h1>內頁導航</h1>
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1><code>&lt;dl&gt;</code> 與 <code>&lt;table&gt;</code> 的區別</h1>
+<h2>重點先講</h2>
+<ul>
+<li>在語意上 <code>&lt;dl&gt;</code> 與 <code>&lt;table&gt;</code> 是有區別的。</li>
+<li><code>&lt;dl&gt;</code> 是用來描述<strong>詞語的定義或資訊</strong>：</li>
+<li><code>&lt;table&gt;</code> 元素會以<strong>欄和列</strong>為依據，整理或組織有關<strong>資料之間的關係</strong>：</li>
+</ul>
+<h2>序言</h2>
+<p>排列資料時，遇上這種排版結構會有點頭痛：</p>
+<pre><code>    姓名 | 小隊
+--------------------
+中須かすみ | QU4RTZ
+桜坂しずく | A·ZU·NA
+    鐘嵐珠 | R3BIRTH
+</code></pre>
+<p>這個該用 <code>&lt;dl&gt;</code> 類元素呢？</p>
+<pre><code class="language-html">&lt;dl&gt;
+    &lt;div&gt;
+        &lt;dt&gt;中須かすみ&lt;/dt&gt;
+        &lt;dd&gt;QU4RTZ&lt;/dd&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;dt&gt;桜坂しずく&lt;/dt&gt;
+        &lt;dd&gt;A·ZU·NA&lt;/dd&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;dt&gt;鐘嵐珠&lt;/dt&gt;
+        &lt;dd&gt;R3BIRTH&lt;/dd&gt;
+    &lt;/div&gt;
+&lt;/dl&gt;
+</code></pre>
+<p>還是 <code>&lt;table&gt;</code> 類元素呢？</p>
+<pre><code class="language-html">&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td&gt;中須かすみ&lt;/td&gt;
+        &lt;td&gt;QU4RTZ&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;桜坂しずく&lt;/td&gt;
+        &lt;td&gt;A·ZU·NA&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;鐘嵐珠&lt;/td&gt;
+        &lt;td&gt;R3BIRTH&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<p>用 CSS 的話，當然兩個都有類似的效果──但語意上呢？</p>
+<p>我查了一下規範與資料，答案是：儘管兩者都是呈現 key 與 value 關係的元素，但在語意上 <code>&lt;dl&gt;</code> 與 <code>&lt;table&gt;</code> 是會有區別的。</p>
+<h2><code>&lt;dl&gt;</code></h2>
+<p><code>&lt;dl&gt;</code> 是用來描述<strong>詞語的定義或資訊</strong>：</p>
+<blockquote>
+<p>The <code>&lt;dl&gt;</code> HTML element represents a description list... Common uses for this element are to implement a glossary or to display metadata (a list of key-value pairs)...</p>
+</blockquote>
+<blockquote>
+<p>The dl element represents an association list consisting of zero or more name-value groups... A name-value group consists of one or more names... followed by one or more values...</p>
+</blockquote>
+<p>所以一個理想的 <code>&lt;dl&gt;</code> 會是這樣：</p>
+<pre><code class="language-html">&lt;dl&gt;
+    &lt;div&gt;
+        &lt;dt&gt;dictionary&lt;/dt&gt;
+        &lt;dd&gt;a list of words and their meanings&lt;/dd&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;dt&gt;Japan&lt;/dt&gt;
+        &lt;dt&gt;Nippon&lt;/dt&gt;
+        &lt;dd&gt;an island country in East Asia&lt;/dd&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;dt&gt;table&lt;/dt&gt;
+        &lt;dd&gt;a furniture with a top surface to accommodate a variety of uses&lt;/dd&gt;
+        &lt;dd&gt;a two-dimensional presentation of data&lt;/dd&gt;
+    &lt;/div&gt;
+&lt;/dl&gt;
+</code></pre>
+<p>如果這樣還很抽象的話，我們可以想成是 JSON 格式：</p>
+<pre><code class="language-json">{
+    &quot;dictionary&quot;: [
+        &quot;a list of words and their meanings&quot;
+    ],
+    &quot;Japan&quot;: [
+        &quot;an island country in East Asia&quot;
+    ],
+    &quot;Nippon&quot;: [
+        &quot;an island country in East Asia&quot;
+    ],
+    &quot;table&quot;: [
+        &quot;a furniture with a top surface to accommodate a variety of uses&quot;,
+        &quot;a two-dimensional presentation of data&quot;
+    ]
+}
+</code></pre>
+<h2><code>&lt;table&gt;</code></h2>
+<p>另一方面 <code>&lt;table&gt;</code> 元素會以<strong>欄和列</strong>為依據，整理或組織有關<strong>資料之間的關係</strong>：</p>
+<blockquote>
+<p>The <code>&lt;table&gt;</code> HTML element represents tabular data — that is, information presented in a two-dimensional table comprised of rows and columns of cells containing data.</p>
+</blockquote>
+<blockquote>
+<p>The table element represents data with more than one dimension, in the form of a table. The table element takes part in the table model. Tables have rows, columns, and cells given by their descendants. The rows and columns form a grid; a table's cells must completely cover that grid without overlap.</p>
+</blockquote>
+<p>比方說，課表就是一個適合用表格排列與呈現的東西：</p>
+<pre><code class="language-html">&lt;table&gt;
+	&lt;caption&gt;標題：模擬課表&lt;/caption&gt;
+	&lt;tr&gt;
+		&lt;td&gt;節次/星期&lt;/td&gt;
+		&lt;td&gt;星期一&lt;/td&gt;
+		&lt;td&gt;星期二&lt;/td&gt;
+		&lt;td&gt;星期三&lt;/td&gt;
+		&lt;td&gt;星期四&lt;/td&gt;
+		&lt;td&gt;星期五&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;第一節&lt;/td&gt;
+		&lt;td&gt;通識教育&lt;/td&gt;
+		&lt;td&gt;  &lt;/td&gt;
+		&lt;td&gt;  &lt;/td&gt;
+		&lt;td&gt;微積分&lt;/td&gt;
+		&lt;td&gt;線性代數&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;第二節&lt;/td&gt;
+		&lt;td&gt;通識教育&lt;/td&gt;
+		&lt;td&gt;離散數學&lt;/td&gt;
+		&lt;td&gt;英文(一)&lt;/td&gt;
+		&lt;td&gt;微積分&lt;/td&gt;
+		&lt;td&gt;線性代數&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;第三節&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+		&lt;td&gt;離散數學&lt;/td&gt;
+		&lt;td&gt;英文(一)&lt;/td&gt;
+		&lt;td&gt;微積分&lt;/td&gt;
+		&lt;td&gt;線性代數&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;第四節&lt;/td&gt;
+		&lt;td&gt; &lt;/td&gt;
+		&lt;td&gt;體育(一)&lt;/td&gt;
+		&lt;td&gt;計算機概論&lt;/td&gt;
+		&lt;td&gt;數位邏輯設計&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;第五節&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+		&lt;td&gt;體育(一)&lt;/td&gt;
+		&lt;td&gt;計算機概論&lt;/td&gt;
+		&lt;td&gt;數位邏輯設計&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td&gt;第六節&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+		&lt;td&gt;計算機概論&lt;/td&gt;
+		&lt;td&gt;數位邏輯設計&lt;/td&gt;
+		&lt;td&gt;韻律教學法&lt;/td&gt;
+	&lt;/tr&gt;
+		&lt;td&gt;第七節&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+		&lt;td&gt;&lt;/td&gt;
+		&lt;td&gt;韻律教學法&lt;/td&gt;
+	&lt;/tr&gt;		
+&lt;/table&gt;
+</code></pre>
+<p>（上面 HTML 取自 <a href="https://gist.github.com/gaoshix">gaoshix</a> 的 <a href="https://gist.github.com/gaoshix/8232450">課表練習</a>）</p>
+<p>如果想成是 JSON 格式的話，大概是這樣：</p>
+<pre><code class="language-json">[{
+    &quot;節次/星期&quot;: &quot;第一節&quot;,
+    &quot;星期一&quot;: &quot;通識教育&quot;,
+    &quot;星期二&quot;: &quot;&quot;,
+    &quot;星期三&quot;: &quot;&quot;,
+    &quot;星期四&quot;: &quot;微積分&quot;,
+    &quot;星期五&quot;: &quot;線性代數&quot;
+}, {
+    &quot;節次/星期&quot;: &quot;第二節&quot;,
+    &quot;星期一&quot;: &quot;通識教育&quot;,
+    &quot;星期二&quot;: &quot;離散數學&quot;,
+    &quot;星期三&quot;: &quot;英文(一)&quot;,
+    &quot;星期四&quot;: &quot;微積分&quot;,
+    &quot;星期五&quot;: &quot;線性代數&quot;
+}, 
+    &quot;以下省略&quot;: &quot;省略&quot;
+]
+</code></pre>
+<h2>回到一開始的例子</h2>
+<p>再度回一下前面的例子：</p>
+<pre><code>    姓名 | 小隊
+--------------------
+中須かすみ | QU4RTZ
+桜坂しずく | A·ZU·NA
+    鐘嵐珠 | R3BIRTH
+</code></pre>
+<p>這個該用 <code>&lt;dl&gt;</code> 還是 <code>&lt;table&gt;</code> 呢？</p>
+<p>很明顯，因為三位人名都有兩個資料：「姓名」與「小隊」。因此，這表<strong>該用 <code>&lt;table&gt;</code> 元素</strong>，把三個人的「姓名」與「小隊」關聯起來。就像這樣：</p>
+<pre><code class="language-html">&lt;table&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;姓名&lt;/th&gt;
+            &lt;th&gt;小隊&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;中須かすみ&lt;/td&gt;
+            &lt;td&gt;QU4RTZ&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;桜坂しずく&lt;/td&gt;
+            &lt;td&gt;A·ZU·NA&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;鐘嵐珠&lt;/td&gt;
+            &lt;td&gt;R3BIRTH&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>以上。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-dl-element">https://html.spec.whatwg.org/multipage/grouping-content.html#the-dl-element</a></li>
+<li><a href="https://html.spec.whatwg.org/multipage/tables.html#the-table-element">https://html.spec.whatwg.org/multipage/tables.html#the-table-element</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl</a></li>
+<li><a href="https://stackoverflow.com/questions/8900571">https://stackoverflow.com/questions/8900571</a></li>
+</ul>
+
+        </article>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
