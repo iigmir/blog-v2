@@ -7,9 +7,11 @@ import axios from "axios";
  */
 export const read_source_directory = ( source_directory: string ) =>
 {
-    return new Promise( (resolve, reject) =>
-        axios(source_directory).then( data => resolve(data.data) ).catch( error => reject(error) )
-    );
+    return new Promise( (resolve, reject) => {
+        const res = (data = { data: {} }) => resolve(data.data);
+        const rej: ((reason: any) => void | PromiseLike<void>) | null | undefined = error => reject(error);
+        axios(source_directory).then( res ).catch( rej )
+    });
 }
 
 /**
