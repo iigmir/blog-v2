@@ -1,4 +1,4 @@
-const fs = require( "fs" );
+import fs from "fs";
 
 class FileSystemModule
 {
@@ -6,12 +6,12 @@ class FileSystemModule
      * @param {String} path - File path
      * @returns {Promise} - If file vaild, the Promise will contain file content, else contain Error object.
      */
-    read_file( file_path = "" )
+    static read_file( file_path: string ): Promise<string | Error>
     {
         return new Promise(( resolve, reject ) =>
             fs.readFile( file_path, "utf8", ( error, files ) =>
             {
-                if ( error ) reject( new Error( error ));
+                if ( error ) reject( error );
                 resolve( files );
             })
         );
@@ -26,7 +26,7 @@ class FileSystemModule
         {
             fs.readdir( path, ( error, files ) =>
             {
-                if ( error ) reject( new Error( error ));
+                if ( error ) reject( error );
                 resolve( files );
             });
         });
@@ -40,7 +40,7 @@ class FileSystemModule
         return new Promise(( resolve, reject ) =>
             fs.readFile( file_path, "utf8", ( fs_error, file ) => 
             {
-                if ( fs_error ) reject( new Error( fs_error ));
+                if ( fs_error ) reject( fs_error );
                 try
                 {
                     const result = JSON.parse( file );
@@ -88,5 +88,4 @@ class FileSystemModule
     }
 }
 
-module.exports = FileSystemModule;
-
+export default FileSystemModule;

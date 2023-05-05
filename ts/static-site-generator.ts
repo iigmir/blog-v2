@@ -2,7 +2,6 @@ import error_handling from "./utils/error-handling";
 import { read_config_file } from "./utils/fs";
 import { ConfigModeEnum } from "./types/index";
 import type { ConfigInterface } from "./types/index";
-// ConfigModeEnum, 
 
 class StaticSiteData
 {

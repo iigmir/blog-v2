@@ -4,7 +4,7 @@ class BasicGenerator {
     config: ConfigInterface;
     fs_handler: any;
     ajax_handler: any;
-    main() {}
+    main( config: ConfigInterface ): void | Promise<void> {}
 }
 
 export { BasicGenerator };
