@@ -1,25 +1,17 @@
-import { BasicGenerator } from "../types/generator";
 import type { ConfigInterface } from "../types/index";
-
-import error_handling from "../utils/error-handling";
-import { AJAXDatas, read_source_directory, read_source_markdowns } from "../utils/ajax";
+import { BasicGenerator } from "../types/generator";
+import { AJAXDatas } from "../utils/ajax";
+import { write_files_to_destination } from "../utils/fs";
 import { RenderMarkdown, RequestSource } from "../utils/helpers";
+import error_handling from "../utils/error-handling";
 import read_template_file from "../utils/read-template-file";
-
-// const FileSystemHandler = require( "./utils/FileSystemHandler.js" );
-// const AJAXHandler = require( "./utils/AJAXHandler.js" );
-// const error_handling = require( "./utils/error-handling.js" );
-// const read_template_file = require( "./utils/read-template-file.js" );
-// const MarkdownIt = require( "markdown-it" );
 
 class BlogAJAXGenerator implements BasicGenerator
 {
     config: ConfigInterface;
     directory_files: string[] = [];
     template: string = "";
-    // new FileSystemHandler()
-    fs_handler = {};
-    // new AJAXHandler()
+    fs_handler = null;
     ajax_handler = new AJAXDatas();
     /**
      * @returns {Array} - Markdown texts by file
@@ -68,16 +60,13 @@ class BlogAJAXGenerator implements BasicGenerator
     }
     async write_files()
     {
-        const parsed_htmls = await this.parsed_htmls;
-        /*
-        this.fs_handler.
+        const parsed_htmls = this.parsed_htmls;
         write_files_to_destination({
             dest_dir: this.config.destination_directory,
             dir_files: this.directory_files,
             mode: this.config.mode,
             parsed_htmls,
         });
-        */
     }
     async main( config: ConfigInterface )
     {
