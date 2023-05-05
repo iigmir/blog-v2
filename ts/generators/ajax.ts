@@ -78,4 +78,4 @@ class BlogAJAXGenerator implements BasicGenerator
     }
 }
 
-module.exports = BlogAJAXGenerator;
+export default BlogAJAXGenerator;
