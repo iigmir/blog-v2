@@ -33,4 +33,4 @@ class TemplateGenerator implements BasicGenerator
     }
 }
 
-module.exports = TemplateGenerator;
+export default TemplateGenerator;

@@ -85,4 +85,4 @@ class LocalFileGenerator implements BasicGenerator
     }
 }
 
-module.exports = LocalFileGenerator;
+export default LocalFileGenerator;

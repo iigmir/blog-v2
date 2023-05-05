@@ -69,4 +69,4 @@ class IndexAJAXGenerator implements BasicGenerator
     }
 }
 
-module.exports = IndexAJAXGenerator;
+export default IndexAJAXGenerator;
