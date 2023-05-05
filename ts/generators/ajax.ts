@@ -37,7 +37,7 @@ class BlogAJAXGenerator extends BasicGenerator
         try
         {
             const files = await RequestSource( this.config.source_directory );
-            const is_markdown = item => item.name.match(/.md$/g);
+            const is_markdown = (item = { name: "" }) => item.name.match(/.md$/g);
             const get_array = (files: unknown) => {
                 if( Array.isArray(files) ) {
                     return files.filter(is_markdown).map(item => item.download_url)
