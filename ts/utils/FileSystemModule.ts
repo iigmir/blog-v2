@@ -20,7 +20,7 @@ class FileSystemModule
      * @param {String} path - Directory path
      * @returns {Promise} - If directory vaild, the Promise will contain directory file names array, else contain Error object.
      */
-    read_directory( path = "" )
+    static read_directory( path = "" )
     {
         return new Promise(( resolve, reject ) =>
         {
@@ -35,7 +35,7 @@ class FileSystemModule
      * @param {String} path - JSON file path
      * @returns {Promise} - If JSON file vaild, the Promise will contain JSON, else contain Error object.
      */
-    read_json( file_path = "" )
+    static read_json( file_path = "" )
     {
         return new Promise(( resolve, reject ) =>
             fs.readFile( file_path, "utf8", ( fs_error, file ) => 
@@ -58,7 +58,7 @@ class FileSystemModule
      * @param {String} file.data - Written file content
      * @returns {void} Throw error if fs encounter one, else return nothing.
      */
-    write_file({ path = "", data = "" })
+    static write_file({ path = "", data = "" })
     {
         fs.writeFile( path, data, "utf8", ( err ) => 
         {
@@ -69,7 +69,7 @@ class FileSystemModule
      * @param {String} path - Written file path and name
      * @returns {void} Throw error if fs encounter one, else return nothing.
      */
-    delete_file( path = "" )
+    static delete_file( path = "" )
     {
         fs.unlink( path, err =>
         {
