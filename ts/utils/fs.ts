@@ -49,25 +49,42 @@ export const write_files_to_destination = ({ dest_dir = "", dir_files = [""], pa
 }
 
 /**
-* @param {String} path - JSON file path
-* @returns {Promise} - If JSON file vaild, the Promise will contain JSON, else contain Error object.
-*/
-export const read_json = ( file_path = "" ) =>
+ * @param file_path File path.
+ * @returns The content.
+ */
+export const read_file = ( file_path = "" ) =>
 {
     return new Promise(( resolve, reject ) =>
         readFile( file_path, "utf8", ( fs_error, file ) => 
         {
             if ( fs_error ) reject( fs_error );
-            try
-            {
-                resolve( JSON.parse( file ) );
-            }
-            catch ( json_error ) 
-            {
-                reject( json_error );
-            }
+            resolve( file );
         })
     );
+};
+
+/**
+* @param path JSON file path
+* @returns If JSON file vaild, the Promise will contain JSON, else contain Error object.
+*/
+export const read_json = ( file_path = "" ) =>
+{
+    const get_json = (input: string) =>
+    {
+        try { return JSON.parse( input ); }
+        catch (error) {
+            console.warn("Input text is not a JSON file.", error);
+            return false;
+        }
+    };
+    return new Promise(( resolve, reject ) =>
+    {
+        read_file(file_path).then( content =>
+        {
+            if( get_json(content as string) ) resolve(get_json(content as string));
+            reject( content );
+        }).catch( e => reject(e) );
+    });
 };
 
 export const read_config_file = ( file_path = "" ) =>
@@ -76,5 +93,4 @@ export const read_config_file = ( file_path = "" ) =>
     {
         read_json( file_path ).then( c => resolve(c) ).catch( e => reject(e) );
     });
-    // return this.fs_module.read_json( file_path );
 };

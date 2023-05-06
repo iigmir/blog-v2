@@ -2,6 +2,11 @@ import axios from "axios";
 import type { AxiosResponse } from "axios";
 // AxiosResponse
 
+/**
+ * 
+ * @param source_directory API path
+ * @returns axios instance
+ */
 export const ajax_url = (source_directory: string) => axios(source_directory);
 
 /**
