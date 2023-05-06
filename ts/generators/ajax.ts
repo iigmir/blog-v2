@@ -5,6 +5,7 @@ import { write_files_to_destination } from "../utils/fs";
 import { RenderMarkdown, RequestSourceByURL } from "../utils/helpers";
 import error_handling from "../utils/error-handling";
 import read_template_file from "../utils/read-template-file";
+import { BlogArticleInfoInterface } from "../types/index";
 
 class BlogAJAXGenerator extends BasicGenerator
 {
@@ -36,14 +37,6 @@ class BlogAJAXGenerator extends BasicGenerator
     {
         try
         {
-            interface BlogArticleInfoInterface {
-                "id": number,
-                "title": string,
-                "created_at"?: string,
-                "updated_at"?: string,
-                "category_id": number[],
-                "language": string,
-            }
             const get_files = async (source_directory: string | BlogArticleInfoInterface[]) => {
                 if( typeof(source_directory) === "string" )
                 {

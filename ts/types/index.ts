@@ -46,4 +46,13 @@ export interface ApiSourceItemInterface {
     title: string
 }
 
+export interface BlogArticleInfoInterface {
+    "id": number,
+    "title": string,
+    "created_at"?: string,
+    "updated_at"?: string,
+    "category_id": number[],
+    "language": string,
+}
+
 export const IsConfigApi = (input: unknown): input is ConfigInterface[] => Array.isArray(input) ? "source_directory" in input[0] : false;
