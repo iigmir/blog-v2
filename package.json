@@ -8,7 +8,7 @@
     "build": "tsc && node dist/index.js",
     "build:ts": "tsc",
     "publish": "node dist/index.js",
-    "build:one": "node build-one.js"
+    "build:one": "node dist/build-one.js"
   },
   "author": "iigmir",
   "license": "ISC",
