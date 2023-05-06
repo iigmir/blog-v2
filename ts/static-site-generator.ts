@@ -36,11 +36,12 @@ const exexute_module = (config: ConfigInterface) =>
 {
     const get_instance = (mode: ConfigModeEnum) =>
     {
-        class Errr { main(err: any) { error_handling(err) } }
+        class Errr { main(err: any) { console.warn( "No such type:", err ); } }
         switch (mode) {
             case ConfigModeEnum.Local: return LocalFileGenerator;
             case ConfigModeEnum.Ajax: return BlogAJAXGenerator;
-            case ConfigModeEnum.AjaxIndex: return IndexAJAXGenerator;
+            // FIXME: The `IndexAJAXGenerator` class is known for error: `Error: ENOENT: no such file or directory, scandir`
+            // case ConfigModeEnum.AjaxIndex: return IndexAJAXGenerator;
             case ConfigModeEnum.Template: return TemplateGenerator;
             default: return Errr;
         }
