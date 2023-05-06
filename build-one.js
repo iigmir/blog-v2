@@ -1,13 +1,17 @@
-const BlogAJAXGenerator = require( "./lib/BlogAJAXGenerator" );
+// const BlogAJAXGenerator = require( "./lib/BlogAJAXGenerator" );
 const main = (id = "ERROR") =>
 {
-    const app = new BlogAJAXGenerator();
     const name = `${ id }.md`;
     if( id.length < 3 )
     {
         console.error("Invalid input");
         return;
     }
+    // const app = new BlogAJAXGenerator();
+    const app = { main: (input) => {
+        console.error("The script is current under development.");
+        throw new Error( input );
+    } }
     app.main({
         "mode": "ajax",
         "source_directory": [ {
