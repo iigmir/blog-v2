@@ -1,7 +1,6 @@
 import { BasicGenerator, generate_default_config } from "../types/generator";
 import error_handling from "../utils/error-handling.js";
 import read_template_file from "../utils/read-template-file.js";
-// ../../src/new-index-text
 import new_index_text from "../new-index-text-ts";
 import { fs_read_source_directory, fs_write_a_file_to_destination } from "../utils/handlers";
 import type { ApiSourceItemInterface, ConfigInterface } from "../types/index";
@@ -22,6 +21,13 @@ class IndexAJAXGenerator implements BasicGenerator
         });
         return this.api_source.length > 0 ? this.api_source.map( items ) : [];
     }
+    get write_file_params()
+    {
+        return {
+            path: this.config.destination_directory,
+            data: this.parsed_htmls,
+        };
+    }
     /**
      * @returns HTML texts with parsed Markdown HTML
      */
@@ -33,13 +39,6 @@ class IndexAJAXGenerator implements BasicGenerator
             return this.template.replace( this.config.replaced_text, new_api_dom );
         }
         return "";
-    }
-    async write_files()
-    {
-        fs_write_a_file_to_destination({
-            path: this.config.destination_directory,
-            data: this.parsed_htmls,
-        });
     }
     async read_api()
     {
@@ -59,6 +58,10 @@ class IndexAJAXGenerator implements BasicGenerator
     {
         const res = await read_template_file(this.config.template_file);
         if( typeof(res) === "string" ) this.template = res;
+    }
+    async write_files()
+    {
+        fs_write_a_file_to_destination(this.write_file_params);
     }
     async main( config: ConfigInterface )
     {

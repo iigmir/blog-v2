@@ -6,7 +6,8 @@ import type { ConfigInterface } from "../types/index";
 import { BlogArticleInfoInterface } from "../types/index";
 import { fs_write_a_file_to_destination } from "../utils/handlers";
 
-class IndexPageGenerator implements BasicGenerator {
+class IndexPageGenerator implements BasicGenerator
+{
     config = generate_default_config();
     template: string = "";
     list: BlogArticleInfoInterface[] = [];
@@ -33,7 +34,7 @@ class IndexPageGenerator implements BasicGenerator {
         const res = await ajax_url( this.config.source_directory );
         this.list = res.data;
     }
-    async get_template()
+    async set_template()
     {
         const template = String( await read_file(this.config.template_file) );
         this.template = template;
@@ -46,7 +47,7 @@ class IndexPageGenerator implements BasicGenerator {
     {
         this.config = config;
         await this.get_api();
-        await this.get_template();
+        await this.set_template();
         await this.write_file();
     }
 }
