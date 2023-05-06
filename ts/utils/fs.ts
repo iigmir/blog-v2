@@ -35,12 +35,8 @@ export const md_file_name = ( md_name = "", mode = "local" ) =>
 
 export const write_files_to_destination = ({ dest_dir = "", dir_files = [""], parsed_htmls = [""], mode = "local" }) =>
 {
-    // const fcp_payload = {
-    //     destination_directory: dest_dir,
-    //     directory_files: dir_files,
-    //     parsed_htmls: parsed_htmls,
-    // };
-    if( file_can_parse( dest_dir, dir_files, parsed_htmls ))
+    const passed = file_can_parse(dest_dir, dir_files, parsed_htmls);
+    if( passed )
     {
         const fn = ( md_name = "", md_index = -1 ) =>
         {

@@ -36,7 +36,6 @@ class BlogAJAXGenerator extends BasicGenerator
     {
         try
         {
-            // directly_import
             interface BlogArticleInfoInterface {
                 "id": number,
                 "title": string,
@@ -48,8 +47,8 @@ class BlogAJAXGenerator extends BasicGenerator
             const get_files = async (source_directory: string | BlogArticleInfoInterface[]) => {
                 if( typeof(source_directory) === "string" )
                 {
-                    // as BlogArticleInfoInterface[]
-                    return await RequestSourceByURL( this.config.source_directory );
+                    const { data } = await RequestSourceByURL(this.config.source_directory);
+                    return data as BlogArticleInfoInterface[];
                 }
                 else
                 {
@@ -78,12 +77,11 @@ class BlogAJAXGenerator extends BasicGenerator
     }
     async write_files()
     {
-        const parsed_htmls = this.parsed_htmls;
         write_files_to_destination({
             dest_dir: this.config.destination_directory,
             dir_files: this.directory_files,
             mode: this.config.mode,
-            parsed_htmls,
+            parsed_htmls: this.parsed_htmls,
         });
     }
     async main( config: ConfigInterface )
