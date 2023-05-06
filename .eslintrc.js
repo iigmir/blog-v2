@@ -8,7 +8,7 @@ module.exports = {
         "browser": true,
     },
     "extends": "eslint:recommended",
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 11
     },
@@ -54,5 +54,6 @@ module.exports = {
             "always"
         ],
         "camelcase": "off",
+        "no-unused-vars": "warn"
     }
 };
