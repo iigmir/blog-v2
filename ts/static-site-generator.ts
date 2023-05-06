@@ -2,7 +2,7 @@ import error_handling from "./utils/error-handling";
 import { read_config_file } from "./utils/fs";
 import { ConfigModeEnum, IsConfigApi } from "./types/index";
 import type { ConfigInterface } from "./types/index";
-import { IndexPageGenerator, BlogAJAXGenerator, LocalFileGenerator, TemplateGenerator } from "./generators/index";
+import { IndexAJAXGenerator, BlogAJAXGenerator, LocalFileGenerator, TemplateGenerator } from "./generators/index";
 
 class StaticSiteData
 {
@@ -39,7 +39,7 @@ const exexute_module = (config: ConfigInterface) =>
         switch (mode) {
             case ConfigModeEnum.Local: return LocalFileGenerator;
             case ConfigModeEnum.Ajax: return BlogAJAXGenerator;
-            case ConfigModeEnum.AjaxIndex: return IndexPageGenerator;
+            case ConfigModeEnum.AjaxIndex: return IndexAJAXGenerator;
             case ConfigModeEnum.Template: return TemplateGenerator;
             default: return Errr;
         }
