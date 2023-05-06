@@ -1,6 +1,6 @@
 import error_handling from "./utils/error-handling";
 import { read_config_file } from "./utils/fs";
-import { ConfigModeEnum } from "./types/index";
+import { ConfigModeEnum, IsConfigApi } from "./types/index";
 import type { ConfigInterface } from "./types/index";
 import { IndexAJAXGenerator, BlogAJAXGenerator, LocalFileGenerator, TemplateGenerator } from "./generators/index";
 
@@ -11,9 +11,8 @@ class StaticSiteData
     {
         try
         {
-            const check_int = (input: any): input is ConfigInterface[] => Array.isArray(input) ? "source_directory" in input[0] : false;
             const config = await read_config_file( config_path );
-            return check_int( config ) ? config : [];
+            return IsConfigApi( config ) ? config : [];
         }
         catch (error)
         {
@@ -40,7 +39,7 @@ const exexute_module = (config: ConfigInterface) =>
         switch (mode) {
             case ConfigModeEnum.Local: return LocalFileGenerator;
             case ConfigModeEnum.Ajax: return BlogAJAXGenerator;
-            // FIXME: The `IndexAJAXGenerator` class is known for error: `Error: ENOENT: no such file or directory, scandir`
+            // FIXME: The `IndexAJAXGenerator` class is known for error: `Error: ENOENT: no such file or directory, scandir directory/api`
             // case ConfigModeEnum.AjaxIndex: return IndexAJAXGenerator;
             case ConfigModeEnum.Template: return TemplateGenerator;
             default: return Errr;

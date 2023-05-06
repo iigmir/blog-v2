@@ -19,3 +19,5 @@ export interface ApiSourceItemInterface {
     id: string | number
     title: string
 }
+
+export const IsConfigApi = (input: unknown): input is ConfigInterface[] => Array.isArray(input) ? "source_directory" in input[0] : false;
