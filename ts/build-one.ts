@@ -12,7 +12,7 @@ const main = (id = "ERROR") =>
     app.main({
         "mode": ConfigModeEnum.Ajax,
         "source_directory": `https://raw.githubusercontent.com/iigmir/blog-source/master/articles/${ id }.md`,
-        "template_file": "src/template.html",
+        "template_file": "ts/assets/template.html",
         "destination_directory": "docs/articles",
         "replaced_text": "<the-article />"
     });
