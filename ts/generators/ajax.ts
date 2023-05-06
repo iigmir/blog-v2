@@ -1,14 +1,17 @@
-import type { ConfigInterface } from "../types/index";
-import { BasicGenerator } from "../types/generator";
+// Generators
+import { BasicGenerator, generate_default_config } from "../types/generator";
+// Utils
+import error_handling from "../utils/error-handling";
+import read_template_file from "../utils/read-template-file";
 import { AJAXDatas } from "../utils/ajax";
 import { write_files_to_destination } from "../utils/fs";
 import { RenderMarkdown, RequestSourceByURL } from "../utils/helpers";
-import error_handling from "../utils/error-handling";
-import read_template_file from "../utils/read-template-file";
-import { BlogArticleInfoInterface } from "../types/index";
+// Types
+import type { ConfigInterface, BlogArticleInfoInterface } from "../types/index";
 
-class BlogAJAXGenerator extends BasicGenerator
+class BlogAJAXGenerator implements BasicGenerator
 {
+    config = generate_default_config();
     directory_files: string[] = [];
     template: string = "";
     ajax_handler = new AJAXDatas();
@@ -77,7 +80,7 @@ class BlogAJAXGenerator extends BasicGenerator
             parsed_htmls: this.parsed_htmls,
         });
     }
-    async main( config: ConfigInterface )
+    async main(config: ConfigInterface)
     {
         this.config = config;
         await this.read_directory();

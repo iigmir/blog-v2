@@ -1,8 +1,11 @@
+// Generators
 import { BasicGenerator, generate_default_config } from "../types/generator";
-import type { ConfigInterface } from "../types/index";
+// Utils
 import FileSystemModule from "../utils/FileSystemModule.js";
 import error_handling from "../utils/error-handling.js";
 import jsdom from "jsdom";
+// Types
+import type { ConfigInterface } from "../types/index";
 
 class TemplateGenerator implements BasicGenerator
 {

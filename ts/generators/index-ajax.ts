@@ -1,11 +1,14 @@
-import render_list from "../assets/index-text-render";
+// Generators
+import { BasicGenerator, generate_default_config } from "../types/generator";
+// Utils
 import error_handling from "../utils/error-handling.js";
 import { read_file } from "../utils/fs";
 import { ajax_url } from "../utils/ajax";
-import { BlogArticleInfoInterface } from "../types/index";
-import { BasicGenerator, generate_default_config } from "../types/generator";
 import { fs_write_a_file_to_destination } from "../utils/handlers";
-import type { ConfigInterface } from "../types/index";
+// Rendering functions
+import render_list from "../assets/index-text-render";
+// Types
+import type { ConfigInterface, BlogArticleInfoInterface } from "../types/index";
 
 class IndexAJAXGenerator implements BasicGenerator
 {
@@ -41,12 +44,20 @@ class IndexAJAXGenerator implements BasicGenerator
     }
     async set_template()
     {
-        const template = await read_file(this.config.template_file);
-        this.template = String( template );
+        try {
+            const template = await read_file(this.config.template_file);
+            this.template = String( template );
+        } catch (error) {
+            error_handling( error );
+        }
     }
     async write_file()
     {
-        fs_write_a_file_to_destination( this.write_file_params );
+        try {
+            fs_write_a_file_to_destination( this.write_file_params );
+        } catch (error) {
+            error_handling( error );
+        }
     }
     async main(config: ConfigInterface)
     {
