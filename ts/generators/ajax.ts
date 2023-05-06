@@ -2,7 +2,7 @@ import type { ConfigInterface } from "../types/index";
 import { BasicGenerator } from "../types/generator";
 import { AJAXDatas } from "../utils/ajax";
 import { write_files_to_destination } from "../utils/fs";
-import { RenderMarkdown, RequestSource } from "../utils/helpers";
+import { RenderMarkdown, RequestSourceByURL } from "../utils/helpers";
 import error_handling from "../utils/error-handling";
 import read_template_file from "../utils/read-template-file";
 
@@ -36,7 +36,27 @@ class BlogAJAXGenerator extends BasicGenerator
     {
         try
         {
-            const files = await RequestSource( this.config.source_directory );
+            // directly_import
+            interface BlogArticleInfoInterface {
+                "id": number,
+                "title": string,
+                "created_at"?: string,
+                "updated_at"?: string,
+                "category_id": number[],
+                "language": string,
+            }
+            const get_files = async (source_directory: string | BlogArticleInfoInterface[]) => {
+                if( typeof(source_directory) === "string" )
+                {
+                    // as BlogArticleInfoInterface[]
+                    return await RequestSourceByURL( this.config.source_directory );
+                }
+                else
+                {
+                    return Promise.resolve( source_directory );
+                }
+            }
+            const files = await get_files( this.config.source_directory );
             const is_markdown = (item = { name: "" }) => item.name.match(/.md$/g);
             const get_array = (files: unknown) => {
                 if( Array.isArray(files) ) {

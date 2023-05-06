@@ -1,5 +1,7 @@
 import axios from "axios";
 
+export const ajax_url = (source_directory: string) => axios(source_directory);
+
 /**
  * AJAX request.
  * @param source_directory Requesting API.

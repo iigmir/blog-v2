@@ -1,4 +1,4 @@
-import { read_source_directory, read_source_markdowns } from "../utils/ajax";
+import { ajax_url, read_source_directory } from "../utils/ajax";
 import MarkdownIt from "markdown-it";
 
 const RenderMarkdown = (md_text = "") => 
@@ -15,8 +15,6 @@ const RenderMarkdown = (md_text = "") =>
     }
 };
 
-const RequestSourceByURL = (source_directory: string) => read_source_directory(source_directory);
-
 const RequestSource = async(source_directory: string | object) =>
 {
     const is_ajax = typeof( source_directory ) === "string";
@@ -24,7 +22,7 @@ const RequestSource = async(source_directory: string | object) =>
     const action = (resolve: (value: unknown) => void, reject: (reason?: any) => void): void =>
     {
         if (is_ajax) {
-            RequestSourceByURL(source_directory).then(r => resolve(r)).catch(e => reject(e));
+            read_source_directory(source_directory).then(r => resolve(r)).catch(e => reject(e));
             return;
         } else if (directly_import) {
             resolve(source_directory);
@@ -35,4 +33,6 @@ const RequestSource = async(source_directory: string | object) =>
     return new Promise( action );
 };
 
-export { RenderMarkdown, RequestSource };
+const RequestSourceByURL = async(source_directory: string) => ajax_url(source_directory);
+
+export { RenderMarkdown, RequestSourceByURL, RequestSource };
