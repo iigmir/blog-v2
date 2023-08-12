@@ -1,6 +1,9 @@
 import { BlogArticleInfoInterface } from "../types/index";
 
-const render_list_items = (url = "index.html", title = "Foobar") => `<li><a href="${ url }">${ title }</a></li>\n`;
+// See: https://stackoverflow.com/a/5251552
+const escape_html = (str = "") => str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+const render_list_items = (url = "index.html", title = "Foobar") => `<li><a href="${ url }">${ escape_html(title) }</a></li>\n`;
 
 const get_name = (id: number) => String(id).padStart(3, "0");
 
