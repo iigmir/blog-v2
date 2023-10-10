@@ -1,0 +1,6 @@
+<svg width="250" height="250" xmlns="http://www.w3.org/2000/svg">
+  <rect id="background" width="250" height="250" x="0" y="0" fill="#012169" />
+  <line id="left-cross" stroke-width="42" stroke-linecap="white" stroke-linejoin="white" y2="250" x2="250" y1="0" x1="0" stroke="#FFF" fill="#FFF" />
+  <line id="right-cross" stroke-width="42" stroke-linecap="white" stroke-linejoin="white" y2="250" x2="250" y1="0" x1="0" stroke="#FFF" fill="#FFF" transform="rotate(90, 125, 125)" />
+  <polygon id="triangle" points="0,29 96,125 0,220" fill="#C8102E" />
+</svg>
