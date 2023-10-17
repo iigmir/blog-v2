@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css" />
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <!-- <h1>內頁導航</h1> -->
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>fnpd</h1>
+<p>i felt angry that nginx is too complex while most sites use it. docker doesn't help.</p>
+<h2>user story</h2>
+<p>i can access following urls by browsers AND curl:</p>
+<ol>
+<li>http://127.0.0.1</li>
+<li>http://127.0.0.1/index.php</li>
+<li>http://127.0.0.1/version.php</li>
+<li>http://127.0.0.1/blog</li>
+<li>http://127.0.0.1/blog/index.php</li>
+</ol>
+<h2>first</h2>
+<p>i firstly tried:</p>
+<pre><code class="language-yml">version: '3'
+# https://marc.it/dockerize-application-with-nginx-and-php8/
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - ./src:/var/www/html
+      - ./nginx:/etc/nginx/conf.d
+    links:
+      - php-fpm
+  php-fpm:
+    image: php:8-fpm
+    volumes:
+      - ./src:/var/www/html
+</code></pre>
+<pre><code class="language-conf">; ./nginx/default.conf
+server {
+    index index.php index.html;
+    server_name phpfpm.local;
+    error_log  /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+    root /var/www/html;
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass php-fpm:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+}
+</code></pre>
+<p>but while we can only access 1, 2, and 3, that means <code>http://127.0.0.1/blog</code> and <code>http://127.0.0.1/blog/index.php</code> will failed when access by browsers.</p>
+<p>lets try different one by chatgpt</p>
+<h2>second</h2>
+<p>chatgpt doesn't help either</p>
+<pre><code class="language-yml">version: '3'
+services:
+  web:
+    image: nginx:latest
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./src:/var/www/html
+    ports:
+      - 80:80
+  php:
+    image: php:fpm
+    volumes:
+      - ./src:/var/www/html
+</code></pre>
+<pre><code class="language-conf">; ./nginx/nginx.conf
+worker_processes 1;
+
+events { worker_connections 1024; }
+
+http {
+    server {
+        listen 80;
+        index index.php index.html;
+        server_name localhost;
+        error_log  /var/log/nginx/error.log;
+        access_log /var/log/nginx/access.log;
+        root /var/www/html;
+
+        location ~ \.php$ {
+            try_files $uri =404;
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            fastcgi_pass php:9000;
+            fastcgi_index index.php;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
+        }
+
+        location /blog {
+            try_files $uri $uri/ /a/index.php?$query_string;
+        }
+    }
+}
+</code></pre>
+<p>it cannot access at all and waste three hours</p>
+<p>just give up</p>
+<p>why nginx make everone suffer?</p>
+
+        </article>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="/blog-v2/assets/article.js"></script>
+</body>
+</html>
