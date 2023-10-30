@@ -8,7 +8,7 @@ class ArticleTagsApp {
             this.id = current_article_path.split(".")[0];
         }
     }
-    // AJAX module
+    // AJAX module: Metadata
     /**
      * ```json
 {
@@ -28,7 +28,7 @@ class ArticleTagsApp {
 ```
      */
     responsed_data = {}
-    get api_path() {
+    get data_api_path() {
         const domain = "https://iigmir.serv00.net";
         const api = "/api/blog-metadata.php";
         const param = `?id=${this.id}`;
@@ -43,18 +43,35 @@ class ArticleTagsApp {
                 "title": "Test",
                 "category_id": [1, 2, 3],
                 "language": "zh-Hant-TW",
-                "created_at": "2023-04-27T17:11:36Z",
-                "updated_at": "2023-04-27T17:11:36Z"
+                "created_at": "2000-01-01T10:11:12Z",
+                "updated_at": "2000-01-01T10:11:12Z"
             }
         }
     }
+    // AJAX module: Tags
+    tags_data = []
+    get tags_api_path() {
+        return "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/categories.json";
+    }
+    // AJAX module: Main
     request_api() {
         return new Promise( (resolve, reject) => {
             if( this.id ) {
-                this.set_data_test();
-                resolve( this.responsed_data );
+                const requests = Promise.all([
+                    fetch( this.tags_api_path ).then( r => r.json() ),
+                    fetch( this.data_api_path ).then( r => r.json() )
+                ]);
+                const success_callback = ([tags, metadata]) => {
+                    this.tags_data = tags;
+                    this.responsed_data = metadata;
+                    resolve( this.responsed_data );
+                };
+                requests.then( success_callback );
+                // this.set_data_test();
+                // resolve( this.responsed_data );
+                // const tagsresponse = fetch( this.data_api_path ).then( r => r.json() );
                 return;
-                const response = fetch( this.api_path ).then( r => r.json() );
+                const response = fetch( this.data_api_path ).then( r => r.json() );
                 response.then( (response) => {
                     this.responsed_data = response;
                     resolve( this.responsed_data );
@@ -63,10 +80,6 @@ class ArticleTagsApp {
                 reject( "No ID given" );
             }
         });
-    }
-    // Main method
-    main() {
-        this.set_id();
     }
 }
 
