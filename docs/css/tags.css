@@ -47,6 +47,7 @@
 {
     display: block;
 }
+/* Modal: Close button */
 .modal .close
 {
     width: 2rem;
@@ -55,9 +56,14 @@
     border: 0;
     cursor: pointer;
     background-color: #CF002d;
-    box-shadow: inset rgba(255, 255, 255, 0.6) 0 0.3em 0.3em,
-        inset rgba(0, 0, 0, 0.15) 0 -0.1em 0.3em,
-        #fa00af 0 0.1em 0.1em,
-        #610043 0 0.1em 0.05em
+    box-shadow: inset rgba(255, 255, 255, 0.6) 0 0.3rem 0.3rem,
+        inset rgba(0, 0, 0, 0.15) 0 -0.1em 0.3rem,
+        #fa00af 0 0.1em 0.1rem,
+        #610043 0 0.1em 0.05rem
     ;
+}
+.modal .close:active
+{
+    background-color: #9F002d;
+    box-shadow: inset rgba(255, 255, 255, 0.6) 0 0.3rem 0.3rem, inset rgba(0, 0, 0, 0.15) 0 -0.1rem 0.3rem;
 }
