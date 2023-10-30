@@ -9,6 +9,25 @@ class ArticleTagsApp {
         }
     }
     // AJAX module
+    /**
+     * ```json
+{
+    "message": "",
+    "id": "",
+    "data": {
+        "id": 1,
+        "title": "",
+        "category_id": [
+            1
+        ],
+        "language": "",
+        "created_at": "",
+        "updated_at": ""
+    }
+}
+```
+     */
+    responsed_data = {}
     get api_path() {
         const domain = "https://iigmir.serv00.net";
         const api = "/api/blog-metadata.php";
@@ -16,18 +35,21 @@ class ArticleTagsApp {
         return domain + api + param;
     }
     request_api() {
-        console.log( this.api_path );
+        return new Promise( (resolve, reject) => {
+            if( this.id ) {
+                const response = fetch( this.api_path ).then( r => r.json() );
+                response.then( (response) => {
+                    this.responsed_data = response;
+                    resolve( this.responsed_data );
+                }).catch( error => reject( error ) );
+            } else {
+                reject( "No ID given" );
+            }
+        });
     }
-    // Render module
-    render_element() {
-        // 
-    }
+    // Main method
     main() {
         this.set_id();
-        if( this.id ) {
-            this.request_api();
-            this.render_element();
-        }
     }
 }
 
@@ -35,8 +57,22 @@ class ArticleTagsAppELement extends HTMLElement {
     tags_object = null
     constructor() {
         super();
+    }
+    connectedCallback() {
         this.tags_object = new ArticleTagsApp();
-        this.tags_object.main();
+        this.tagsapp_action();
+    }
+    tagsapp_action() {
+        this.tags_object.set_id();
+        this.tags_object.request_api().then( (data) => {
+            console.log(data);
+        }).catch( error => {
+            console.error(error);
+        });
+    }
+    // Render module
+    render_element() {
+        // 
     }
 }
 
