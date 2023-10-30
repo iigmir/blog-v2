@@ -62,8 +62,8 @@ class ArticleTagsApp {
     }
     get matched_tags() {
         const data = this.responsed_source_data.data ?? { category_id: [] };
-        if( data ) {}
-        return [];
+        const tag_matched = (id) => this.tags_data.find( tag => tag.id === id )?.tag_name ?? null;
+        return [...data.category_id].map( tag_matched ).filter( tag => tag );
     }
     // AJAX module: Main
     request_api() {
@@ -120,7 +120,6 @@ class ArticleTagsAppELement extends HTMLElement {
         const shadow = this.attachShadow({ mode: "open" });
         const wrapper = document.createElement( "footer" );
         wrapper.setAttribute( "class", "tags container" );
-        console.log(this.tags_object.responsed_data);
 
         // Set date: Created
         const created_date_container = document.createElement("span");
@@ -137,8 +136,15 @@ class ArticleTagsAppELement extends HTMLElement {
         );
 
         // Add tags
-        const list = document.createElement("ul");
-        // 
+        const tag_help = document.createElement("p");
+        tag_help.textContent = "Tags: ";
+        const tag_list = document.createElement("ul");
+        const list_items = this.tags_object.matched_tags.map( (item) => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            return li;
+        });
+        list_items.forEach( element => tag_list.appendChild( element ) );
 
         // Add CSS
         const css = document.createElement("link");
@@ -155,6 +161,8 @@ class ArticleTagsAppELement extends HTMLElement {
         wrapper.appendChild(created_date_container);
         wrapper.appendChild(gap);
         wrapper.appendChild(updated_date_container);
+        wrapper.appendChild(tag_help);
+        wrapper.appendChild(tag_list);
     }
 }
 
