@@ -47,3 +47,17 @@
 {
     display: block;
 }
+.modal .close
+{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 0;
+    cursor: pointer;
+    background-color: #CF002d;
+    box-shadow: inset rgba(255, 255, 255, 0.6) 0 0.3em 0.3em,
+        inset rgba(0, 0, 0, 0.15) 0 -0.1em 0.3em,
+        #fa00af 0 0.1em 0.1em,
+        #610043 0 0.1em 0.05em
+    ;
+}
