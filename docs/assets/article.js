@@ -34,9 +34,26 @@ class ArticleTagsApp {
         const param = `?id=${this.id}`;
         return domain + api + param;
     }
+    set_data_test() {
+        this.responsed_data = {
+            "message": "Success",
+            "id": "1",
+            "data": {
+                "id": 1,
+                "title": "Test",
+                "category_id": [1, 2, 3],
+                "language": "zh-Hant-TW",
+                "created_at": "2023-04-27T17:11:36Z",
+                "updated_at": "2023-04-27T17:11:36Z"
+            }
+        }
+    }
     request_api() {
         return new Promise( (resolve, reject) => {
             if( this.id ) {
+                this.set_data_test();
+                resolve( this.responsed_data );
+                return;
                 const response = fetch( this.api_path ).then( r => r.json() );
                 response.then( (response) => {
                     this.responsed_data = response;
