@@ -1,7 +1,6 @@
-class ArticleTagsAppELement extends HTMLElement {
+class ArticleTagsApp {
     id = ""
     constructor() {
-        super();
         this.set_id();
         console.log( this.id );
     }
@@ -11,7 +10,13 @@ class ArticleTagsAppELement extends HTMLElement {
             this.id = current_article_path.split(".")[0];
         }
     }
-    attributeChangedCallback(name, oldValue, newValue) {
+}
+
+class ArticleTagsAppELement extends HTMLElement {
+    tags_object = null
+    constructor() {
+        super();
+        this.tags_object = new ArticleTagsApp();
     }
 }
 
