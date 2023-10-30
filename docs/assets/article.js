@@ -92,25 +92,42 @@ class ArticleTagsAppELement extends HTMLElement {
         // Create a shadow root and wrapper
         const shadow = this.attachShadow({ mode: "open" });
         const wrapper = document.createElement( "footer" );
-        wrapper.setAttribute( "class", "tags" );
+        wrapper.setAttribute( "class", "tags container" );
         console.log(this.tags_object.responsed_data);
 
         // Set date: Created
+        const created_date_container = document.createElement("span");
         const created_date = document.createElement("time");
-        created_date.setAttribute("class", ["date", "-created"]);
+        created_date.setAttribute("class", "date -created");
         created_date.setAttribute("datetime", this.tags_object.responsed_data.data.created_at);
+        created_date.textContent = this.tags_object.responsed_data.data.created_at;
+        created_date_container.textContent = "Created: ";
+        created_date_container.appendChild( created_date );
 
         // Set dates: Updated
+        const updated_date_container = document.createElement("span");
         const updated_date = document.createElement("time");
-        updated_date.setAttribute("class", ["date", "-updated"]);
+        updated_date.setAttribute("class", "date -updated");
         updated_date.setAttribute("datetime", this.tags_object.responsed_data.data.updated_at);
+        updated_date.textContent = this.tags_object.responsed_data.data.updated_at;
+        updated_date_container.textContent = "Updated: ";
+        updated_date_container.appendChild( updated_date );
 
-        // Set dates: Put it all togeter
-        // shadow.appendChild(linkElem);
+        // Add CSS
+        const css = document.createElement("link");
+        css.setAttribute("rel", "stylesheet");
+        css.setAttribute("href", "../css/new-framework.css");
+
+        // Add gap
+        const gap = document.createElement("span");
+        gap.textContent = " ";
+
+        // Now put it all togeter
+        shadow.appendChild(css);
         shadow.appendChild(wrapper);
-        wrapper.appendChild(created_date);
-        wrapper.appendChild(updated_date);
-        // document.body.appendChild(square);
+        wrapper.appendChild(created_date_container);
+        wrapper.appendChild(gap);
+        wrapper.appendChild(updated_date_container);
     }
 }
 
