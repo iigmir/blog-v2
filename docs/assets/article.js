@@ -82,14 +82,35 @@ class ArticleTagsAppELement extends HTMLElement {
     tagsapp_action() {
         this.tags_object.set_id();
         this.tags_object.request_api().then( (data) => {
-            console.log(data);
-        }).catch( error => {
+            this.render_element();
+        }).catch( (error) => {
             console.error(error);
         });
     }
     // Render module
     render_element() {
-        // 
+        // Create a shadow root and wrapper
+        const shadow = this.attachShadow({ mode: "open" });
+        const wrapper = document.createElement( "footer" );
+        wrapper.setAttribute( "class", "tags" );
+        console.log(this.tags_object.responsed_data);
+
+        // Set date: Created
+        const created_date = document.createElement("time");
+        created_date.setAttribute("class", ["date", "-created"]);
+        created_date.setAttribute("datetime", this.tags_object.responsed_data.data.created_at);
+
+        // Set dates: Updated
+        const updated_date = document.createElement("time");
+        updated_date.setAttribute("class", ["date", "-updated"]);
+        updated_date.setAttribute("datetime", this.tags_object.responsed_data.data.updated_at);
+
+        // Set dates: Put it all togeter
+        // shadow.appendChild(linkElem);
+        shadow.appendChild(wrapper);
+        wrapper.appendChild(created_date);
+        wrapper.appendChild(updated_date);
+        // document.body.appendChild(square);
     }
 }
 
