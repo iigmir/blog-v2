@@ -98,6 +98,13 @@ class ArticleTagsAppELement extends HTMLElement {
             console.error(error);
         });
     }
+    new_time_element(classes = "", datetime = "") {
+        const time = document.createElement("time");
+        time.setAttribute("class", classes);
+        time.setAttribute("datetime", datetime);
+        time.textContent = datetime;
+        return time;
+    }
     // Render module
     render_element() {
         // Create a shadow root and wrapper
@@ -108,21 +115,17 @@ class ArticleTagsAppELement extends HTMLElement {
 
         // Set date: Created
         const created_date_container = document.createElement("span");
-        const created_date = document.createElement("time");
-        created_date.setAttribute("class", "date -created");
-        created_date.setAttribute("datetime", this.tags_object.responsed_data.data.created_at);
-        created_date.textContent = this.tags_object.responsed_data.data.created_at;
         created_date_container.textContent = "Created: ";
-        created_date_container.appendChild( created_date );
+        created_date_container.appendChild(
+            this.new_time_element("date -created", this.tags_object.responsed_data.data.created_at)
+        );
 
         // Set dates: Updated
         const updated_date_container = document.createElement("span");
-        const updated_date = document.createElement("time");
-        updated_date.setAttribute("class", "date -updated");
-        updated_date.setAttribute("datetime", this.tags_object.responsed_data.data.updated_at);
-        updated_date.textContent = this.tags_object.responsed_data.data.updated_at;
         updated_date_container.textContent = "Updated: ";
-        updated_date_container.appendChild( updated_date );
+        updated_date_container.appendChild( 
+            this.new_time_element("date -updated", this.tags_object.responsed_data.data.updated_at)
+        );
 
         // Add CSS
         const css = document.createElement("link");
