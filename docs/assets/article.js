@@ -47,6 +47,10 @@ class ArticleTagsApp {
                 "updated_at": "2000-01-01T10:11:12Z"
             }
         }
+        this.tags_data = [
+            { "id": 1, "tag_name": "Example 1" },
+            { "id": 2, "tag_name": "Example 2" },
+        ];
     }
     // AJAX module: Tags
     tags_data = []
@@ -57,6 +61,9 @@ class ArticleTagsApp {
     request_api() {
         return new Promise( (resolve, reject) => {
             if( this.id ) {
+                this.set_data_test();
+                resolve( this.responsed_data );
+                return;
                 const requests = Promise.all([
                     fetch( this.tags_api_path ).then( r => r.json() ),
                     fetch( this.data_api_path ).then( r => r.json() )
@@ -67,15 +74,6 @@ class ArticleTagsApp {
                     resolve( this.responsed_data );
                 };
                 requests.then( success_callback );
-                // this.set_data_test();
-                // resolve( this.responsed_data );
-                // const tagsresponse = fetch( this.data_api_path ).then( r => r.json() );
-                return;
-                const response = fetch( this.data_api_path ).then( r => r.json() );
-                response.then( (response) => {
-                    this.responsed_data = response;
-                    resolve( this.responsed_data );
-                }).catch( error => reject( error ) );
             } else {
                 reject( "No ID given" );
             }
