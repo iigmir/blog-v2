@@ -1,19 +1,4 @@
-.modal
-{
-    display: none;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background-color: rgba(250, 250, 250, 0.4);
-}
-.show.modal
-{
-    display: block;
-}
-
+/* Container part */
 .narrow.container
 {
     padding: 2.0rem;
@@ -26,6 +11,7 @@
     background-color: rgba(250, 250, 250, 1);
 }
 
+/* Button part */
 .button
 {
     margin: 0.2rem;
@@ -39,4 +25,25 @@
 .button:hover
 {
     background-color: #383b40;
+}
+
+/* Modal part */
+.modal
+{
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(250, 250, 250, 0.4);
+}
+.modal
+{
+    overflow-y: scroll;
+}
+.show.modal
+{
+    display: block;
 }
