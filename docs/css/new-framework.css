@@ -8,3 +8,15 @@
         padding-left: 0;
     }
 }
+
+code {
+    font-family: "Consolas", "Monaco", 'Andale Mono', 'Ubuntu Mono', monospace;
+    background-color: #f5f2f0;
+    color: #000;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+p, article p {
+    line-height: 24px;
+}
