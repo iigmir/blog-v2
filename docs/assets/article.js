@@ -27,7 +27,7 @@ class ArticleTagsApp {
 }
 ```
      */
-    responsed_data = {}
+    responsed_source_data = {}
     get data_api_path() {
         const domain = "https://iigmir.serv00.net";
         const api = "/api/blog-metadata.php";
@@ -35,7 +35,7 @@ class ArticleTagsApp {
         return domain + api + param;
     }
     set_data_test() {
-        this.responsed_data = {
+        this.responsed_source_data = {
             "message": "Success",
             "id": "1",
             "data": {
@@ -52,26 +52,35 @@ class ArticleTagsApp {
             { "id": 2, "tag_name": "Example 2" },
         ];
     }
+    get responsed_data() {
+        return this.responsed_source_data.data;
+    }
     // AJAX module: Tags
     tags_data = []
     get tags_api_path() {
         return "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/categories.json";
+    }
+    get matched_tags() {
+        const data = this.responsed_source_data.data ?? { category_id: [] };
+        if( data ) {}
+        return [];
     }
     // AJAX module: Main
     request_api() {
         return new Promise( (resolve, reject) => {
             if( this.id ) {
                 this.set_data_test();
-                resolve( this.responsed_data );
+                resolve( this.responsed_source_data );
                 return;
+                // Main program
                 const requests = Promise.all([
                     fetch( this.tags_api_path ).then( r => r.json() ),
                     fetch( this.data_api_path ).then( r => r.json() )
                 ]);
                 const success_callback = ([tags, metadata]) => {
                     this.tags_data = tags;
-                    this.responsed_data = metadata;
-                    resolve( this.responsed_data );
+                    this.responsed_source_data = metadata;
+                    resolve( this.responsed_source_data );
                 };
                 requests.then( success_callback );
             } else {
@@ -117,15 +126,19 @@ class ArticleTagsAppELement extends HTMLElement {
         const created_date_container = document.createElement("span");
         created_date_container.textContent = "Created: ";
         created_date_container.appendChild(
-            this.new_time_element("date -created", this.tags_object.responsed_data.data.created_at)
+            this.new_time_element("date -created", this.tags_object.responsed_data.created_at)
         );
 
         // Set dates: Updated
         const updated_date_container = document.createElement("span");
         updated_date_container.textContent = "Updated: ";
         updated_date_container.appendChild( 
-            this.new_time_element("date -updated", this.tags_object.responsed_data.data.updated_at)
+            this.new_time_element("date -updated", this.tags_object.responsed_data.updated_at)
         );
+
+        // Add tags
+        const list = document.createElement("ul");
+        // 
 
         // Add CSS
         const css = document.createElement("link");
