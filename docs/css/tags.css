@@ -1,8 +1,3 @@
-/* layout */
-.button
-{
-    margin: 0.5rem;
-}
 .modal
 {
     display: none;
@@ -12,11 +7,15 @@
     width: 100%;
     height: 100%;
     z-index: 1;
+    background-color: rgba(250, 250, 250, 0.4);
 }
+.show.modal
+{
+    display: block;
+}
+
 .narrow.container
 {
-    margin: 1rem auto;
-    max-width: 960px;
     padding: 2.0rem;
     position: relative;
     width: 100%;
@@ -24,18 +23,20 @@
 .centre.container
 {
     border-radius: 0.5rem;
-}
-.show.modal
-{
-    display: block;
+    background-color: rgba(250, 250, 250, 1);
 }
 
-/* colour */
-.modal
+.button
 {
-    background-color: rgba(250, 250, 250, 0.4);
+    margin: 0.2rem;
+    padding: 0.5rem;
+	/* font-size: 1.9rem; */
+    display: inline-flex;
+    text-decoration: none;
+    border: 1px solid #383b40;
+    border-radius: 0.2rem;
 }
-.centre.container
+.button:hover
 {
-    background-color: rgba(250, 250, 250, 1);
+    background-color: #383b40;
 }

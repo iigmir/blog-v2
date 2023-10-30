@@ -62,7 +62,7 @@ class DOMRenderUtilities
     // eslint-disable-next-line brace-style
     tags_to_the_modal( tags_dom_target = "#doms", callback = () => {})
     {
-        const func = ( item = []) =>
+        const func = (item = []) =>
         {
             item.addEventListener( "click", dom =>
             {
@@ -79,6 +79,18 @@ class DOMRenderUtilities
         });
     }
 }
+
+/**
+ * Renders:
+ * ```html
+ * <li> <a href="../articles/007.html">SPY FAMILY</a> </li>
+```
+ * @param {Object} item Blog item
+ * @returns 
+ */
+const set_item_component = (item = { id: 1, title: "" }) => `<li>
+    <a href="../articles/${String(item.id).padStart( 3, "0" )}.html">${item.title}</a>
+</li>`;
 
 $( document ).ready(() =>
 {
@@ -114,11 +126,7 @@ $( document ).ready(() =>
         {
             tags_data.store_number( parseInt( dom.target.dataset.iBtnId, 10 ));
             document.querySelector( "#modal ul" ).innerHTML = tags_data.articles_with_number.map(
-                item => `<li>
-                    <a href="../articles/${ String( item.id ).padStart( 3, "0" ) }.html">
-                        ${ item.title }
-                    </a>
-                </li>`
+                item => set_item_component(item)
             ).join( "" );
             the.MODAL_DOM.classList.add( "show" );
         };
