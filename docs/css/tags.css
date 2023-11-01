@@ -77,3 +77,8 @@
     background-color: #9F002d;
     box-shadow: inset rgba(255, 255, 255, 0.6) 0 0.3rem 0.3rem, inset rgba(0, 0, 0, 0.15) 0 -0.1rem 0.3rem;
 }
+
+a:hover
+{
+    color: var(--hover-link-colour);
+}
