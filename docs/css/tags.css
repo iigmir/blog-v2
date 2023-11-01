@@ -1,16 +1,20 @@
 /* Container part */
-.narrow.container
+.container
 {
-    padding: 2.0rem;
-    position: relative;
-    width: 100%;
+    &.narrow
+    {
+        padding: 2.0rem;
+        position: relative;
+        width: 100%;
+    }
+    &.centre
+    {
+        --container-bg-colour: rgba(250, 250, 250, 1);
+        border-radius: 0.5rem;
+        background-color: var(--container-bg-colour);
+    }
 }
-.centre.container
-{
-    --container-bg-colour: rgba(250, 250, 250, 1);
-    border-radius: 0.5rem;
-    background-color: var(--container-bg-colour);
-}
+
 
 /* Button part */
 .button
@@ -22,12 +26,11 @@
     text-decoration: none;
     border: 1px solid #383b40;
     border-radius: 0.2rem;
+    &:hover
+    {
+        background-color: #383b40;
+    }
 }
-.button:hover
-{
-    background-color: #383b40;
-}
-
 /* Modal part */
 .modal
 {
@@ -38,7 +41,6 @@
     width: 100%;
     height: 100%;
     z-index: 1;
-    background-color: rgba(250, 250, 250, 0.4);
 }
 
 /* Modal: text and block */
@@ -51,10 +53,14 @@
     display: block;
 }
 
-/* Modal: Background colour */
-.modal .centre.container
+/* Modal: Colour */
+.modal
 {
-    --container-bg-colour: var(--bg-colour);
+    background-color: rgba(250, 250, 250, 0.4);
+    .centre.container
+    {
+        --container-bg-colour: var(--bg-colour);
+    }
 }
 
 /* Modal: Close button */
@@ -71,11 +77,11 @@
         #fa00af 0 0.1em 0.1rem,
         #610043 0 0.1em 0.05rem
     ;
-}
-.modal .close:active
-{
-    background-color: #9F002d;
-    box-shadow: inset rgba(255, 255, 255, 0.6) 0 0.3rem 0.3rem, inset rgba(0, 0, 0, 0.15) 0 -0.1rem 0.3rem;
+    &:active
+    {
+        background-color: #9F002d;
+        box-shadow: inset rgba(255, 255, 255, 0.6) 0 0.3rem 0.3rem, inset rgba(0, 0, 0, 0.15) 0 -0.1rem 0.3rem;
+    }
 }
 
 a:hover
