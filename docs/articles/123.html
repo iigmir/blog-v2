@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="../css/new-framework.css" />
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>CSS 酷東西：巢狀選擇器</h1>
+<p>最近在看 CSS 選擇器的時候，發現一個酷東西──巢狀選擇器！</p>
+<h2>介紹</h2>
+<p>巢狀選擇器是什麼呢？好，假設寫 SCSS 時，要給下面的 HTML 寫樣式：</p>
+<pre><code class="language-html">&lt;article class=&quot;article&quot;&gt;
+    &lt;h1 class=&quot;title&quot;&gt;Hello World&lt;/h1&gt;
+    &lt;section class=&quot;section&quot;&gt;
+        &lt;p class=&quot;text&quot;&gt;This is a description.&lt;/p&gt;
+    &lt;/section&gt;
+&lt;/article&gt;
+</code></pre>
+<p>通常在 SCSS 下會這樣寫：</p>
+<pre><code class="language-scss">.article {
+    // CSS variable: https://sass-lang.com/documentation/variables
+    $bg-color: #FF0000;
+    background-color: $bg-color;
+    .title {
+        font-weight: 900;
+    }
+    .section {
+        p {
+            &amp;.text {
+                color: grey;
+            }
+        }
+    }
+}
+</code></pre>
+<p>然後 CSS 會變成這樣：</p>
+<pre><code class="language-scss">.article {
+    background-color: #FF0000;
+}
+.article .title {
+    font-weight: 900;
+}
+.article .section p.text {
+    color: grey;
+}
+</code></pre>
+<p>有發現嗎？SCSS 程式可以在 CSS 內的選擇器，寫進新的選擇器與規則。</p>
+<p>在做組件的時候，這種技巧很有用。</p>
+<h2>CSS 語法</h2>
+<p>好消息：現在原生 CSS 也能這樣寫了。而且與 SCSS 的寫法<em>幾乎</em>一樣！</p>
+<pre><code class="language-css">.article {
+    /* CSS variable: https://developer.mozilla.org/en-US/docs/Web/CSS/--* */
+    --bg-color: #FF0000;
+    background-color: var(--bg-color);
+    .title {
+        font-weight: 900;
+    }
+    .section {
+        p {
+            &amp;.text {
+                color: grey;
+            }
+        }
+    }
+}
+</code></pre>
+<p>我的感想：要是未來實做成熟的話，可能就不需要像 SCSS 這樣的 <a href="https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor">CSS 預處理器</a>這樣了吧。</p>
+<h2>支援狀況與實做進度</h2>
+<p>那麼支援狀況如何呢？嗯──這是一個有點年紀，但還沒納入規範的選擇器：這個規則<a href="https://github.com/w3c/csswg-drafts/commit/0e38020a779406dceede3a3c235093b575d3fd0a">首次提出是五年前</a>，但<a href="https://caniuse.com/css-nesting">直到最近的2023年夏，主流瀏覽器才開始實做</a>。</p>
+<ol>
+<li>Firefox 完整支援。</li>
+<li>Chrome 等 Blank 系瀏覽器，<a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1427259">還不能用元素選擇器</a>。</li>
+<li>Safari 與 Blank 系瀏覽器一樣不能用元素選擇器。</li>
+<li>Samsung Internet, Opera Mobile, QQ, UC, Baidu 等市占率與 Firefox 相當的其他瀏覽器不支援。</li>
+</ol>
+<p>不過……我在寫 CSS 的話，會量避免用元素選擇器寫規則。所以……沒差。比較頭痛的大概是 Samsung 等瀏覽器怎麼辦啦。</p>
+<p>最後目前元素選擇器在 W3C 的階段是 <a href="https://www.w3.org/standards/types/#ED">Editor's Draft</a>──這還不是太穩定。</p>
+<p>明明已經五年了說……</p>
+<h2>參考資料</h2>
+<ul>
+<li>MDN:
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting">CSS nesting</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector">&amp; nesting selector</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors">Type selectors</a></li>
+</ul>
+</li>
+<li><a href="https://caniuse.com/css-nesting">Can I use... CSS Nesting?</a></li>
+<li><a href="https://drafts.csswg.org/css-nesting">W3C - CSS Nesting Module</a></li>
+<li><a href="https://github.com/w3c/csswg-drafts/commits/main/css-nesting-1/Overview.bs">History for csswg-drafts/css-nesting-1/Overview.bs</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.js"></script>
+</body>
+</html>
