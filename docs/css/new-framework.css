@@ -21,6 +21,20 @@ p, article p {
     line-height: 24px;
 }
 
+.click-icon { cursor: pointer; }
+
+.badges {
+    list-style: none;
+    display: flex;
+    .item {
+        --default-badge-colour: rgba( 108, 117, 125, 1 );
+        margin-right: 0.45rem;
+        padding: 0.45rem;
+        border-radius: 50rem;
+        background-color: var( --default-badge-colour );
+    }
+}
+
 @media (max-width: 1199px) {
     article, .article {
         padding: 0 1rem;

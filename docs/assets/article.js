@@ -139,8 +139,12 @@ class ArticleTagsAppELement extends HTMLElement {
         const tag_help = document.createElement("p");
         tag_help.textContent = "Tags: ";
         const tag_list = document.createElement("ul");
+        tag_list.classList.add("badges");
+        tag_list.classList.add("-round");
         const list_items = this.tags_object.matched_tags.map( (item) => {
             const li = document.createElement("li");
+            li.classList.add("item");
+            li.classList.add("click-icon");
             li.textContent = item;
             return li;
         });
