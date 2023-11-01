@@ -7,8 +7,9 @@
 }
 .centre.container
 {
+    --container-bg-colour: rgba(250, 250, 250, 1);
     border-radius: 0.5rem;
-    background-color: rgba(250, 250, 250, 1);
+    background-color: var(--container-bg-colour);
 }
 
 /* Button part */
@@ -39,6 +40,8 @@
     z-index: 1;
     background-color: rgba(250, 250, 250, 0.4);
 }
+
+/* Modal: text and block */
 .modal
 {
     overflow-y: scroll;
@@ -47,6 +50,13 @@
 {
     display: block;
 }
+
+/* Modal: Background colour */
+.modal .centre.container
+{
+    --container-bg-colour: var(--bg-colour);
+}
+
 /* Modal: Close button */
 .modal .close
 {
