@@ -27,11 +27,11 @@ p, article p {
     list-style: none;
     display: flex;
     .item {
-        --default-badge-colour: rgba( 108, 117, 125, 1 );
+        --default-badge-bg-colour: rgba( 108, 117, 125, 1 );
         margin-right: 0.45rem;
         padding: 0.45rem;
         border-radius: 50rem;
-        background-color: var( --default-badge-colour );
+        background-color: var( --default-badge-bg-colour );
     }
 }
 
