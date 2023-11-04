@@ -1,3 +1,6 @@
+/**
+ * To request and store the article's metadata.
+ */
 class ArticleTagsApp {
     constructor() {}
     // ID module
@@ -52,7 +55,10 @@ class ArticleTagsApp {
             { "id": 2, "tag_name": "Example 2" },
         ];
     }
-    get responsed_data() {
+    /**
+     * Datas from AJAX result. See `responsed_source_data` for details.
+     */
+    get ajax_data() {
         return this.responsed_source_data.data;
     }
     // AJAX module: Tags
@@ -90,6 +96,9 @@ class ArticleTagsApp {
     }
 }
 
+/**
+ * The `<article-tags-app>` component.
+ */
 class ArticleTagsAppELement extends HTMLElement {
     tags_object = null
     constructor() {
@@ -126,6 +135,8 @@ class ArticleTagsAppELement extends HTMLElement {
     */
     // Render module
     render_element() {
+        // Data layer
+        const article_metadata = this.tags_object;
         // Create a shadow root and wrapper
         const shadow = this.attachShadow({ mode: "open" });
         const wrapper = document.createElement( "footer" );
@@ -134,11 +145,12 @@ class ArticleTagsAppELement extends HTMLElement {
         // Add tags: Help
         const tag_help = document.createElement("p");
         tag_help.textContent = "Tags: ";
+
         // Add tags: List
         const tag_list = document.createElement("ul");
         tag_list.classList.add("badges");
         tag_list.classList.add("-round");
-        const list_items = this.tags_object.matched_tags.map( (item) => {
+        const list_items = article_metadata.matched_tags.map( (item) => {
             const li = document.createElement("li");
             li.classList.add("item");
             li.classList.add("click-icon");
@@ -159,11 +171,18 @@ class ArticleTagsAppELement extends HTMLElement {
         // Now put it all togeter
         shadow.appendChild(css);
         shadow.appendChild(wrapper);
+
         // Set date: Created
-        wrapper.appendChild( this.generate_date_component("Created: ", "date -created") );
+        wrapper.appendChild(
+            this.generate_date_component( "Created: ", "date -created", article_metadata.ajax_data.created_at )
+        );
+
         wrapper.appendChild(gap);
+
         // Set dates: Updated
-        wrapper.appendChild( this.generate_date_component("Updated: ", "date -updated") );
+        wrapper.appendChild(
+            this.generate_date_component( "Updated: ", "date -updated", article_metadata.ajax_data.updated_at )
+        );
         wrapper.appendChild(tag_help);
         wrapper.appendChild(tag_list);
     }
@@ -180,13 +199,11 @@ class ArticleTagsAppELement extends HTMLElement {
      * @param {String} update_text 
      * @returns 
      */
-    generate_date_component(update_text = "", class_text = "") {
+    generate_date_component(update_text = "", class_text = "", given_date = "") {
         const main_component = document.createElement("span");
         main_component.classList.add("date-component");
         main_component.textContent = update_text;
-        main_component.appendChild(
-            this.new_time_element( class_text, this.tags_object.responsed_data.updated_at)
-        );
+        main_component.appendChild( this.new_time_element( class_text, given_date ) );
         return main_component;
     }
 }
