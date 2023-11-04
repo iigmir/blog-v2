@@ -1,7 +1,9 @@
 /**
  * ```html
  * <i-date
+ *     data-title="Created: "
  *     data-date="2014-06-01T12:00:00.000Z"
+ *     data-classes="date -updated"
  *     data-timezone="America/New_York"
  *     data-format="YYYY-MM-DDTHH:mm:ss"
  * />
@@ -9,7 +11,7 @@
  * can be:
  * ```html
  * <span class="i-date-component">
- *     <time class="date -updated" datetime="2014-06-01T12:00:00.000Z">2014-06-01T12:00:00</time>
+ *     Created: <time class="date -updated" datetime="2014-06-01T12:00:00.000Z">2014-06-01T12:00:00</time>
  * </span>
  * ```
  * @todo Can we use [dayjs](https://day.js.org)?
@@ -34,11 +36,11 @@ export class IDateComponentElement extends HTMLElement {
         wrapper.appendChild( this.new_time_element( this.classes, this.date ) );
         shadow.appendChild(wrapper);
     }
-    new_time_element(classes = "", datetime = "") {
+    new_time_element() {
         const time = document.createElement("time");
-        time.setAttribute("class", classes);
-        time.setAttribute("datetime", datetime);
-        time.textContent = datetime;
+        time.setAttribute("class", this.classes);
+        time.setAttribute("datetime", this.date);
+        time.textContent = this.date;
         return time;
     }
 }
