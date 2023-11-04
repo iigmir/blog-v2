@@ -107,13 +107,6 @@ class ArticleTagsAppELement extends HTMLElement {
             console.error(error);
         });
     }
-    new_time_element(classes = "", datetime = "") {
-        const time = document.createElement("time");
-        time.setAttribute("class", classes);
-        time.setAttribute("datetime", datetime);
-        time.textContent = datetime;
-        return time;
-    }
     /*
     add_loading_reminder() {
         const shadow = this.attachShadow({ mode: "open" });
@@ -138,23 +131,10 @@ class ArticleTagsAppELement extends HTMLElement {
         const wrapper = document.createElement( "footer" );
         wrapper.setAttribute( "class", "tags container" );
 
-        // Set date: Created
-        const created_date_container = document.createElement("span");
-        created_date_container.textContent = "Created: ";
-        created_date_container.appendChild(
-            this.new_time_element("date -created", this.tags_object.responsed_data.created_at)
-        );
-
-        // Set dates: Updated
-        const updated_date_container = document.createElement("span");
-        updated_date_container.textContent = "Updated: ";
-        updated_date_container.appendChild( 
-            this.new_time_element("date -updated", this.tags_object.responsed_data.updated_at)
-        );
-
-        // Add tags
+        // Add tags: Help
         const tag_help = document.createElement("p");
         tag_help.textContent = "Tags: ";
+        // Add tags: List
         const tag_list = document.createElement("ul");
         tag_list.classList.add("badges");
         tag_list.classList.add("-round");
@@ -179,11 +159,35 @@ class ArticleTagsAppELement extends HTMLElement {
         // Now put it all togeter
         shadow.appendChild(css);
         shadow.appendChild(wrapper);
-        wrapper.appendChild(created_date_container);
+        // Set date: Created
+        wrapper.appendChild( this.generate_date_component("Created: ", "date -created") );
         wrapper.appendChild(gap);
-        wrapper.appendChild(updated_date_container);
+        // Set dates: Updated
+        wrapper.appendChild( this.generate_date_component("Updated: ", "date -updated") );
         wrapper.appendChild(tag_help);
         wrapper.appendChild(tag_list);
+    }
+    new_time_element(classes = "", datetime = "") {
+        const time = document.createElement("time");
+        time.setAttribute("class", classes);
+        time.setAttribute("datetime", datetime);
+        time.textContent = datetime;
+        return time;
+    }
+    /**
+     * Get something like this:
+     * `<span><time class="date -updated" datetime="1234-55-66T77:88:99Z">1234-55-66T77:88:99Z</time></span>`
+     * @param {String} update_text 
+     * @returns 
+     */
+    generate_date_component(update_text = "", class_text = "") {
+        const main_component = document.createElement("span");
+        main_component.classList.add("date-component");
+        main_component.textContent = update_text;
+        main_component.appendChild(
+            this.new_time_element( class_text, this.tags_object.responsed_data.updated_at)
+        );
+        return main_component;
     }
 }
 
