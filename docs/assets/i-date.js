@@ -1,6 +1,10 @@
 /**
  * ```html
- * <i-date date="2014-06-01T12:00:00.000Z" timezone="America/New_York" format="YYYY-MM-DDTHH:mm:ss" />
+ * <i-date
+ *     data-date="2014-06-01T12:00:00.000Z"
+ *     data-timezone="America/New_York"
+ *     data-format="YYYY-MM-DDTHH:mm:ss"
+ * />
  * ```
  * can be:
  * ```html
