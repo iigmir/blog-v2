@@ -74,27 +74,30 @@ class ArticleTagsApp {
     // AJAX module: Main
     request_api() {
         return new Promise( (resolve, reject) => {
-            if( this.id ) {
-                const in_development = false;
-                if( in_development ) {
-                    this.set_stub_data();
-                    resolve( this.responsed_source_data );
-                    return;
-                }
-                // Main program
-                const requests = Promise.all([
-                    fetch( this.tags_api_path ).then( r => r.json() ),
-                    fetch( this.data_api_path ).then( r => r.json() )
-                ]);
-                const success_callback = ([tags, metadata]) => {
-                    this.tags_data = tags;
-                    this.responsed_source_data = metadata;
-                    resolve( this.responsed_source_data );
-                };
-                requests.then( success_callback );
-            } else {
+            // Reject the request if no ID given
+            if( !this.id ) {
                 reject( "No ID given" );
             }
+
+            // Enable the option if we want tp develop the app without calling the API
+            const in_development = false;
+            if( in_development ) {
+                this.set_stub_data();
+                resolve( this.responsed_source_data );
+                return;
+            }
+
+            // Main program
+            const requests = Promise.all([
+                fetch( this.tags_api_path ).then( r => r.json() ),
+                fetch( this.data_api_path ).then( r => r.json() )
+            ]);
+            const success_callback = ([tags, metadata]) => {
+                this.tags_data = tags;
+                this.responsed_source_data = metadata;
+                resolve( this.responsed_source_data );
+            };
+            requests.then( success_callback );
         });
     }
 }
