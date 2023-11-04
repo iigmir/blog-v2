@@ -187,7 +187,6 @@ class ArticleTagsAppELement extends HTMLElement {
         main_component.dataset.date = given_date;
         main_component.dataset.classes = class_text;
         main_component.dataset.timezone = "Asia/Taipei";
-        main_component.dataset.format = "YYYY-MM-DD HH:mm:ss";
         return main_component;
     }
 }

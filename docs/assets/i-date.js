@@ -3,14 +3,23 @@ import "https://cdn.jsdelivr.net/npm/temporal-polyfill/dist/global.js";
 class DateStore {
     date = ""
     current_timezone = ""
-    temporal_obj = null
+    source_date = null
+    timezone_date = null;
     constructor(date = "2020-06-13T00:05:11+08:00[Asia/Taipei]", timezone = "Etc/UTC") {
         this.date = date;
         this.current_timezone = timezone;
         this.set_temporal_obj();
     }
     set_temporal_obj() {
-        this.temporal_obj = Temporal.Instant.from( this.date );
+        this.source_date = Temporal.Instant.from( this.date );
+        this.timezone_date = Temporal.TimeZone.from( this.current_timezone );
+    }
+    /**
+     * @see [toLocaleString method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString)
+     */
+    get result() {
+        const result = this.source_date.toZonedDateTimeISO( this.timezone_date );
+        return result.toLocaleString( navigator.language, { hour12: false });
     }
 }
 
@@ -21,7 +30,6 @@ class DateStore {
  *     data-date="2014-06-01T12:00:00.000Z"
  *     data-classes="date -updated"
  *     data-timezone="America/New_York"
- *     data-format="YYYY-MM-DDTHH:mm:ss"
  * />
  * ```
  * can be:
@@ -46,7 +54,6 @@ export class IDateComponentElement extends HTMLElement {
      * @see: Info about [Etc/UTC](https://en.wikipedia.org/wiki/UTC%2B00:00)
      */
     get timezone() { return this.hasAttribute("data-timezone") ? this.getAttribute("data-timezone") : "Etc/UTC"; }
-    get format() { return this.hasAttribute("data-format") ? this.getAttribute("data-format") : "YYYY-MM-DDTHH:mm:ssZ"; }
     connectedCallback() {
         this.date_store = new DateStore( this.date, this.timezone );
         const shadow = this.attachShadow({ mode: "open" });
@@ -54,6 +61,7 @@ export class IDateComponentElement extends HTMLElement {
     }
     wrapper_element() {
         const wrapper = document.createElement( "span" );
+        wrapper.setAttribute("title", `Source date: ${this.date}`);
         wrapper.classList.add("date-component");
         wrapper.textContent = this.title;
         wrapper.appendChild( this.time_element( this.classes, this.date ) );
@@ -63,7 +71,7 @@ export class IDateComponentElement extends HTMLElement {
         const time = document.createElement("time");
         time.setAttribute("class", this.classes);
         time.setAttribute("datetime", this.date);
-        time.textContent = this.date;
+        time.textContent = this.date_store.result;
         return time;
     }
 }
