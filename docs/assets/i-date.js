@@ -15,6 +15,22 @@ export class IDateComponentElement extends HTMLElement {
         super();
     }
     connectedCallback() {
+        let update_text = "Date: ";
+        let class_text = "date -created";
+        let given_date = "123456789";
+        const shadow = this.attachShadow({ mode: "open" });
+        const wrapper = document.createElement( "span" );
+        wrapper.classList.add("date-component");
+        wrapper.textContent = update_text;
+        wrapper.appendChild( this.new_time_element( class_text, given_date ) );
         console.log("Hello. This is a component.");
+        shadow.appendChild(wrapper);
+    }
+    new_time_element(classes = "", datetime = "") {
+        const time = document.createElement("time");
+        time.setAttribute("class", classes);
+        time.setAttribute("datetime", datetime);
+        time.textContent = datetime;
+        return time;
     }
 }

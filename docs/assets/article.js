@@ -188,10 +188,11 @@ class ArticleTagsAppELement extends HTMLElement {
      * @returns 
      */
     generate_date_component(update_text = "", class_text = "", given_date = "") {
-        const main_component = document.createElement("span");
-        main_component.classList.add("date-component");
-        main_component.textContent = update_text;
-        main_component.appendChild( this.new_time_element( class_text, given_date ) );
+        const main_component = document.createElement("i-date");
+        // const main_component = document.createElement("span");
+        // main_component.classList.add("date-component");
+        // main_component.textContent = update_text;
+        // main_component.appendChild( this.new_time_element( class_text, given_date ) );
         return main_component;
     }
 }
