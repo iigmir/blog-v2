@@ -98,6 +98,7 @@ class ArticleTagsApp {
 
 /**
  * The `<article-tags-app>` component.
+ * @todo Extract the `<show-date />` component.
  */
 class ArticleTagsAppELement extends HTMLElement {
     tags_object = null
