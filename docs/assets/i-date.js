@@ -1,3 +1,5 @@
+import "https://cdn.jsdelivr.net/npm/temporal-polyfill/dist/global.js";
+
 /**
  * ```html
  * <i-date
@@ -41,6 +43,7 @@ export class IDateComponentElement extends HTMLElement {
         time.setAttribute("class", this.classes);
         time.setAttribute("datetime", this.date);
         time.textContent = this.date;
+        console.log(Temporal.Now.zonedDateTimeISO().toString())
         return time;
     }
 }
