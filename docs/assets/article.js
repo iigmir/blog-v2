@@ -114,6 +114,7 @@ class ArticleTagsAppELement extends HTMLElement {
         time.textContent = datetime;
         return time;
     }
+    /*
     add_loading_reminder() {
         const shadow = this.attachShadow({ mode: "open" });
         const wrapper = document.createElement( "div" );
@@ -129,6 +130,7 @@ class ArticleTagsAppELement extends HTMLElement {
             shadow.querySelector("footer.loading").remove();
         }
     }
+    */
     // Render module
     render_element() {
         // Create a shadow root and wrapper
