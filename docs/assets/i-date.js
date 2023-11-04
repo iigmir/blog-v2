@@ -14,16 +14,20 @@ export class IDateComponentElement extends HTMLElement {
     constructor() {
         super();
     }
+    get title() { return this.hasAttribute("data-title") ? this.getAttribute("data-title") : "Date: "; }
+    get date() { return this.hasAttribute("data-date") ? this.getAttribute("data-date") : "Unknown date"; }
+    get classes() { return this.hasAttribute("data-classes") ? this.getAttribute("data-classes") : "date"; }
+    /**
+     * @see: Info about [Etc/UTC](https://en.wikipedia.org/wiki/UTC%2B00:00)
+     */
+    get timezone() { return this.hasAttribute("data-timezone") ? this.getAttribute("data-timezone") : "Etc/UTC"; }
+    get format() { return this.hasAttribute("data-format") ? this.getAttribute("data-format") : "YYYY-MM-DDTHH:mm:ssZ"; }
     connectedCallback() {
-        let update_text = "Date: ";
-        let class_text = "date -created";
-        let given_date = "123456789";
         const shadow = this.attachShadow({ mode: "open" });
         const wrapper = document.createElement( "span" );
         wrapper.classList.add("date-component");
-        wrapper.textContent = update_text;
-        wrapper.appendChild( this.new_time_element( class_text, given_date ) );
-        console.log("Hello. This is a component.");
+        wrapper.textContent = this.title;
+        wrapper.appendChild( this.new_time_element( this.classes, this.date ) );
         shadow.appendChild(wrapper);
     }
     new_time_element(classes = "", datetime = "") {

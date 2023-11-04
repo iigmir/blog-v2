@@ -189,6 +189,11 @@ class ArticleTagsAppELement extends HTMLElement {
      */
     generate_date_component(update_text = "", class_text = "", given_date = "") {
         const main_component = document.createElement("i-date");
+        main_component.dataset.title = update_text;
+        main_component.dataset.date = given_date;
+        main_component.dataset.classes = class_text;
+        main_component.dataset.timezone = "Asia/Taipei";
+        main_component.dataset.format = "YYYY-MM-DD HH:mm:ss";
         // const main_component = document.createElement("span");
         // main_component.classList.add("date-component");
         // main_component.textContent = update_text;
