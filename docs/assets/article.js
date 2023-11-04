@@ -114,6 +114,21 @@ class ArticleTagsAppELement extends HTMLElement {
         time.textContent = datetime;
         return time;
     }
+    add_loading_reminder() {
+        const shadow = this.attachShadow({ mode: "open" });
+        const wrapper = document.createElement( "div" );
+        wrapper.setAttribute( "class", "tags loading container" );
+        const loading = document.createElement("p");
+        loading.textContent = "Loading...";
+        shadow.appendChild(wrapper);
+        wrapper.appendChild(loading);
+    }
+    remove_loading_reminder() {
+        const shadow = this.attachShadow({ mode: "open" });
+        if( shadow.querySelector("footer.loading") ) {
+            shadow.querySelector("footer.loading").remove();
+        }
+    }
     // Render module
     render_element() {
         // Create a shadow root and wrapper
