@@ -61,7 +61,7 @@ p, article p {
 }
 
 @media (max-width: 1199px) {
-    article, .article {
+    article, .article, footer, .footer {
         padding: 0 1rem;
     }
 }
