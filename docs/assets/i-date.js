@@ -10,4 +10,11 @@
  * ```
  * @todo Can we use [dayjs](https://day.js.org)?
  */
-class IDateComponentElement extends HTMLElement {}
+export class IDateComponentElement extends HTMLElement {
+    constructor() {
+        super();
+    }
+    connectedCallback() {
+        console.log("Hello. This is a component.");
+    }
+}

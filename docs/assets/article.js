@@ -1,3 +1,5 @@
+import { IDateComponentElement } from "./i-date.js";
+
 /**
  * To request and store the article's metadata.
  */
@@ -196,6 +198,7 @@ class ArticleTagsAppELement extends HTMLElement {
 
 function main() {
     customElements.define("article-tags-app", ArticleTagsAppELement);
+    customElements.define("i-date", IDateComponentElement);
 }
 
 main();
