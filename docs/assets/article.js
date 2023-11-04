@@ -32,28 +32,14 @@ class ArticleTagsApp {
      */
     responsed_source_data = {}
     get data_api_path() {
+        const in_development = location.host.includes( "127.0.0.1" );
+        if( in_development ) {
+            return "/docs/assets/stub-data-api.json";
+        }
         const domain = "https://iigmir.serv00.net";
         const api = "/api/blog-metadata.php";
         const param = `?id=${this.id}`;
         return domain + api + param;
-    }
-    set_stub_data() {
-        this.responsed_source_data = {
-            "message": "Success",
-            "id": "1",
-            "data": {
-                "id": 1,
-                "title": "Test",
-                "category_id": [1, 2, 3],
-                "language": "zh-Hant-TW",
-                "created_at": "2000-01-01T10:11:12Z",
-                "updated_at": "2000-01-01T10:11:12Z"
-            }
-        }
-        this.tags_data = [
-            { "id": 1, "tag_name": "Example 1" },
-            { "id": 2, "tag_name": "Example 2" },
-        ];
     }
     /**
      * Datas from AJAX result. See `responsed_source_data` for details.
@@ -64,6 +50,10 @@ class ArticleTagsApp {
     // AJAX module: Tags
     tags_data = []
     get tags_api_path() {
+        const in_development = location.host.includes( "127.0.0.1" );
+        if( in_development ) {
+            return "/docs/assets/stub-tag-api.json";
+        }
         return "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/categories.json";
     }
     get matched_tags() {
@@ -77,14 +67,6 @@ class ArticleTagsApp {
             // Reject the request if no ID given
             if( !this.id ) {
                 reject( "No ID given" );
-            }
-
-            // Enable the option if we want tp develop the app without calling the API
-            const in_development = false;
-            if( in_development ) {
-                this.set_stub_data();
-                resolve( this.responsed_source_data );
-                return;
             }
 
             // Main program
