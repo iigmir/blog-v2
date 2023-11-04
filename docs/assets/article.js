@@ -37,7 +37,7 @@ class ArticleTagsApp {
         const param = `?id=${this.id}`;
         return domain + api + param;
     }
-    set_data_test() {
+    set_stub_data() {
         this.responsed_source_data = {
             "message": "Success",
             "id": "1",
@@ -75,9 +75,12 @@ class ArticleTagsApp {
     request_api() {
         return new Promise( (resolve, reject) => {
             if( this.id ) {
-                // this.set_data_test();
-                // resolve( this.responsed_source_data );
-                // return;
+                const in_development = false;
+                if( in_development ) {
+                    this.set_stub_data();
+                    resolve( this.responsed_source_data );
+                    return;
+                }
                 // Main program
                 const requests = Promise.all([
                     fetch( this.tags_api_path ).then( r => r.json() ),
