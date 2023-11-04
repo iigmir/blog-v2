@@ -10,13 +10,7 @@ class DateStore {
         this.set_temporal_obj();
     }
     set_temporal_obj() {
-        this.temporal_obj = Temporal.TimeZone.from( this.current_timezone );
-    }
-    get result() {
-        if( this.temporal_obj ) {
-            return this.temporal_obj.getPlainDateTimeFor( this.date ).toString();
-        }
-        return "";
+        this.temporal_obj = Temporal.Instant.from( this.date );
     }
 }
 
