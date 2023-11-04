@@ -174,18 +174,12 @@ class ArticleTagsAppELement extends HTMLElement {
         wrapper.appendChild(tag_help);
         wrapper.appendChild(tag_list);
     }
-    new_time_element(classes = "", datetime = "") {
-        const time = document.createElement("time");
-        time.setAttribute("class", classes);
-        time.setAttribute("datetime", datetime);
-        time.textContent = datetime;
-        return time;
-    }
     /**
-     * Get something like this:
-     * `<span><time class="date -updated" datetime="1234-55-66T77:88:99Z">1234-55-66T77:88:99Z</time></span>`
+     * See `IDateComponentElement` class for details.
      * @param {String} update_text 
-     * @returns 
+     * @param {String} class_text 
+     * @param {String} given_date 
+     * @returns An <i-date /> element instance.
      */
     generate_date_component(update_text = "", class_text = "", given_date = "") {
         const main_component = document.createElement("i-date");
@@ -194,10 +188,6 @@ class ArticleTagsAppELement extends HTMLElement {
         main_component.dataset.classes = class_text;
         main_component.dataset.timezone = "Asia/Taipei";
         main_component.dataset.format = "YYYY-MM-DD HH:mm:ss";
-        // const main_component = document.createElement("span");
-        // main_component.classList.add("date-component");
-        // main_component.textContent = update_text;
-        // main_component.appendChild( this.new_time_element( class_text, given_date ) );
         return main_component;
     }
 }
