@@ -60,6 +60,7 @@ p, article p {
     }
 }
 
+/* RWD service */
 @media (max-width: 1199px) {
     article, .article, footer, .footer {
         padding: 0 1rem;
