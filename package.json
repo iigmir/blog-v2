@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "build": "npm run build:ts && build:css && npm run publish",
+    "build": "npm run build:ts && npm run build:css && npm run publish",
     "build:ts": "tsc",
     "build:css": "css-minify --dir src/css --output docs/css",
     "publish": "node dist/index.js",
