@@ -1,4 +1,4 @@
-import { IDateComponentElement } from "./i-date.js";
+import { IDateComponentElement } from "./i-date.min.js";
 
 /**
  * To request and store the article's metadata.

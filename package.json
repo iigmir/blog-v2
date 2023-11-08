@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "build": "npm run build:ts && npm run build:css && npm run publish",
+    "build": "npm run build:ts && npm run build:css && build:js && npm run publish",
     "build:ts": "tsc",
     "build:css": "css-minify --dir src/css --output docs/css",
+    "build:js": "node src/build-js.js",
     "publish": "node dist/index.js",
     "build:one": "node dist/build-one.js"
   },
@@ -19,6 +20,7 @@
     "css-minify": "^2.0.0",
     "jsdom": "^22.0.0",
     "markdown-it": "^13.0.1",
+    "terser": "^5.24.0",
     "typescript": "^5.0.4"
   }
 }
