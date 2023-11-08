@@ -64,4 +64,7 @@ p, article p {
     article, .article, footer, .footer {
         padding: 0 1rem;
     }
+    article img, .article img {
+        max-width: 100%;
+    }
 }
