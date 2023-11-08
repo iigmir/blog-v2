@@ -12,7 +12,6 @@
     "build:one": "node dist/build-one.js"
   },
   "author": "iigmir",
-  "license": "ISC",
   "devDependencies": {
     "@types/jsdom": "^21.1.1",
     "@types/markdown-it": "^12.2.3",
