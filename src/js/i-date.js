@@ -38,7 +38,6 @@ class DateStore {
  *     Created: <time class="date -updated" datetime="2014-06-01T12:00:00.000Z">2014-06-01T12:00:00</time>
  * </span>
  * ```
- * @todo Can we use [dayjs](https://day.js.org)?
  */
 export class IDateComponentElement extends HTMLElement {
     constructor() {
