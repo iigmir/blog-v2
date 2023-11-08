@@ -150,7 +150,7 @@ class ArticleTagsAppELement extends HTMLElement {
         // Add CSS
         const css = document.createElement("link");
         css.setAttribute("rel", "stylesheet");
-        css.setAttribute("href", "../css/new-framework.css");
+        css.setAttribute("href", "../css/new-framework.min.css");
 
         // Add gap
         const gap = document.createElement("span");
