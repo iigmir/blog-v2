@@ -20,27 +20,26 @@
         </nav>
         <article class="article">
             <h1>Telegram Bot: From start to abandon</h1>
-<p>&lt;p&gt;我曾經想過一個 &lt;a href=&quot;https://core.telegram.org/bots&quot;&gt;Telegram 機器人&lt;/a&gt;的專案：它可以每天檢查日期，並在特定日期的時候送出訊息。&lt;/p&gt;
-&lt;p&gt;最後我放棄了，因為遠比我想像中的難很多。不過也許有天我會重啟，所以先記下筆記。&lt;/p&gt;
-&lt;p&gt;首先，我先假設你已經有了 Telegram 帳號，並透過 &lt;a href=&quot;https://telegram.me/botfather&quot;&gt;BotFather&lt;/a&gt; 帳號建了一個機器人。&lt;br&gt;
-從這裡開始來講如何寫個機器人：首先先選個習慣的工具來寫：我這邊選用了 mullwar 的 &lt;a href=&quot;https://github.com/mullwar/telebot&quot;&gt;telebot&lt;/a&gt; 來用。&lt;br&gt;
-接著就可以開始寫了。一開始可以先照手冊複製貼上。&lt;/p&gt;
-&lt;p&gt;那個每天檢查的並在特定日期的時候送出訊息怎麼寫？嗯，&lt;a href=&quot;https://github.com/irazasyed/telegram-bot-sdk/issues/20&quot;&gt;看起來 Telegram 沒有定時送信的 API&lt;/a&gt;，我只好自己想辦法了。&lt;br&gt;
-我一開始認為應該向 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E7%B6%B2%E8%B7%AF%E6%99%82%E9%96%93%E5%8D%94%E5%AE%9A&quot;&gt;NTP&lt;/a&gt; 求日期，所以想用 ntp-client 抓時間並配合 moment 套件完成。不過，在看了 &lt;a href=&quot;https://www.reddit.com/r/TelegramBots/comments/3d83jm/how_to_send_daily_notifications/&quot;&gt;reddit 的討論&lt;/a&gt;後，我發現我搞錯了方向：就算用了 NTP，我還是會需要自動排程來完成工作。自動排程，似乎要使用 &lt;a href=&quot;http://linux.vbird.org/linux_basic/0430cron.php&quot;&gt;cron jobs&lt;/a&gt; 這玩意（另外還有一個有趣的東西叫 &lt;a href=&quot;https://www.npmjs.com/package/node-schedule&quot;&gt; Node Schedule&lt;/a&gt; 的）。而如果需要對一個以上的用戶發送，你可能還需要資料庫以儲存用戶資訊。&lt;/p&gt;
-&lt;p&gt;……突然有點累了呀。還不知道如何佈署呢。那算了。&lt;/p&gt;
-&lt;p&gt;困難點：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;如何透過 cron jobs 發送訊息？又該下何種指令？&lt;/li&gt;
-&lt;li&gt;該下何種方法以便發送訊息？&lt;/li&gt;
-&lt;li&gt;如何安排日期檢查的實做？&lt;/li&gt;
-&lt;li&gt;還需要其他相關功能嗎？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;參考資料：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://blog.sean.taipei/2017/05/telegram-bot&quot;&gt;從零開始的 Telegram Bot&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.reddit.com/r/TelegramBots/comments/3d83jm/how_to_send_daily_notifications/&quot;&gt;How to send daily notifications?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://core.telegram.org/bots&quot;&gt;Bots: An introduction for developers&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</p>
+<p>我曾經想過一個 <a href="https://core.telegram.org/bots">Telegram 機器人</a> 的專案：它可以每天檢查日期，並在特定日期的時候送出訊息。</p>
+<p>最後我放棄了，因為遠比我想像中的難很多。不過也許有天我會重啟，所以先記下筆記。</p>
+<p>首先，我先假設你已經有了 Telegram 帳號，並透過 <a href="https://telegram.me/botfather">BotFather</a> 帳號建了一個機器人。</p>
+<p>從這裡開始來講如何寫個機器人：首先先選個習慣的工具來寫：我這邊選用了 mullwar 的 <a href="https://github.com/mullwar/telebot">telebot</a> 來用。接著就可以開始寫了。一開始可以先照手冊複製貼上。</p>
+<p>那個每天檢查的並在特定日期的時候送出訊息怎麼寫？嗯，<a href="https://github.com/irazasyed/telegram-bot-sdk/issues/20">看起來 Telegram 沒有定時送信的 API</a>，我只好自己想辦法了。</p>
+<p>我一開始認為應該向 <a href="https://zh.wikipedia.org/wiki/%E7%B6%B2%E8%B7%AF%E6%99%82%E9%96%93%E5%8D%94%E5%AE%9A">NTP</a> 求日期，所以想用 ntp-client 抓時間並配合 moment 套件完成。不過，在看了 <a href="https://www.reddit.com/r/TelegramBots/comments/3d83jm/how_to_send_daily_notifications">reddit 的討論</a> 後，我發現我搞錯了方向：就算用了 NTP，我還是會需要自動排程來完成工作。自動排程，似乎要使用 <a href="http://linux.vbird.org/linux_basic/0430cron.php">cron jobs</a> 這玩意（另外還有一個有趣的東西叫 <a href="https://www.npmjs.com/package/node-schedule">Node Schedule</a> 的）。而如果需要對一個以上的用戶發送，你可能還需要資料庫以儲存用戶資訊。</p>
+<p>……突然有點累了呀。還不知道如何佈署呢。那算了。</p>
+<h2>困難點</h2>
+<ul>
+<li>如何透過 cron jobs 發送訊息？又該下何種指令？</li>
+<li>該下何種方法以便發送訊息？</li>
+<li>如何安排日期檢查的實做？</li>
+<li>還需要其他相關功能嗎？</li>
+</ul>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://blog.sean.taipei/2017/05/telegram-bot">從零開始的 Telegram Bot</a></li>
+<li><a href="https://www.reddit.com/r/TelegramBots/comments/3d83jm/how_to_send_daily_notifications">How to send daily notifications?</a></li>
+<li><a href="https://core.telegram.org/bots">Bots: An introduction for developers</a></li>
+</ul>
 
         </article>
     </main>

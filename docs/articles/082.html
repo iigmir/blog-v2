@@ -20,6 +20,14 @@
         </nav>
         <article class="article">
             <h1>BootstrapVue: What if I want to refactor scoped field slots in tables</h1>
+<h2>TL;DR</h2>
+<ol>
+<li>You can use scoped field slots to render what a cell in a table should look.</li>
+<li>The <code>#</code> sign in a component property is a shorten alias of the <code>v-slot</code> statement. Therefore, <code>#cell(index)</code> is a shorten alias of <code>v-slot:cell(index)</code>.</li>
+<li>If you need to loop scoped field slots, consider using the <code>render</code> function.</li>
+<li>Vue uses virtual DOM to compile codes, so does the <code>render</code> function.</li>
+<li><code>v-slot</code> uses the <code>scopedSlots</code> property in the <code>render</code> function, so <code>v-slot:cell(index)</code> will be complied to <code>scopedSlots: { &quot;cell(index)&quot;: () =&gt; {} }</code>.</li>
+</ol>
 <h2>First: The problem</h2>
 <p>Have you used <a href="https://bootstrap-vue.org">BootstrapVue</a> before? If so, you may have known that you can control what a cell should look like in a table by using <a href="https://bootstrap-vue.org/docs/components/table#scoped-field-slots">scoped field slots</a>.</p>
 <p>Simply said, you can use <code>&lt;template #cell(prop)=&quot;&quot;&gt;</code> on <code>&lt;b-table&gt;</code> template; and add a <code>[&quot;prop&quot;]</code> item to <code>fields</code> property. Like <a href="https://bootstrap-vue.org/docs/components/table#scoped-field-slots">example</a> shows:</p>
@@ -99,8 +107,6 @@ export default {
         &lt;/b-table&gt;
     &lt;/div&gt;
 &lt;/template&gt;
-
-&lt;/script&gt;
 </code></pre>
 <p>look like this?</p>
 <pre><code class="language-js">createElement(&quot;div&quot;, [
@@ -151,14 +157,6 @@ export default {
 }
 </code></pre>
 <p>If you are in interested now, how about turning an array to <code>scopedSlots</code> by using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries"><code>Object.fromEntries()</code></a> method?</p>
-<h2>Summary: TL;DR</h2>
-<ol>
-<li>You can use scoped field slots to render what a cell in a table should look.</li>
-<li>The <code>#</code> sign in a component property is a shorten alias of the <code>v-slot</code> statement. Therefore, <code>#cell(index)</code> is a shorten alias of <code>v-slot:cell(index)</code>.</li>
-<li>If you need to loop scoped field slots, consider using the <code>render</code> function.</li>
-<li>Vue uses virtual DOM to compile codes, so does the <code>render</code> function.</li>
-<li><code>v-slot</code> uses the <code>scopedSlots</code> property in the <code>render</code> function, so <code>v-slot:cell(index)</code> will be complied to <code>scopedSlots: { &quot;cell(index)&quot;: () =&gt; {} }</code>.</li>
-</ol>
 
         </article>
     </main>

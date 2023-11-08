@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link rel="stylesheet" href="../css/new-framework.css" />
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>部落格更新！</h1>
+<p>趁著有空，我更新了<a href="https://iigmir.github.io/blog-v2">第二代部落格</a>的程式。主要幾個點：</p>
+<ol>
+<li>砍掉外部的 <a href="https://milligram.io">Milligram CSS</a>，只留下需要的渲染程式需要的 <a href="https://prismjs.com">Prism.js</a>。</li>
+<li>改寫 CSS。自己需要自己寫。</li>
+<li>文章內部添加可以顯示日期與標籤的小程式。</li>
+<li>favicon 用更小的 SVG 寫。</li>
+</ol>
+<p>其中引入的新技術有幾個：</p>
+<ol>
+<li><a href="https://iigmir.github.io/blog-v2/articles/123.html">巢狀選擇器</a></li>
+<li><a href="https://github.com/iigmir/serv00-app">自製 API</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">Web Component</a></li>
+<li><a href="https://tc39.es/proposal-temporal/docs">Temporal API</a></li>
+</ol>
+<hr>
+<p>先簡單說明部落格的技術規則：首先，文章會放在 <a href="https://github.com/iigmir/blog-source">blog-source</a> 裡面、再來在 <a href="https://github.com/iigmir/blog-v2">blog-v2</a> 使用自製的靜態網站產生器，把 blog-source 的文章都弄出來。</p>
+<p>這樣做可以把維護文章本身，與其他事務分開。不用為了改 CSS 而去動部落格文章。反之亦然。未來做 API 或查歷史也比較容易。</p>
+<p>而之所以有這次更新，是因為我看到了 <a href="https://bearblog.dev">https://bearblog.dev</a> 這個網站。裡面的功能令我感觸不已：檔案小、速度快、沒有廣告追蹤器、自訂佈景、以及 RSS 服務、可以說是最接近我理想的網站。我心想，我一定要與這個網站看齊。</p>
+<p>好，說完簡介後，講點感想。</p>
+<h2>CSS</h2>
+<p>這次寫 CSS 蠻快樂的：巢狀選擇器不難用，SCSS 背景的話很好入手；加上 CSS 變數的引入，相當適合近年來的組件化開發。相對單位可以用得很開心、不用擔心一大堆的設計問題……出來的效果我也還算滿意。按需增 code 也符合我的節奏。</p>
+<h2>自製 API 接合</h2>
+<p>比較麻煩的問題，是找完全免費的後端環境，以及架設符合該環境的 docker 來練練手。</p>
+<p>因為預想中，後端環境不需要用什麼資料庫、接接其他 API 之類的，檔案也不大、暫時也沒有想買域名，所以我完全不想要付錢買程式、然後檢查額度是否被用完什麼的。相反，限制流量我倒是不太在乎。</p>
+<p>不過……由於託管的網路雲，費用算法太麻煩，沒有保證每月低於多少完全免費啥的，所以這邊卡了很久──直到看到 <a href="https://free-for.dev">Free for Developers</a> 裡面的 <a href="https://serv00.com">Serv00.com</a> 這網站，才想到這件事。</p>
+<p>然後，架設 docker 的玩意是惡夢。最大的問題，大概是如何設定 <a href="https://hub.docker.com/_/nginx">nginx</a> 了：一大堆莫名其妙的 API 名稱、還有奇奇怪怪的符號，根本弄不清楚哪裡幹嘛、路徑怎麼寫之類的。</p>
+<p>唉……天知道還有 mysql 呢。如何設定資料庫，註定又會是另一場麻煩吧。我想。</p>
+<hr>
+<p>然後呢，我在後端接 API 主要是想接日期時間，把文章的資訊補完。這樣，設定語言或得到時間什麼的，就用不著對靜態網站產生器下手了。</p>
+<p>至於接 API 最大的問題，大概是如何應對這種錯誤回應吧：有些問題如 API 超過了使用的 rate limit，那錯誤回應就很難模擬與重現，如何是好？PHP 的經驗也與 JavaScript 不太一樣。所以寫起來，實在是有點尷尬。</p>
+<h2>標籤小程式：Web Component 與 Temporal API</h2>
+<p>Web Component 很難用。因為程式主要是寫了 Shadow DOM 以外、裡面各種元素也要靠 Web API 寫法完成：</p>
+<pre><code class="language-js">class Foobar extends HTMLElement {
+    connectedCallback() {
+        const shadow = this.attachShadow({ mode: &quot;open&quot; });
+        shadow.appendChild( this.data_component() );
+    }
+    data_component() {
+        const wrapper = document.createElement( &quot;span&quot; );
+        wrapper.setAttribute(&quot;title&quot;, `Element: `);
+        wrapper.classList.add(&quot;data-component&quot;);
+        wrapper.appendChild( /* Whatever on earth the element is */ );
+        return wrapper;
+    }
+}
+</code></pre>
+<p>這比起 Vue 或 React 都不直覺：</p>
+<pre><code class="language-vue">&lt;template&gt;
+    &lt;span class=&quot;data-component&quot; v-bind:title=&quot;asd&quot;&gt;
+        &lt;!-- Whatever on earth the element is --&gt;
+    &lt;/span&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+const asd = ref(&quot;Element: &quot;);
+&lt;/script&gt;
+</code></pre>
+<pre><code class="language-jsx">export function App() {
+    const [asd, set_asd] = useState(&quot;Element: &quot;);
+    return &lt;span className=&quot;data-component&quot; title={asd}&gt;
+        {/* Whatever on earth the element is */}
+    &lt;/span&gt;;
+}
+</code></pre>
+<p>所以我覺得，短期內 Vue 與 React 之類的 SPA 框架，應該還有一席之地。</p>
+<hr>
+<p><a href="https://tc39.es/proposal-temporal/docs">Temporal API</a> 是個曲線有點陡峭的 API。不好學，但學會了，就會發現比 <code>Date</code> API 好用：至少不同時區的同一個時間，可以簡單用下去。文字本地化也簡單多了。</p>
+<h2>小結</h2>
+<p>好啦，總之這次做得還不錯。我喜歡。</p>
+<p>接下來，我想看看能不能把 blog-v2 的程式壓縮起來，看看大小會不會變小呢？但覺得很難吧。另外就是，能不能做 RSS 呢？</p>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.js"></script>
+</body>
+</html>
