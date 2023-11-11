@@ -20,10 +20,10 @@
         </nav>
         <article class="article">
             <h1>RSS feed</h1>
-<p>&lt;blockqote&gt;
-「還有人用 <a href="https://zh.wikipedia.org/wiki/RSS">RSS</a> 嗎？」&lt;br /&gt;
-「沒了吧」
-&lt;/blockqote&gt;</p>
+<blockquote>
+<p>「還有人用 <a href="https://zh.wikipedia.org/wiki/RSS">RSS</a> 嗎？」<br>
+「沒了吧」</p>
+</blockquote>
 <p>好啦，雖然看起來沒人用，但我還是想寫一下 RSS feed。一來了解技術、二來這是部落格的重要功能、第三就是看了點文章後，有點想「力挽狂瀾」的熱血。至於什麼文章，可以移到後面的 Ref 來看。</p>
 <p>最基礎來說，RSS feed 檔案是 <a href="https://zh.wikipedia.org/wiki/XML">XML</a> 檔案。然後用 <a href="https://stackoverflow.com/questions/1975442/how-does-rss-reader-know-that-a-feed-is-updated">Conditional GET</a> 推送請求。</p>
 <p>總之，要做的話，就要做出這段 XML。看起來，用 <a href="https://zh.wikipedia.org/wiki/Atom_(%E6%A8%99%E6%BA%96)">Atom</a> 格式比較新。接著，因為 RSS 就是個 XML，所以出乎意料的簡單，連 gem 也不需要。</p>
@@ -58,7 +58,7 @@ atom_feed({'xml:lang' =&gt; 'zh-TW'}) do |feed|
 end
 </code></pre>
 <p>總之，針對 <code>&lt;property&gt;value&lt;/property&gt;</code> 的東西，你要在 builder 這樣寫成 <code>feed.property(&quot;value&quot;)</code> 這樣。把必要的東西寫好，接著用 URL 地址貼上訂閱器。收工。</p>
-<p>Ref:</p>
+<h2>參考資料</h2>
 <ul>
 <li>有關為什麼要用 RSS feed：
 <ol>

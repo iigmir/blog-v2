@@ -20,27 +20,21 @@
         </nav>
         <article class="article">
             <h1>如果 rails 開發環境要用其他資料庫的話</h1>
-<p>&lt;p&gt;在開發的時候，rails 預設使用 sqlite 資料庫作為開發環境。不過要公諸於世的網站，不會用 sqlite 資料庫運作。用什麼呢？這就必須要看雲端供應商（如果要用供應商的 IaaS 的話）、或是自己的偏好（如果要用供應商的 PaaS，或是自己架主機的話）。&lt;/p&gt;
-&lt;p&gt;無論如何，如果需要在開發環境改用其他資料庫、而不是使用 sqlite 資料庫的話，一點步驟的小指引：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;首先請決定要用什麼資料庫：這裡用的 &lt;a href=&quot;https://mariadb.org/&quot;&gt;MariaDB&lt;/a&gt; 是 MySQL 的分支。&lt;/li&gt;
-&lt;li&gt;下載該資料庫，並設定需要的帳號密碼。每個資料庫的用法不同。MariaDB 的話，照著這篇 &lt;a href=&quot;https://mariadb.com/products/get-started&quot;&gt;StartGuide&lt;/a&gt; 做。&lt;/li&gt;
-&lt;li&gt;設定完成後記下帳號密碼，然後翻翻看 rails 支援哪些資料庫：
-&lt;pre&gt;
--d, [--database=DATABASE]                              # Preconfigure for selected database (options: mysql/postgresql/sqlite3/oracle/frontbase/ibm_db/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc)
-&lt;/pre&gt;
-主流的 &lt;a href=&quot;https://www.mysql.com/&quot;&gt;mysql&lt;/a&gt;, &lt;a href=&quot;https://www.postgresql.org&quot;&gt;postgresql&lt;/a&gt;,&lt;a href=&quot;https://www.microsoft.com/sql-server&quot;&gt; sqlserver&lt;/a&gt; 都有......我覺得應該夠用了啦。&lt;/li&gt;
-&lt;li&gt;輸入 &lt;code&gt;rails -d mysql&lt;/code&gt;。請記住 MariaDB 是 MySQL 的分支。&lt;/li&gt;
-&lt;li&gt;去檢查 &lt;code&gt;config/database.yml&lt;/code&gt; 的說明，它在最前面應該有說明需要安裝的驅動程式。&lt;br&gt;
-再去 Gemfile 檔案搜尋，應該是有安裝到的。&lt;/li&gt;
-&lt;li&gt;把前面記下來的帳號密碼寫在 &lt;code&gt;config/database.yml&lt;/code&gt; 的 &lt;var&gt;username&lt;/var&gt; 與 &lt;var&gt;password&lt;/var&gt; 裡面。&lt;/li&gt;
-&lt;li&gt;檢查一下 &lt;var&gt;database&lt;/var&gt; 以確認即將建立的資料庫。&lt;/li&gt;
-&lt;li&gt;
-&lt;strong&gt;&lt;a href=&quot;https://stackoverflow.com/questions/6765740/rake-mysql2-unknown-database-error&quot;&gt;輸入 &lt;code&gt;rake db:create&lt;/code&gt; ！輸入 &lt;code&gt;rake db:create&lt;/code&gt; ！輸入 &lt;code&gt;rake db:create&lt;/code&gt; ！&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
-因為很重要所以要說三次。沒有輸入，資料庫根本不存在。&lt;/li&gt;
-&lt;li&gt;撰寫一下自己的的 CRUD。懶得撰寫只要測試的話，參考一下 &lt;a href=&quot;http://docs.railsbridge.org/installfest/create_a_rails_app&quot;&gt;RailsBridge&lt;/a&gt; 的指引：&lt;code&gt;rails generate scaffold drink name:string temperature:integer&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;收工！&lt;/li&gt;
-&lt;/ol&gt;</p>
+<p>在開發的時候，rails 預設使用 sqlite 資料庫作為開發環境。不過要公諸於世的網站，不會用 sqlite 資料庫運作。用什麼呢？這就必須要看雲端供應商（如果要用供應商的 IaaS 的話）、或是自己的偏好（如果要用供應商的 PaaS，或是自己架主機的話）。</p>
+<p>無論如何，如果需要在開發環境改用其他資料庫、而不是使用 sqlite 資料庫的話，一點步驟的小指引：</p>
+<ol>
+<li>首先請決定要用什麼資料庫：這裡用的 <a href="https://mariadb.org">MariaDB</a> 是 MySQL 的分支。</li>
+<li>下載該資料庫，並設定需要的帳號密碼。每個資料庫的用法不同。MariaDB 的話，照著這篇 <a href="https://mariadb.com/products/get-started">StartGuide</a> 做。</li>
+<li>設定完成後記下帳號密碼，然後翻翻看 rails 支援哪些資料庫：<code>-d, \[--database=DATABASE\] # Preconfigure for selected database (options: mysql/postgresql/sqlite3/oracle/frontbase/ibm\_db/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc)</code></li>
+<li>主流的 <a href="https://www.mysql.com/">mysql</a>, <a href="https://www.postgresql.org">postgresql</a>, <a href="https://www.microsoft.com/sql-server">sqlserver</a> 都有......我覺得應該夠用了啦。</li>
+<li>輸入 <code>rails -d mysql</code>。請記住 MariaDB 是 MySQL 的分支。</li>
+<li>去檢查 <code>config/database.yml</code> 的說明，它在最前面應該有說明需要安裝的驅動程式。再去 Gemfile 檔案搜尋，應該是有安裝到的。</li>
+<li>把前面記下來的帳號密碼寫在 <code>config/database.yml</code> 的 username 與 password 裡面。</li>
+<li>檢查一下 database 以確認即將建立的資料庫。</li>
+<li><a href="https://stackoverflow.com/questions/6765740/rake-mysql2-unknown-database-error"><strong>輸入 <code>rake db:create</code> ！輸入 <code>rake db:create</code> ！輸入 <code>rake db:create</code> ！</strong></a> 因為很重要所以要說三次。沒有輸入，資料庫根本不存在。</li>
+<li>撰寫一下自己的的 CRUD。懶得撰寫只要測試的話，參考一下 <a href="http://docs.railsbridge.org/installfest/create_a_rails_app">RailsBridge</a> 的指引：<code>rails generate scaffold drink name:string temperature:integer</code>。</li>
+<li>收工！</li>
+</ol>
 
         </article>
     </main>

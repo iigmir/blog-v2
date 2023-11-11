@@ -28,7 +28,7 @@
 <blockquote>
 <p>Sass::SyntaxError......Undefined variable: &quot;$color-black&quot;.</p>
 </blockquote>
-<p>一開始，我對 Asset Pipeline 毫不熟悉，所以沒辦法解決。但是看到 [Ruby on Rails 實戰聖經]以後，才發現 <code>require_tree .</code> 的意思是<strong>載入所有目錄的所有預處理檔案</strong>：</p>
+<p>一開始，我對 Asset Pipeline 毫不熟悉，所以沒辦法解決。但是看到 Ruby on Rails 實戰聖經以後，才發現 <code>require_tree .</code> 的意思是<strong>載入所有目錄的所有預處理檔案</strong>：</p>
 <blockquote>
 <p>實務上不喜歡用 require_tree 的方式來一次載入全部的 css 和 javascript，而是喜歡逐條 require載入，一來比較清楚，二來也可以確保 css 和 javascript 載入的順序是正確的。</p>
 </blockquote>

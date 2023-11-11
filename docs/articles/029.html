@@ -20,7 +20,7 @@
         </nav>
         <article class="article">
             <h1>About some weird Convention</h1>
-<p>我們都知道 Ruby on Rails 有個稱作<a href="https://zh.wikipedia.org/zh-tw/%E7%B4%84%E5%AE%9A%E5%84%AA%E6%96%BC%E9%85%8D%E7%BD%AE">慣例優於設定</a>（Convention Over Configuration） 的原則。不過，這慣例常常會坑人，端看你對 Ruby on Rails 的理解究竟有多少。<br>
+<p>我們都知道 Ruby on Rails 有個稱作<a href="https://zh.wikipedia.org/wiki/%E7%B4%84%E5%AE%9A%E5%84%AA%E6%96%BC%E9%85%8D%E7%BD%AE">慣例優於設定</a>（Convention Over Configuration） 的原則。不過，這慣例常常會坑人，端看你對 Ruby on Rails 的理解究竟有多少。<br>
 對於什麼事情都有個人看法的我來說，慣例的設計原則把我害得很慘很慘……</p>
 <p>這篇來講兩個慣例的坑：＼</p>
 <ol>
@@ -53,7 +53,7 @@ end
 <p><code>ActiveModel::UnknownAttributeError: unknown attribute 'foo_id' for Bar.</code></p>
 <p>WTF? 這什麼奇怪的變數？「慣例」是這樣搞？</p>
 <p>雖然最後透過修改 migrate 檔案解決了問題，但慣例卻還是深深困惑住我。</p>
-<p>Ref:</p>
+<h2>參考資料</h2>
 <p>關於 <code>belongs_to</code> 與 <code>has_many</code> 的問題：</p>
 <ol>
 <li><a href="https://stackoverflow.com/questions/33707380/rails-associations-sqlite3sqlexception-no-such-column">Rails Associations: SQLite3::SQLException: no such column</a></li>
