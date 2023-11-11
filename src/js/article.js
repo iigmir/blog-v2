@@ -38,7 +38,7 @@ class ArticleTagsApp {
         if( in_development ) {
             return "/docs/assets/stub-data-api.json";
         }
-        return `https://iigmir.serv00.net/api/blog-metadata.php?id=${this.id}`;
+        return `https://iigmir.serv00.net/api/blog-metadata.php/${this.id}`;
     }
     /**
      * Datas from AJAX result. See `responsed_source_data` for details.
