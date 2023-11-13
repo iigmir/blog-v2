@@ -17,9 +17,7 @@ code {
     padding: 3px;
 }
 
-p, article p {
-    line-height: 24px;
-}
+p, article p { line-height: 24px; }
 
 .click-icon { cursor: pointer; }
 
@@ -35,8 +33,7 @@ p, article p {
 }
 
 /* Colour scheme */
-@media (prefers-color-scheme: light)
-{
+@media (prefers-color-scheme: light) {
     code {
         --code-text-colour: #000000;
         --code-bg-colour: #f5f2f0;
@@ -47,8 +44,7 @@ p, article p {
         }
     }
 }
-@media (prefers-color-scheme: dark)
-{
+@media (prefers-color-scheme: dark) {
     code {
         --code-text-colour: #000000;
         --code-bg-colour: #f5f2f0;
@@ -60,7 +56,11 @@ p, article p {
     }
 }
 
-/* RWD service */
+/* Image and its RWD service */
+article img, .article img {
+    max-width: 1200px;
+}
+
 @media (max-width: 1199px) {
     article, .article, footer, .footer {
         padding: 0 1rem;
