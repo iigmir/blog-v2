@@ -78,7 +78,10 @@ class ArticleTagsApp {
                 this.responsed_source_data = metadata;
                 resolve( this.responsed_source_data );
             };
-            requests.then( success_callback );
+            const unsuccess_callback = (error) => {
+                reject( error );
+            };
+            requests.then( success_callback ).catch( unsuccess_callback );
         });
     }
 }
@@ -99,9 +102,10 @@ class ArticleTagsAppELement extends HTMLElement {
     tagsapp_action() {
         this.tags_object.set_id();
         this.tags_object.request_api().then( (data) => {
-            this.render_element();
+            this.render_resolved_element();
         }).catch( (error) => {
             console.error(error);
+            this.render_rejected_element( error );
         });
     }
     /*
@@ -122,7 +126,7 @@ class ArticleTagsAppELement extends HTMLElement {
     }
     */
     // Render module
-    render_element() {
+    render_resolved_element() {
         // Data layer
         const article_metadata = this.tags_object;
         // Create a shadow root and wrapper
@@ -173,6 +177,23 @@ class ArticleTagsAppELement extends HTMLElement {
         );
         wrapper.appendChild(tag_help);
         wrapper.appendChild(tag_list);
+    }
+    render_rejected_element(error_message = "") {
+        const shadow = this.attachShadow({ mode: "open" });
+        const wrapper = document.createElement( "footer" );
+        wrapper.setAttribute( "class", "tags container" );
+
+        const css = document.createElement("link");
+        css.setAttribute("rel", "stylesheet");
+        css.setAttribute("href", "../css/new-framework.min.css");
+
+        const error_reminder = document.createElement("span");
+        error_reminder.textContent = "Oh-oh. Something's up. :-(";
+        error_reminder.dataset.errorMessage = error_message;
+
+        shadow.appendChild(css);
+        shadow.appendChild(wrapper);
+        wrapper.appendChild(error_reminder);
     }
     /**
      * See `IDateComponentElement` class for details.
