@@ -36,7 +36,7 @@ class ArticleTagsApp {
     get data_api_path() {
         const in_development = location.host.includes( "127.0.0.1" );
         if( in_development ) {
-            return "/docs/assets/stub-data-api.json";
+            return "/docs/api/data.json";
         }
         return `https://iigmir.serv00.net/api/blog-metadata/${this.id}`;
     }
@@ -51,7 +51,7 @@ class ArticleTagsApp {
     get tags_api_path() {
         const in_development = location.host.includes( "127.0.0.1" );
         if( in_development ) {
-            return "/docs/assets/stub-tag-api.json";
+            return "/docs/api/tags.json";
         }
         return "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/categories.json";
     }
