@@ -15,7 +15,7 @@ class LocalFileGenerator implements BasicGenerator
     directory_files: string[] = [];
     template = "";
     fs_handler = null;
-    new_parsed_htmls = [""]
+    new_parsed_htmls: string[] = [];
     async get_new_parsed_htmls()
     {
         async function get_source_markdowns(source_directory = "", directory_files = [""]) {
