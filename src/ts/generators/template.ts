@@ -14,10 +14,15 @@ class TemplateGenerator implements BasicGenerator
     source_template = "";
     async read_file()
     {
-        const source_index = this.config.source_directory + "/index.html";
-        const source_template = this.config.source_directory + "/templates.html";
-        FileSystemModule.read_file( source_index ).then( (res) => { this.source_index = res; }).catch( err => error_handling( err ) );
-        FileSystemModule.read_file( source_template ).then( (res) => { this.source_template = res; }).catch( err => error_handling( err ) );
+        Promise.all([
+            // Source index
+            FileSystemModule.read_file( `${this.config.source_directory}/index.html` ),
+            // Source template
+            FileSystemModule.read_file( `${this.config.source_directory}/templates.html` ),
+        ]).then( ([source_index_response, source_template_response]) => {
+            this.source_index = source_index_response;
+            this.source_template = source_template_response;
+        }).catch( err => error_handling( err ) );
     }
     set_template()
     {
