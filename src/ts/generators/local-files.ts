@@ -15,7 +15,30 @@ class LocalFileGenerator implements BasicGenerator
     directory_files: string[] = [];
     template = "";
     fs_handler = null;
-    // ajax_handler = new AJAXDatas();
+    new_parsed_htmls = [""]
+    async get_new_parsed_htmls()
+    {
+        const check_type = (markdowns: unknown, replaced_text: string) => {
+            if( Array.isArray( markdowns ) ) {
+                if( markdowns.length > 0 && replaced_text ) {
+                    return markdowns;
+                }
+            }
+            return [];
+        };
+        async function get_source_markdowns(source_directory = "", directory_files = [""]) {
+            try {
+                return await read_source_markdowns({ source_directory, directory_files });
+            } catch (error) {
+                console.error(error);
+                return [];
+            }
+        }
+        const source_markdowns = await get_source_markdowns(this.config.source_directory, this.directory_files);
+        this.new_parsed_htmls = check_type(source_markdowns, this.config.replaced_text).map( md_text =>
+            this.template.replace( this.config.replaced_text, RenderMarkdown( md_text ) )
+        );
+    }
     /**
      * @returns {Array} - Markdown texts by file
      */
@@ -70,12 +93,13 @@ class LocalFileGenerator implements BasicGenerator
     }
     async write_files()
     {
-        const parsed_htmls = await this.parsed_htmls;
-        write_files_to_destination({
-            dest_dir: this.config.destination_directory,
-            dir_files: this.directory_files,
-            mode: this.config.mode,
-            parsed_htmls,
+        this.get_new_parsed_htmls().then( () => {
+            write_files_to_destination({
+                dest_dir: this.config.destination_directory,
+                dir_files: this.directory_files,
+                mode: this.config.mode,
+                parsed_htmls: this.new_parsed_htmls,
+            });
         });
     }
     async main( config: ConfigInterface )
