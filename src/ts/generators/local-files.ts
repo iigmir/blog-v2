@@ -44,8 +44,7 @@ class LocalFileGenerator implements BasicGenerator
                 }
                 return [];
             };
-            const a = check_type(source_markdowns, config.replaced_text);
-            return a.map( md_text =>
+            return check_type(source_markdowns, config.replaced_text).map( md_text =>
                 template.replace( config.replaced_text, RenderMarkdown( md_text ) )
             );
         })();
