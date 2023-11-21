@@ -18,14 +18,6 @@ class LocalFileGenerator implements BasicGenerator
     new_parsed_htmls = [""]
     async get_new_parsed_htmls()
     {
-        const check_type = (markdowns: unknown, replaced_text: string) => {
-            if( Array.isArray( markdowns ) ) {
-                if( markdowns.length > 0 && replaced_text ) {
-                    return markdowns;
-                }
-            }
-            return [];
-        };
         async function get_source_markdowns(source_directory = "", directory_files = [""]) {
             try {
                 return await read_source_markdowns({ source_directory, directory_files });
@@ -34,43 +26,18 @@ class LocalFileGenerator implements BasicGenerator
                 return [];
             }
         }
+        const check_type = (markdowns: unknown, replaced_text: string) => {
+            if( Array.isArray( markdowns ) ) {
+                if( markdowns.length > 0 && replaced_text ) {
+                    return markdowns;
+                }
+            }
+            return [];
+        };
         const source_markdowns = await get_source_markdowns(this.config.source_directory, this.directory_files);
         this.new_parsed_htmls = check_type(source_markdowns, this.config.replaced_text).map( md_text =>
             this.template.replace( this.config.replaced_text, RenderMarkdown( md_text ) )
         );
-    }
-    /**
-     * @returns {Array} - Markdown texts by file
-     */
-    get source_markdowns()
-    {
-        return read_source_markdowns({
-            source_directory: this.config.source_directory,
-            directory_files: this.directory_files
-        });
-    }
-    /**
-     * @returns {Array} - HTML texts with parsed Markdown HTML
-     */
-    get parsed_htmls()
-    {
-        return ( async() =>
-        {
-            const { config, template } = this;
-            // No, 'await' has effects on this.source_markdowns. Don't move "await".
-            const source_markdowns = await this.source_markdowns;
-            const check_type = (markdowns: unknown, replaced_text: string) => {
-                if( Array.isArray( markdowns ) ) {
-                    if( markdowns.length > 0 && replaced_text ) {
-                        return markdowns;
-                    }
-                }
-                return [];
-            };
-            return check_type(source_markdowns, config.replaced_text).map( md_text =>
-                template.replace( config.replaced_text, RenderMarkdown( md_text ) )
-            );
-        })();
     }
     async read_directory()
     {
