@@ -1,8 +1,8 @@
-import error_handling from "./utils/error-handling";
-import { read_config_file } from "./utils/fs";
+import { IndexAJAXGenerator, BlogAJAXGenerator, LocalFileGenerator, TemplateGenerator } from "./generators/index";
 import { ConfigModeEnum, IsConfigApi } from "./types/index";
 import type { ConfigInterface } from "./types/index";
-import { IndexAJAXGenerator, BlogAJAXGenerator, LocalFileGenerator, TemplateGenerator } from "./generators/index";
+import error_handling from "./utils/error-handling";
+import { read_config_file } from "./utils/fs";
 
 class StaticSiteData
 {
@@ -31,9 +31,9 @@ class StaticSiteData
     }
 }
 
-const exexute_module = (config: ConfigInterface) =>
+const exexute_generators = (config: ConfigInterface) =>
 {
-    const get_instance = (mode: ConfigModeEnum) =>
+    const get_generator = (mode: ConfigModeEnum) =>
     {
         class Errr { main(err: any) { console.warn( "No such type:", err ); } }
         switch (mode) {
@@ -44,20 +44,16 @@ const exexute_module = (config: ConfigInterface) =>
             default: return Errr;
         }
     };
-    const App = get_instance( config.mode );
+    const App = get_generator( config.mode );
     const action = new App();
     action.main( config );
-}
-
-const exexute = (site_data: StaticSiteData) =>
-{
-    const fn = (config: ConfigInterface) => { exexute_module( config ); };
-    site_data.config.forEach( fn );
 }
 
 export const main = async (config_path = "src/config.json") =>
 {
     const site_data = new StaticSiteData();
     await site_data.set_config( config_path );
-    exexute( site_data );
+    site_data.config.forEach( (config: ConfigInterface) =>
+        { exexute_generators( config ); }
+    );
 };
