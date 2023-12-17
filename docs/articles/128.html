@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>筆記：Bits</h1>
+<p>有兩個符號讓我很好奇： <code>&gt;&gt;</code> 與 <code>&lt;&lt;</code>。我就問了 ChatGPT 是什麼意思。經過一陣對談後，我想我可以彙整一下了。</p>
+<h2>TL;DR</h2>
+<p>如果想快速記憶的話：</p>
+<pre><code class="language-js">1 &lt;&lt; 1 // 2
+1 &lt;&lt; 2 // 4
+1 &lt;&lt; 3 // 8
+1 &lt;&lt; 4 // 16
+1 &lt;&lt; 5 // 32
+</code></pre>
+<pre><code class="language-js">1024 &gt;&gt; 1 // 512
+1024 &gt;&gt; 2 // 256
+1024 &gt;&gt; 3 // 128
+1024 &gt;&gt; 4 // 64
+1024 &gt;&gt; 5 // 21
+</code></pre>
+<h2>先決知識：二進位</h2>
+<p>在讀這個筆記前，你需要知道二進位是什麼：二進位是一種以 0 與 1 還有位數來標記數字的方法。因為 0 與 1 可以轉為低電壓與高電壓，因此要以電力作為動能的電腦去算術，就需要把數字弄成二進位。每次進位是前一位數乘以二。</p>
+<p>比方說十進位的 9 換算成二進位就會是 1001：</p>
+<pre><code>8421 =&gt; DEC
+----
+1001 =&gt; BIN
+</code></pre>
+<p>因為 <code>(8 * 1) + (4 * 0) + (2 * 0) + (1 * 1)</code> 是 9，所以十進位的 9 換算成二進位就會是 1001。</p>
+<p>你可以把作業系統內建的計算機程式，切到程式員模式後用 DEC 輸入十進位，接著與 BIN 比照看看。</p>
+<h2><code>&lt;&lt;</code></h2>
+<p><code>&lt;&lt;</code> 是把二進位數往左推幾進位，或換句話說，在數字的後面多加幾個 0。就從 <code>9 &lt;&lt; 3</code> 開始吧。 <code>9 &lt;&lt; 3</code> 的答案是 72。為什麼？</p>
+<p>9 換成二進位的話就是 <code>1001</code>。現在， <code>9 &lt;&lt; 3</code> 下的指令就變成：「我要把 <code>1001</code> 往左推 3 個位數」、或是「我要給 <code>1001</code> 後面多 3 個 0」。</p>
+<p>&quot;1001&quot; + &quot;000&quot; 會是什麼？<code>1001000</code>？那怎麼換算呢？</p>
+<p><code>(64 * 1) + (32 * 0) + (16 * 0) + (8 * 1) + (4 * 0) + (2 * 0) + (1 * 0)</code> 就是 72，所以答案就 72 啦。</p>
+<p>所以 <code>1 &lt;&lt; 10</code> 會是什麼呢？因為 <code>&quot;1&quot; + &quot;0000000000&quot; =&gt; &quot;10000000000&quot;</code> 換成十進位是 1024，所以答案是 1024。</p>
+<h2><code>&gt;&gt;</code></h2>
+<p>那所以反過來說，<code>&gt;&gt;</code> 就是給數字前面多幾個 0 囉？ <code>9 &gt;&gt; 3</code> 會是什麼？ <code>&quot;000&quot; + &quot;1001&quot; =&gt; &quot;0001001&quot;</code>？有意義嗎？</p>
+<p>噢，<strong>不對</strong>。</p>
+<p><code>&gt;&gt;</code> 要做的是給二進位數字，往右推幾個位數。</p>
+<p>一樣從 <code>9 &gt;&gt; 3</code> 開始吧。<code>1001</code> 如果把這數字往右推，會發生什麼事呢？同樣位數的話就會變成 <code>0001</code>：原本的 <code>001</code> 早就被推掉了，所以答案是 1。</p>
+<p>反過來說， <code>2048 &gt;&gt; 5</code> 呢？<br>
+直接用計算機吧。</p>
+<ol>
+<li>2048 的二進位為 &quot;100000000000&quot;</li>
+<li>&quot;100000000000&quot; 往右推 5 個： &quot;000001000000&quot;</li>
+<li>&quot;000001000000&quot; 的十進位為 64</li>
+<li>所以 <code>2048 &gt;&gt; 5</code> 是 64</li>
+</ol>
+<h2>原始對話</h2>
+<p>Tell me, how <code>9 &lt;&lt; 3</code> is 72?</p>
+<hr>
+<p>The expression 9 &lt;&lt; 3 is a bitwise left shift operation. Here's how it works: The binary representation of decimal 9 is 1001. When you shift it to the left by 3 positions, you get:</p>
+<p>1001 &lt;&lt; 3 = 1001000</p>
+<p>In decimal, 1001000 is 72. Therefore, 9 &lt;&lt; 3 equals 72. The value is obtained by multiplying the original value (9) by 2 to the power of the shift amount (3). Mathematically:</p>
+<p>9 &lt;&lt; 3 = 9 * 2^3 = 9 * 8 = 72</p>
+<hr>
+<p>Let me repeat:</p>
+<ol>
+<li>When <code>9 &lt;&lt; 3</code>, &quot;9&quot; in decimal will convert to &quot;1001&quot; in a binary</li>
+<li>Then &quot;3&quot;, will add a binary &quot;1&quot; and two binary &quot;0&quot; like: &quot;100&quot;.</li>
+<li>Add &quot;100&quot; to &quot;1001&quot; which is &quot;1001001&quot;.</li>
+<li>Convert a binary &quot;1001001&quot; to decimal &quot;72&quot;.</li>
+</ol>
+<p>Am I right?</p>
+<hr>
+<p>I appreciate your attempt to break it down, but there's a small mistake in step 2. When you perform a left shift by 3 positions, you are not adding binary digits to the original binary representation. Instead, you're shifting the existing bits to the left.</p>
+<p>Let me correct the steps:</p>
+<ol>
+<li>The decimal number 9 is represented in binary as &quot;1001.&quot;</li>
+<li>Left shift the bits by 3 positions: &quot;1001&quot; becomes &quot;1001000.&quot;</li>
+<li>Convert the binary &quot;1001000&quot; to decimal, which is 72.</li>
+</ol>
+<p>So, your final representation is correct, but the process of obtaining it involves only shifting the existing bits to the left, not adding new binary digits.</p>
+<hr>
+<p>Now again with <code>3 &lt;&lt; 3</code>:</p>
+<ol>
+<li>Convert the decimal 3 to binary &quot;11&quot;.</li>
+<li>Add three &quot;0&quot; after &quot;11&quot;, which is &quot;11000&quot;.</li>
+<li>Convert the binary &quot;11000&quot; to decimal 24.</li>
+</ol>
+<p>Right?</p>
+<hr>
+<p>Almost correct, but there's a small mistake in step 2. When you perform a left shift by 3 positions, you are not adding three &quot;0&quot;s after &quot;11.&quot; Instead, you are shifting the existing bits to the left.</p>
+<p>Here's the correct breakdown:</p>
+<ol>
+<li>The decimal number 3 is represented in binary as &quot;11.&quot;</li>
+<li>Left shift the bits by 3 positions: &quot;11&quot; becomes &quot;11000.&quot;</li>
+<li>Convert the binary &quot;11000&quot; to decimal, which is 24.</li>
+</ol>
+<p>So, your final representation is correct, and the process involves shifting the existing bits to the left, not adding new binary digits.</p>
+<hr>
+<p>While <code>1 &lt;&lt; 3</code> turns to &quot;1000&quot; in binary and converts to 8, how about <code>1 &gt;&gt; 3</code>? Will it turn to &quot;0001&quot; in binary? 1?</p>
+<hr>
+<p>The <code>1 &gt;&gt; 3</code> operation is a right shift operation. Let's break it down:</p>
+<ol>
+<li>The binary representation of 1 is <code>0001</code>.</li>
+<li>Right shift the bits by 3 positions: <code>0001</code> becomes <code>0000</code>.</li>
+</ol>
+<p>So, <code>1 &gt;&gt; 3</code> results in <code>0000</code> in binary, which is 0 in decimal. Right shifting a number by n positions is equivalent to dividing the number by 2^n and discarding the remainder. In this case, <code>1 &gt;&gt; 3</code> is equivalent to <code>1 / 2^3</code>, which is 1 / 8, resulting in 0.125, but since we're working with integers, the result is 0.</p>
+<hr>
+<p>So how about <code>10 &gt;&gt; 2</code>? Turns <code>1010</code> (10) into <code>0010</code> because it shifts two 0?</p>
+<hr>
+<p>Exactly. Let's break it down:</p>
+<ol>
+<li>The binary representation of 10 is <code>1010</code>.</li>
+<li>Right shift the bits by 2 positions: <code>1010</code> becomes <code>0010</code>.</li>
+</ol>
+<p>So, <code>10 &gt;&gt; 2</code> results in <code>0010</code> in binary, which is 2 in decimal. Right shifting the bits by 2 positions effectively divides the number by 2^2, which is 4.</p>
+<hr>
+<p>I found an interesting tendency:</p>
+<p>1 &lt;&lt; 1 // 2
+1 &lt;&lt; 2 // 4
+1 &lt;&lt; 3 // 8
+1 &lt;&lt; 4 // 16
+1 &lt;&lt; 5 // 32</p>
+<p>And:</p>
+<p>1024 &gt;&gt; 1 // 512
+1024 &gt;&gt; 2 // 256
+1024 &gt;&gt; 3 // 128
+1024 &gt;&gt; 4 // 64
+1024 &gt;&gt; 5 // 21</p>
+<p>Exactly how the bitwise operators work, right?</p>
+<hr>
+<p>Yes, that's correct! The left shift (<code>&lt;&lt;</code>) operation effectively multiplies the original number by 2 raised to the power of the shift amount, and the right shift (<code>&gt;&gt;</code>) operation divides the original number by 2 raised to the power of the shift amount.</p>
+<p>In your examples:</p>
+<p>For left shift (<code>&lt;&lt;</code>):</p>
+<ul>
+<li><code>1 &lt;&lt; 1</code> is equivalent to <code>1 * 2^1</code> which is 2.</li>
+<li><code>1 &lt;&lt; 2</code> is equivalent to <code>1 * 2^2</code> which is 4.</li>
+<li><code>1 &lt;&lt; 3</code> is equivalent to <code>1 * 2^3</code> which is 8.</li>
+<li><code>1 &lt;&lt; 4</code> is equivalent to <code>1 * 2^4</code> which is 16.</li>
+<li><code>1 &lt;&lt; 5</code> is equivalent to <code>1 * 2^5</code> which is 32.</li>
+</ul>
+<p>For right shift (<code>&gt;&gt;</code>):</p>
+<ul>
+<li><code>1024 &gt;&gt; 1</code> is equivalent to <code>1024 / 2^1</code> which is 512.</li>
+<li><code>1024 &gt;&gt; 2</code> is equivalent to <code>1024 / 2^2</code> which is 256.</li>
+<li><code>1024 &gt;&gt; 3</code> is equivalent to <code>1024 / 2^3</code> which is 128.</li>
+<li><code>1024 &gt;&gt; 4</code> is equivalent to <code>1024 / 2^4</code> which is 64.</li>
+<li><code>1024 &gt;&gt; 5</code> is equivalent to <code>1024 / 2^5</code> which is 32.</li>
+</ul>
+<p>So, your observations are consistent with the behavior of bitwise left and right shift operators.</p>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>
