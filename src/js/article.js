@@ -97,7 +97,7 @@ class ArticleTagsAppELement extends HTMLElement {
     }
     connectedCallback() {
         this.tags_object = new ArticleTagsApp();
-        this.tagsapp_action();
+        // this.tagsapp_action();
     }
     tagsapp_action() {
         this.tags_object.set_id();
