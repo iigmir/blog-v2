@@ -67,10 +67,10 @@ a
         --hover-link-colour: #d898fe;
         --active-link-colour: darkorange;
     }
-    .articles.content .article
+    /* .articles.content .article
     {
         --article-link-colour: #a34567;
-    }
+    } */
 }
 
 body
