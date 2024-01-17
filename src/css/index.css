@@ -63,14 +63,14 @@ a
     {
         --bg-colour: #121212;
         --text-colour: #a3b1ff;
-        --article-link-colour: #cbcbff;
+        --article-link-colour: #ff6d91;
         --hover-link-colour: #d898fe;
         --active-link-colour: darkorange;
     }
-    .articles.content .article
+    /* .articles.content .article
     {
         --article-link-colour: #a34567;
-    }
+    } */
 }
 
 body
