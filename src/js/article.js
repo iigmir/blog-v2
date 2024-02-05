@@ -84,6 +84,82 @@ class ArticleTagsApp {
     }
 }
 
+class ResolvedElements {
+    constructor(article_metadata = { matched_tags: [], ajax_data: {} }) {
+        this.ajax_data = article_metadata.ajax_data;
+        this.matched_tags = article_metadata.matched_tags;
+    }
+    /**
+     * THE CSS
+     */
+    get css_loader() {
+        const path = "../css/new-framework.min.css";
+        const css = document.createElement("link");
+        css.setAttribute("rel", "stylesheet");
+        css.setAttribute("href", path);
+        return css;
+    }
+    /**
+     * Tags list element
+     * @param {Array} article_metadata 
+     * @returns {Element}
+     */
+    get tags_list_dom() {
+        const list_item_dom = (item) => {
+            const li = document.createElement("li");
+            li.classList.add("item");
+            li.classList.add("click-icon");
+            li.textContent = item;
+            return li;
+        };
+        const tag_list = document.createElement("ul");
+        tag_list.classList.add("badges");
+        tag_list.classList.add("-round");
+        this.matched_tags.map( list_item_dom ).forEach( element => tag_list.appendChild(element) );
+        return tag_list;
+    }
+    /**
+     * `<p>Tags: </p>`
+     */
+    get help_dom() {
+        const dom = document.createElement("p");
+        dom.textContent = "Tags: ";
+        return dom;
+    }
+    /**
+     * See `IDateComponentElement` class for details.
+     * @param {String} update_text 
+     * @param {String} class_text 
+     * @param {String} given_date 
+     * @returns An <i-date /> element instance.
+     */
+    generate_date_component(update_text = "", class_text = "", given_date = "") {
+        const main_component = document.createElement("i-date");
+        main_component.dataset.title = update_text;
+        main_component.dataset.date = given_date;
+        main_component.dataset.classes = class_text;
+        main_component.dataset.timezone = "Asia/Taipei";
+        return main_component;
+    }
+    /**
+     * We have: created and updated
+     */
+    get date_doms() {
+        return {
+            created: this.generate_date_component( "Created: ", "date -created", this.ajax_data.created_at ),
+            updated: this.generate_date_component( "Updated: ", "date -updated", this.ajax_data.updated_at ),
+        };
+    }
+    /**
+     * Mind the gap
+     */
+    get gap_dom() {
+        const gap = document.createElement("span");
+        gap.textContent = " ";
+        return gap;
+    }
+}
+
 /**
  * The `<article-tags-app>` component.
  * @todo Extract the `<show-date />` component.
@@ -108,59 +184,20 @@ class ArticleTagsAppELement extends HTMLElement {
     }
     // Render module
     render_resolved_element() {
-        // Data layer
-        const article_metadata = this.tags_object;
-        const ajax_data = article_metadata.ajax_data ?? {};
+        const doms = new ResolvedElements(this.tags_object);
+
         // Create a shadow root and wrapper
         const shadow = this.attachShadow({ mode: "open" });
         const wrapper = document.createElement( "footer" );
-
-        // Add tags: Help
-        const tag_help = document.createElement("p");
-        tag_help.textContent = "Tags: ";
-
-        // Add tags: List
-        const tag_list = document.createElement("ul");
-        tag_list.classList.add("badges");
-        tag_list.classList.add("-round");
-        const list_items = article_metadata.matched_tags.map( (item) => {
-            const li = document.createElement("li");
-            li.classList.add("item");
-            li.classList.add("click-icon");
-            li.textContent = item;
-            return li;
-        });
-        list_items.forEach( element => tag_list.appendChild( element ) );
-
-        // Add CSS
-        const css = document.createElement("link");
-        css.setAttribute("rel", "stylesheet");
-        css.setAttribute("href", "../css/new-framework.min.css");
-
-        // Add gap
-        const gap = document.createElement("span");
-        gap.textContent = " ";
-
-        // Set wrapper: Add class
+        
         wrapper.setAttribute( "class", "tags container" );
-
-        // Set date: Created
-        wrapper.appendChild(
-            this.generate_date_component( "Created: ", "date -created", ajax_data.created_at )
-        );
-
-        wrapper.appendChild(gap);
-
-        // Set dates: Updated
-        wrapper.appendChild(
-            this.generate_date_component( "Updated: ", "date -updated", ajax_data.updated_at )
-        );
-        wrapper.appendChild(tag_help);
-        wrapper.appendChild(tag_list);
-
-        // Now put it all togeter
-        shadow.appendChild(css);
-        shadow.appendChild(wrapper);
+        wrapper.appendChild( doms.date_doms.created );
+        wrapper.appendChild( doms.gap_dom );
+        wrapper.appendChild( doms.date_doms.updated );
+        wrapper.appendChild( doms.help_dom );
+        wrapper.appendChild( doms.tags_list_dom );
+        shadow.appendChild( doms.css_loader );
+        shadow.appendChild( wrapper );
     }
     render_rejected_element(error_message = "") {
         const shadow = this.attachShadow({ mode: "open" });
@@ -178,21 +215,6 @@ class ArticleTagsAppELement extends HTMLElement {
         shadow.appendChild(css);
         shadow.appendChild(wrapper);
         wrapper.appendChild(error_reminder);
-    }
-    /**
-     * See `IDateComponentElement` class for details.
-     * @param {String} update_text 
-     * @param {String} class_text 
-     * @param {String} given_date 
-     * @returns An <i-date /> element instance.
-     */
-    generate_date_component(update_text = "", class_text = "", given_date = "") {
-        const main_component = document.createElement("i-date");
-        main_component.dataset.title = update_text;
-        main_component.dataset.date = given_date;
-        main_component.dataset.classes = class_text;
-        main_component.dataset.timezone = "Asia/Taipei";
-        return main_component;
     }
 }
 
