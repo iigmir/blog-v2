@@ -106,23 +106,6 @@ class ArticleTagsAppELement extends HTMLElement {
             this.render_rejected_element( error );
         });
     }
-    /*
-    add_loading_reminder() {
-        const shadow = this.attachShadow({ mode: "open" });
-        const wrapper = document.createElement( "div" );
-        wrapper.setAttribute( "class", "tags loading container" );
-        const loading = document.createElement("p");
-        loading.textContent = "Loading...";
-        shadow.appendChild(wrapper);
-        wrapper.appendChild(loading);
-    }
-    remove_loading_reminder() {
-        const shadow = this.attachShadow({ mode: "open" });
-        if( shadow.querySelector("footer.loading") ) {
-            shadow.querySelector("footer.loading").remove();
-        }
-    }
-    */
     // Render module
     render_resolved_element() {
         // Data layer
@@ -131,7 +114,6 @@ class ArticleTagsAppELement extends HTMLElement {
         // Create a shadow root and wrapper
         const shadow = this.attachShadow({ mode: "open" });
         const wrapper = document.createElement( "footer" );
-        wrapper.setAttribute( "class", "tags container" );
 
         // Add tags: Help
         const tag_help = document.createElement("p");
@@ -159,9 +141,8 @@ class ArticleTagsAppELement extends HTMLElement {
         const gap = document.createElement("span");
         gap.textContent = " ";
 
-        // Now put it all togeter
-        shadow.appendChild(css);
-        shadow.appendChild(wrapper);
+        // Set wrapper: Add class
+        wrapper.setAttribute( "class", "tags container" );
 
         // Set date: Created
         wrapper.appendChild(
@@ -176,6 +157,10 @@ class ArticleTagsAppELement extends HTMLElement {
         );
         wrapper.appendChild(tag_help);
         wrapper.appendChild(tag_list);
+
+        // Now put it all togeter
+        shadow.appendChild(css);
+        shadow.appendChild(wrapper);
     }
     render_rejected_element(error_message = "") {
         const shadow = this.attachShadow({ mode: "open" });
