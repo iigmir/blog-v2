@@ -34,11 +34,7 @@ class ArticleTagsApp {
      */
     responsed_source_data = {}
     get data_api_path() {
-        const in_development = location.host.includes( "127.0.0.1" );
-        if( in_development ) {
-            return "/docs/api/data.json";
-        }
-        return `https://iigmir.serv00.net/api/blog-metadata/${this.id}`;
+        return `https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/articles.json`;
     }
     /**
      * Datas from AJAX result. See `responsed_source_data` for details.
@@ -75,7 +71,9 @@ class ArticleTagsApp {
             ]);
             const success_callback = ([tags, metadata]) => {
                 this.tags_data = tags;
-                this.responsed_source_data = metadata;
+                this.responsed_source_data = {
+                    data: metadata.filter( ({ id }) => id == this.id )[0]
+                };
                 resolve( this.responsed_source_data );
             };
             const unsuccess_callback = (error) => {
@@ -97,7 +95,7 @@ class ArticleTagsAppELement extends HTMLElement {
     }
     connectedCallback() {
         this.tags_object = new ArticleTagsApp();
-        // this.tagsapp_action();
+        this.tagsapp_action();
     }
     tagsapp_action() {
         this.tags_object.set_id();
@@ -129,6 +127,7 @@ class ArticleTagsAppELement extends HTMLElement {
     render_resolved_element() {
         // Data layer
         const article_metadata = this.tags_object;
+        const ajax_data = article_metadata.ajax_data ?? {};
         // Create a shadow root and wrapper
         const shadow = this.attachShadow({ mode: "open" });
         const wrapper = document.createElement( "footer" );
@@ -166,14 +165,14 @@ class ArticleTagsAppELement extends HTMLElement {
 
         // Set date: Created
         wrapper.appendChild(
-            this.generate_date_component( "Created: ", "date -created", article_metadata.ajax_data.created_at )
+            this.generate_date_component( "Created: ", "date -created", ajax_data.created_at )
         );
 
         wrapper.appendChild(gap);
 
         // Set dates: Updated
         wrapper.appendChild(
-            this.generate_date_component( "Updated: ", "date -updated", article_metadata.ajax_data.updated_at )
+            this.generate_date_component( "Updated: ", "date -updated", ajax_data.updated_at )
         );
         wrapper.appendChild(tag_help);
         wrapper.appendChild(tag_list);
