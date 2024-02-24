@@ -3,21 +3,7 @@ import fs from "fs";
 class FileSystemModule
 {
     /**
-     * @param {String} path - Directory path
-     * @returns {Promise} - If directory vaild, the Promise will contain directory file names array, else contain Error object.
-     */
-    static read_directory( path = "" )
-    {
-        return new Promise(( resolve, reject ) =>
-        {
-            fs.readdir( path, ( error, files ) =>
-            {
-                if ( error ) reject( error );
-                resolve( files );
-            });
-        });
-    }
-    /**
+     * [TODO] Once we know how to extract `fs.writeFile` properly, this object will meet its end.
      * @param {String} file.path - Written file path and name
      * @param {String} file.data - Written file content
      * @returns {void} Throw error if fs encounter one, else return nothing.

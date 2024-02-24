@@ -1,4 +1,4 @@
-import { readFile, readdir } from "fs";
+import { readFile, readdir, writeFile } from "fs";
 import FileSystemModule from "./FileSystemModule";
 
 export const file_can_parse = (destination_directory: string, directory_files: string[], parsed_htmls: string[]) =>
@@ -33,6 +33,14 @@ export const md_file_name = ( md_name = "", mode = "local" ) =>
     }
 }
 
+export const write_file = ({ path = "", data = "" }) =>
+{
+    writeFile( path, data, "utf8", ( err ) => 
+    {
+        if ( err ) throw err;
+    });
+}
+
 export const write_files_to_destination = ({ dest_dir = "", dir_files = [""], parsed_htmls = [""], mode = "local" }) =>
 {
     const passed = file_can_parse(dest_dir, dir_files, parsed_htmls);
@@ -42,7 +50,7 @@ export const write_files_to_destination = ({ dest_dir = "", dir_files = [""], pa
         {
             const path = `${dest_dir}/${md_file_name(md_name, mode)}`;
             const data = parsed_htmls[md_index];
-            FileSystemModule.write_file({ path: path, data: data });
+            write_file({ path: path, data: data });
         };
         dir_files.forEach( fn );
     }

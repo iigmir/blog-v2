@@ -2,9 +2,8 @@
 import { BasicGenerator, generate_default_config } from "../types/generator";
 // Utils
 import error_handling from "../utils/error-handling.js";
-import { read_file } from "../utils/fs";
+import { read_file, write_file } from "../utils/fs";
 import { ajax_url } from "../utils/ajax";
-import FileSystemModule from "../utils/FileSystemModule";
 // Rendering functions
 import render_list from "../assets/index-text-render";
 // Types
@@ -54,7 +53,7 @@ class IndexAJAXGenerator implements BasicGenerator
     async write_file()
     {
         try {
-            FileSystemModule.write_file( this.write_file_params );
+            write_file( this.write_file_params );
         } catch (error) {
             error_handling( error );
         }
