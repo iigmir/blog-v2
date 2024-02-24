@@ -11,7 +11,7 @@ class DateStore {
         this.set_temporal_obj();
     }
     set_temporal_obj() {
-        this.source_date = Temporal.Instant.from( this.date );
+        this.source_date = Temporal.Instant.from( this.date ?? new Date() );
         this.timezone_date = Temporal.TimeZone.from( this.current_timezone );
     }
     /**
