@@ -1,9 +1,9 @@
 // Generators
 import { BasicGenerator, generate_default_config } from "../types/generator";
 // Utils
-import error_handling from "../utils/error-handling.js";
-import read_template_file from "../utils/read-template-file.js";
-import { RenderMarkdown } from "../utils/helpers.js";
+import error_handling from "../utils/error-handling";
+import read_template_file from "../utils/read-template-file";
+import { RenderMarkdown } from "../utils/helpers";
 import { write_files_to_destination } from "../utils/fs";
 import { fs_read_source_directory, read_source_markdowns } from "../utils/handlers";
 // Types
