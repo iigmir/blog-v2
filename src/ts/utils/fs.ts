@@ -1,4 +1,4 @@
-import { readFile } from "fs";
+import { readFile, readdir } from "fs";
 import FileSystemModule from "./FileSystemModule";
 
 export const file_can_parse = (destination_directory: string, directory_files: string[], parsed_htmls: string[]) =>
@@ -96,3 +96,15 @@ export const read_config_file = ( file_path = "" ) =>
         read_json( file_path ).then( c => resolve(c) ).catch( e => reject(e) );
     });
 };
+
+export const read_directory = ( path = "" ) =>
+{
+    return new Promise(( resolve, reject ) =>
+    {
+        readdir( path, ( error, files ) =>
+        {
+            if ( error ) reject( error );
+            resolve( files );
+        });
+    });
+}
