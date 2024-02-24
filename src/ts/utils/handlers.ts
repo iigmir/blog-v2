@@ -1,5 +1,12 @@
 import FileSystemModule from "./FileSystemModule";
 
+/**
+ * Read source markdown files.
+ * @param input Source directory and their files.
+ * @param input.source_directory Usually, it's `source_directory` in config.json.
+ * @param input.directory_files The files under the `source_directory` in config.json.
+ * @returns Source files' content.
+ */
 export const read_source_markdowns = async ({ source_directory = "", directory_files = [""] }) =>
 {
     // https://flaviocopes.com/javascript-async-await-array-map
@@ -9,8 +16,11 @@ export const read_source_markdowns = async ({ source_directory = "", directory_f
     {
         return;
     }
-    const read_files = (source_file: string) => FileSystemModule.read_file(`${ source_directory }/${ source_file }`);
-    const result = await Promise.all( directory_files.map( read_files ) );
+    const result = await Promise.all(
+        directory_files.map(
+            (filename: string) => FileSystemModule.read_file(`${ source_directory }/${ filename }`)
+        )
+    );
     return result;
 }
 
