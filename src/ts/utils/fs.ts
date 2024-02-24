@@ -10,46 +10,46 @@ export const write_file = ({ path = "", data = "" }) =>
 
 export const write_files_to_destination = ({ dest_dir = "", dir_files = [""], parsed_htmls = [""], mode = "local" }) =>
 {
-    const file_can_parse = (destination_directory: string, directory_files: string[], parsed_htmls: string[]) =>
+    const file_can_parse = (dest_dir: string, dir_files: string[], parsed_htmls: string[]) =>
     {
         const result = [
-            Array.isArray( directory_files ),
-            destination_directory,
-            directory_files.length > 0,
-            parsed_htmls.length > 0,
+            Array.isArray( dir_files ),
+            dest_dir,
+            dir_files.length > 0,
+            parsed_htmls.length > 0
         ].some( condition => condition === false );
         if( result === true )
         {
             console.warn({
                 message: "The app cannot parse files because certain files failed to meet conditions.",
-                source: { destination_directory, directory_files, parsed_htmls },
+                source: { destination_directory: dest_dir, directory_files: dir_files, parsed_htmls },
                 result,
             });
         }
         return result === false;
     };
-    const md_file_name = ( md_name = "", mode = "local" ) =>
+    const get_html_file_name = ( md_name = "", mode = "local" ) =>
     {
         const altered_html_name = md_name.replace( /.md$/g, ".html" );
         switch ( mode )
         {
             case "local": return altered_html_name;
             case "ajax":
-                const s = altered_html_name.match( /[^/]+(?=$)/g );
-                return s ? s[0] : "";
+                const matches = altered_html_name.match( /[^/]+(?=$)/g );
+                return matches ? matches[0] : "";
             default: return md_name;
         }
     };
-    const passed = file_can_parse(dest_dir, dir_files, parsed_htmls);
-    if( passed )
+    const write_to_file = ( md_name = "", md_index = -1 ) =>
     {
-        const fn = ( md_name = "", md_index = -1 ) =>
-        {
-            const path = `${dest_dir}/${md_file_name(md_name, mode)}`;
-            const data = parsed_htmls[md_index];
-            write_file({ path: path, data: data });
-        };
-        dir_files.forEach( fn );
+        const path = `${dest_dir}/${get_html_file_name(md_name, mode)}`;
+        const data = parsed_htmls[md_index];
+        write_file({ path, data });
+    };
+    const parsing_successed = file_can_parse(dest_dir, dir_files, parsed_htmls);
+    if( parsing_successed )
+    {
+        dir_files.forEach( write_to_file );
     }
 }
 
