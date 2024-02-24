@@ -16,20 +16,7 @@ class ArticleTagsApp {
     // AJAX module: Metadata
     /**
      * ```json
-{
-    "message": "",
-    "id": "",
-    "data": {
-        "id": 1,
-        "title": "",
-        "category_id": [
-            1
-        ],
-        "language": "",
-        "created_at": "",
-        "updated_at": ""
-    }
-}
+{ "message": "", "id": "", "data": { "id": 1, "title": "", "category_id": [1], "language": "", "created_at": "", "updated_at": "" } }
 ```
      */
     responsed_source_data = {}
@@ -45,10 +32,6 @@ class ArticleTagsApp {
     // AJAX module: Tags
     tags_data = []
     get tags_api_path() {
-        const in_development = location.host.includes( "127.0.0.1" );
-        if( in_development ) {
-            return "/docs/api/tags.json";
-        }
         return "https://raw.githubusercontent.com/iigmir/blog-source/master/info-files/categories.json";
     }
     get matched_tags() {
@@ -84,6 +67,9 @@ class ArticleTagsApp {
     }
 }
 
+/**
+ * `Resolved` is `resolved` in [`Promimse.resolved`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve).
+ */
 class ResolvedElements {
     constructor(article_metadata = { matched_tags: [], ajax_data: {} }) {
         this.ajax_data = article_metadata.ajax_data;
@@ -134,11 +120,12 @@ class ResolvedElements {
      * @returns An <i-date /> element instance.
      */
     generate_date_component(update_text = "", class_text = "", given_date = "") {
+        const tz = new Intl.DateTimeFormat().resolvedOptions().timeZone;
         const main_component = document.createElement("i-date");
         main_component.dataset.title = update_text;
         main_component.dataset.date = given_date;
         main_component.dataset.classes = class_text;
-        main_component.dataset.timezone = "Asia/Taipei";
+        main_component.dataset.timezone = tz;
         return main_component;
     }
     /**
@@ -155,8 +142,88 @@ class ResolvedElements {
      */
     get gap_dom() {
         const gap = document.createElement("span");
-        gap.textContent = " ";
+        gap.textContent = "; ";
         return gap;
+    }
+    get lisence_dom() {
+        function cc_license_link(cc_license = "BY", version = "4.0") {
+            const link = document.createElement("a");
+            link.target = "_blank";
+            link.href = `https://creativecommons.org/licenses/${cc_license.toLocaleLowerCase()}/${version}/deed.en`;
+            link.textContent = `${cc_license.toUpperCase()} ${version}`;
+            return link;
+        }
+        function small_dom() {
+            const small = document.createElement("small");
+            small.style = "display: block; margin-top: 8px;";
+            small.insertAdjacentText( "beforeend", "Works are licenced under " );
+            small.insertAdjacentElement( "beforeend", cc_license_link("BY-ND", "4.0") );
+            small.insertAdjacentText( "beforeend", " unless other licences like " );
+            small.insertAdjacentElement( "beforeend", cc_license_link("BY-SA", "4.0") );
+            small.insertAdjacentText( "beforeend", " applies over CC-BY-ND." );
+            return small;
+        }
+        function img_dom() {
+            const img = document.createElement("img");
+            img.src = "../api/cc-by-nd-icon.svg";
+            img.alt = "CC-BY-ND 4.0";
+            return img;
+        }
+        function img_link_dom() {
+            const a = cc_license_link("BY-ND", "4.0");
+            a.textContent = "";
+            a.appendChild( img_dom() );
+            return a;
+        }
+        const div = document.createElement( "div" );
+        const small = small_dom();
+        const image_link = img_link_dom();
+        div.setAttribute( "class", "lisence" );
+        div.appendChild( image_link );
+        div.appendChild( small );
+        return div;
+    }
+    /**
+     * THE wrapper
+     */
+    get wrapper() {
+        const wrapper = document.createElement( "footer" );
+        wrapper.setAttribute( "class", "tags container" );
+        wrapper.appendChild( this.date_doms.created );
+        wrapper.appendChild( this.gap_dom );
+        wrapper.appendChild( this.date_doms.updated );
+        wrapper.appendChild( this.help_dom );
+        wrapper.appendChild( this.tags_list_dom );
+        wrapper.appendChild( this.lisence_dom );
+        return wrapper;
+    }
+}
+
+/**
+ * `Rejected` is `reject` in [`Promimse.rejected`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject).
+ */
+class RejectedElements {
+    constructor(error_message) {
+        console.error(error_message);
+        this.error_message = error_message;
+    }
+    get css_loader() {
+        const css = document.createElement("link");
+        css.setAttribute("rel", "stylesheet");
+        css.setAttribute("href", "../css/new-framework.min.css");
+        return css;
+    }
+    get error_reminder() {
+        const error_reminder = document.createElement("span");
+        error_reminder.textContent = "Oh-oh. Something's up. :-(";
+        error_reminder.dataset.errorMessage = this.error_message;
+        return error_reminder;
+    }
+    get wrapper() {
+        const wrapper = document.createElement( "footer" );
+        wrapper.setAttribute( "class", "tags container" );
+        wrapper.appendChild(this.error_reminder);
+        return wrapper;
     }
 }
 
@@ -176,45 +243,16 @@ class ArticleTagsAppELement extends HTMLElement {
     tagsapp_action() {
         this.tags_object.set_id();
         this.tags_object.request_api().then( (data) => {
-            this.render_resolved_element();
+            this.render_given_element( ResolvedElements, this.tags_object );
         }).catch( (error) => {
-            console.error(error);
-            this.render_rejected_element( error );
+            this.render_given_element( RejectedElements, error );
         });
     }
-    // Render module
-    render_resolved_element() {
-        const doms = new ResolvedElements(this.tags_object);
-
-        // Create a shadow root and wrapper
+    render_given_element(element_instance, input) {
         const shadow = this.attachShadow({ mode: "open" });
-        const wrapper = document.createElement( "footer" );
-        
-        wrapper.setAttribute( "class", "tags container" );
-        wrapper.appendChild( doms.date_doms.created );
-        wrapper.appendChild( doms.gap_dom );
-        wrapper.appendChild( doms.date_doms.updated );
-        wrapper.appendChild( doms.help_dom );
-        wrapper.appendChild( doms.tags_list_dom );
+        const doms = new element_instance( input );
         shadow.appendChild( doms.css_loader );
-        shadow.appendChild( wrapper );
-    }
-    render_rejected_element(error_message = "") {
-        const shadow = this.attachShadow({ mode: "open" });
-        const wrapper = document.createElement( "footer" );
-        wrapper.setAttribute( "class", "tags container" );
-
-        const css = document.createElement("link");
-        css.setAttribute("rel", "stylesheet");
-        css.setAttribute("href", "../css/new-framework.min.css");
-
-        const error_reminder = document.createElement("span");
-        error_reminder.textContent = "Oh-oh. Something's up. :-(";
-        error_reminder.dataset.errorMessage = error_message;
-
-        shadow.appendChild(css);
-        shadow.appendChild(wrapper);
-        wrapper.appendChild(error_reminder);
+        shadow.appendChild( doms.wrapper );
     }
 }
 
