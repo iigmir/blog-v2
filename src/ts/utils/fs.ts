@@ -28,27 +28,26 @@ export const write_files_to_destination = ({ dest_dir = "", dir_files = [""], pa
         }
         return result === false;
     };
-    const get_html_file_name = ( md_name = "", mode = "local" ) =>
+    if( file_can_parse(dest_dir, dir_files, parsed_htmls) )
     {
-        const altered_html_name = md_name.replace( /.md$/g, ".html" );
-        switch ( mode )
+        const get_html_file_name = ( md_name = "", mode = "local" ) =>
         {
-            case "local": return altered_html_name;
-            case "ajax":
-                const matches = altered_html_name.match( /[^/]+(?=$)/g );
-                return matches ? matches[0] : "";
-            default: return md_name;
-        }
-    };
-    const write_to_file = ( md_name = "", md_index = -1 ) =>
-    {
-        const path = `${dest_dir}/${get_html_file_name(md_name, mode)}`;
-        const data = parsed_htmls[md_index];
-        write_file({ path, data });
-    };
-    const parsing_successed = file_can_parse(dest_dir, dir_files, parsed_htmls);
-    if( parsing_successed )
-    {
+            const altered_html_name = md_name.replace( /.md$/g, ".html" );
+            switch ( mode )
+            {
+                case "local": return altered_html_name;
+                case "ajax":
+                    const matches = altered_html_name.match( /[^/]+(?=$)/g );
+                    return matches ? matches[0] : "";
+                default: return md_name;
+            }
+        };
+        const write_to_file = ( md_name = "", md_index = -1 ) =>
+        {
+            const path = `${dest_dir}/${get_html_file_name(md_name, mode)}`;
+            const data = parsed_htmls[md_index];
+            write_file({ path, data });
+        };
         dir_files.forEach( write_to_file );
     }
 }
