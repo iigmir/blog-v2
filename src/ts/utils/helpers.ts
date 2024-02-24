@@ -1,8 +1,52 @@
 import { ajax_url, read_source_directory } from "../utils/ajax";
 import MarkdownIt from "markdown-it";
+import MarkdownItDo from "@digitalocean/do-markdownit";
+
 const RenderMarkdown = (md_text = "") => 
 {
-    const MDParser = new MarkdownIt();
+    const get_enabled_plugins = (accepted_plugins: string[]) => {
+        const all_plugins = [
+            "highlight",
+            "user_mention",
+            "html_comment",
+            "image_caption",
+            "table_wrapper",
+            "callout",
+            "rsvp_button",
+            "terminal_button",
+            "columns",
+            "details",
+            "glob",
+            "dns",
+            "asciinema",
+            "codepen",
+            "glitch",
+            "caniuse",
+            "youtube",
+            "wistia",
+            "vimeo",
+            "twitter",
+            "instagram",
+            "slideshow",
+            "compare",
+            "underline",
+            "fence_label",
+            "fence_secondary_label",
+            "fence_environment",
+            "fence_prefix",
+            "fence_pre_attrs",
+            "fence_classes",
+            "heading_id",
+            "image_settings",
+            "prismjs",
+            "limit_tokens"
+        ];
+        return Object.fromEntries(
+            all_plugins.map( (plugin) => ([plugin, accepted_plugins.includes(plugin)]) )
+        );
+    };
+    const options = { ...get_enabled_plugins(["youtube", "codepen"]) };
+    const MDParser = new MarkdownIt().use(MarkdownItDo, options);
     try 
     {
         /**
