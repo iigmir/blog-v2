@@ -1,5 +1,4 @@
 import { readFile, readdir, writeFile } from "fs";
-import FileSystemModule from "./FileSystemModule";
 
 export const file_can_parse = (destination_directory: string, directory_files: string[], parsed_htmls: string[]) =>
 {
