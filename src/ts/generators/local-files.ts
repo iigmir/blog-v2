@@ -2,8 +2,7 @@
 import { BasicGenerator, generate_default_config } from "../types/generator";
 // Utils
 import { RenderMarkdown } from "../utils/helpers";
-import { write_files_to_destination, read_file } from "../utils/fs";
-import { fs_read_source_directory } from "../utils/handlers";
+import { write_files_to_destination, read_file, read_directory } from "../utils/fs";
 import read_template_file from "../utils/read-template-file";
 import error_handling from "../utils/error-handling";
 // Types
@@ -49,7 +48,7 @@ class LocalFileGenerator implements BasicGenerator
     {
         try
         {
-            const res = await fs_read_source_directory(this.config.source_directory);
+            const res = await read_directory(this.config.source_directory);
             if( Array.isArray(res) ) {
                 this.directory_files = res;
             }

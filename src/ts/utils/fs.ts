@@ -103,7 +103,9 @@ export const read_directory = ( path = "" ) =>
     {
         readdir( path, ( error, files ) =>
         {
-            if ( error ) reject( error );
+            if ( error ) {
+                reject( error );
+            }
             resolve( files );
         });
     });
