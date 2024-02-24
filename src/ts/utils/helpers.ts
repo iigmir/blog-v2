@@ -1,12 +1,19 @@
 import { ajax_url, read_source_directory } from "../utils/ajax";
 import MarkdownIt from "markdown-it";
-
 const RenderMarkdown = (md_text = "") => 
 {
     const MDParser = new MarkdownIt();
     try 
     {
-        return MDParser.render( md_text );
+        /**
+         *.replace(/&lt;the-tag\/?&gt;/g, "<the-tag/>");
+         */
+        const result = MDParser.render(md_text)
+            // HTML replacements
+            .replace(/&lt;(\/?small|iframe)&gt;/g, (match, p1) => {
+                return `<${p1}>`;
+            });
+        return result;
     }
     catch (error) 
     {
