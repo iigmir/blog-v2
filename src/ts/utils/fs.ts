@@ -57,7 +57,9 @@ export const read_file = ( file_path = "" ) =>
     return new Promise(( resolve, reject ) =>
         readFile( file_path, "utf8", ( fs_error, file ) => 
         {
-            if ( fs_error ) reject( fs_error );
+            if ( fs_error ) {
+                reject( fs_error );
+            }
             resolve( file );
         })
     );

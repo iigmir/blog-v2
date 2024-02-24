@@ -1,7 +1,7 @@
 // Generators
 import { BasicGenerator, generate_default_config } from "../types/generator";
 // Utils
-import FileSystemModule from "../utils/FileSystemModule.js";
+import { read_file } from "../utils/fs";
 import error_handling from "../utils/error-handling.js";
 import jsdom from "jsdom";
 // Types
@@ -16,12 +16,12 @@ class TemplateGenerator implements BasicGenerator
     {
         Promise.all([
             // Source index
-            FileSystemModule.read_file( `${this.config.source_directory}/index.html` ),
+            read_file( `${this.config.source_directory}/index.html` ),
             // Source template
-            FileSystemModule.read_file( `${this.config.source_directory}/templates.html` ),
+            read_file( `${this.config.source_directory}/templates.html` ),
         ]).then( ([source_index_response, source_template_response]) => {
-            this.source_index = source_index_response;
-            this.source_template = source_template_response;
+            this.source_index = String(source_index_response);
+            this.source_template = String(source_template_response);
         }).catch( err => error_handling( err ) );
     }
     set_template()

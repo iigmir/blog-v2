@@ -1,5 +1,5 @@
 import error_handling from "./error-handling";
-import FileSystemModule from "./FileSystemModule";
+import { read_file } from "./fs";
 
 // fs_handler
 export default async ( template_path: string ) =>
@@ -8,7 +8,7 @@ export default async ( template_path: string ) =>
     {
         try
         {
-            const res = await FileSystemModule.read_file( template_path );
+            const res = await read_file( template_path );
             return res;
         }
         catch ( err )

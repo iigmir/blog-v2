@@ -2,10 +2,9 @@
 import { BasicGenerator, generate_default_config } from "../types/generator";
 // Utils
 import { RenderMarkdown } from "../utils/helpers";
-import { write_files_to_destination } from "../utils/fs";
+import { write_files_to_destination, read_file } from "../utils/fs";
 import { fs_read_source_directory } from "../utils/handlers";
 import read_template_file from "../utils/read-template-file";
-import FileSystemModule from "../utils/FileSystemModule";
 import error_handling from "../utils/error-handling";
 // Types
 import type { ConfigInterface } from "../types/index";
@@ -25,9 +24,7 @@ class LocalFileGenerator implements BasicGenerator
                     return [];
                 }
                 const result = await Promise.all(
-                    directory_files.map(
-                        (filename: string) => FileSystemModule.read_file(`${ source_directory }/${ filename }`)
-                    )
+                    directory_files.map( (filename: string) => read_file(`${ source_directory }/${ filename }`) )
                 );
                 return result;
             } catch (error) {
