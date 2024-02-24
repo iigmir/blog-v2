@@ -1,11 +1,12 @@
 // Generators
 import { BasicGenerator, generate_default_config } from "../types/generator";
 // Utils
-import error_handling from "../utils/error-handling";
-import read_template_file from "../utils/read-template-file";
 import { RenderMarkdown } from "../utils/helpers";
 import { write_files_to_destination } from "../utils/fs";
-import { fs_read_source_directory, read_source_markdowns } from "../utils/handlers";
+import { fs_read_source_directory } from "../utils/handlers";
+import read_template_file from "../utils/read-template-file";
+import FileSystemModule from "../utils/FileSystemModule";
+import error_handling from "../utils/error-handling";
 // Types
 import type { ConfigInterface } from "../types/index";
 
@@ -20,7 +21,15 @@ class LocalFileGenerator implements BasicGenerator
     {
         async function get_source_markdowns(source_directory = "", directory_files = [""]) {
             try {
-                return await read_source_markdowns({ source_directory, directory_files });
+                if( directory_files.length < 1 ) {
+                    return [];
+                }
+                const result = await Promise.all(
+                    directory_files.map(
+                        (filename: string) => FileSystemModule.read_file(`${ source_directory }/${ filename }`)
+                    )
+                );
+                return result;
             } catch (error) {
                 console.error(error);
                 return [];
