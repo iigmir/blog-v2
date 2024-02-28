@@ -57,7 +57,7 @@ console.log(typeof(undefined));
 <ol start="6">
 <li>請問點選第一個 node 與第三個 node 會顯示什麼？</li>
 </ol>
-<pre><code class="language-js">&lt;pre&gt;for( var i = 0 ; i &lt;= 10 ; i++ )
+<pre><code class="language-js">for( var i = 0 ; i &lt;= 10 ; i++ )
 {
     node[i].addEventListener(&quot;click&quot;,function()
     {
@@ -91,13 +91,17 @@ console.log(typeof(undefined));
 1.5. MDN 的 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a> 與 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></li>
 <li>以後再寫寫我的看法與結論？</li>
 <li><code>Error: foo is not defined</code>：也許我看錯了。</li>
-<li><code>I have undefined</code>, <code>Now got 5000$</code>：我忘記了<a href="https://developer.mozilla.org/zh-TW/docs/Glossary/Hoisting">提昇</a>的概念：它會讓所有 function 放到最上面執行，但針對變數就不會。這個程式與以下程式碼一樣：&lt;br /&gt;&lt;pre&gt;var salary = &quot;1000<the-article />quot;;
+<li><code>I have undefined</code>, <code>Now got 5000$</code>：我忘記了<a href="https://developer.mozilla.org/zh-TW/docs/Glossary/Hoisting">提昇</a>的概念：它會讓所有 function 放到最上面執行，但針對變數就不會。這個程式與以下程式碼一樣：</li>
+</ol>
+<pre><code class="language-js">var salary = &quot;1000<the-article />quot;;
 function foo(){
-console.log(&quot;I have &quot; + salary);
-var salary = &quot;5000<the-article />quot;;
-console.log(&quot;Now got &quot; + salary);
+    console.log(&quot;I have &quot; + salary);
+    var salary = &quot;5000<the-article />quot;;
+    console.log(&quot;Now got &quot; + salary);
 };
-foo();&lt;/pre&gt;</li>
+foo();
+</code></pre>
+<ol start="5">
 <li><code>object</code>, <code>object</code>, <code>object</code>, <code>undefined</code>：陣列也是物件。</li>
 <li>還來不及想怎麼測……</li>
 <li>關於面試的 ORM：ORM 的意思是 Object-Relational Mapping，也就是用物件導向的想法/方法寫資料庫存取。其實 rails 裡面就有這個概念，稱作 Active Record。請參考 <a href="https://ihower.tw/rails/activerecord.html">iHower</a> 與 Ruby on Rails Guides ( <a href="http://guides.rubyonrails.org/active_record_basics.html">English</a> 與 <a href="https://rails.ruby.tw/active_record_basics.html">中文</a> 都有 )</li>

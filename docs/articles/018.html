@@ -33,22 +33,21 @@
 <ol>
 <li>先確定有沒有安裝 ImageMagick 這個軟體，不確定的話先安裝吧：例如 Ubuntu 就是 <code>sudo apt-get install imagemagick</code>。</li>
 <li>不免俗的當然要先初始化專案：<code>rails new pictures</code>。</li>
-<li>去 <code>Gemfile</code> 引入上面提到的兩個 Gem 並輸入 <code>bundle</code> 安裝之。亦即： &lt;pre&gt;
-gem 'carrierwave', '~&gt; 0.10.0'
-gem 'mini_magick', '~&gt; 4.3'&lt;/pre&gt;這會安裝到舊版。新版的以後再增筆。</li>
-<li>使用鷹架快速完成稱為 <code>test</code> 的架構：<code>rails g scaffold test name:string description:text image:string</code>，接著用 <code>rake db:migrate</code> 產生資料庫。</li>
-<li>新增稱為 <code>Image</code> 的上傳器（uploader）：<code>rails generate uploader Image</code></li>
-<li>去剛產生的 <code>uploader</code> 檔案改一些東西：
-<ol>
-<li>如果需要縮圖，你必須啟動 ImageMagick 程式並指定縮圖大小：前者需要去除 <code>include CarrierWave::MiniMagick</code> 註釋完成；後者則需要 <code>version :thumb do</code> 函式：該函式裡面有 <code>process :resize_to_fill =&gt; [50, 50]</code> 的宣告。其中 <code>[50, 50]</code> 陣列就可以指定縮圖大小。</li>
-<li><code>def extension_white_list</code> 能指定上傳格式。</li>
-<li>之類之類.....</li>
+<li>去 <code>Gemfile</code> 引入上面提到的兩個 Gem 並輸入 <code>bundle</code> 安裝之。亦即：</li>
 </ol>
-</li>
-<li>告訴 model 我們要用 image 上傳器吧：去 <code>app/models/test.rb</code> 寫下 <code>mount_uploader :image, ImageUploader</code>。</li>
-<li>最後去 view，也就是前端，把介面做出來。像是把 <code>text_area</code> 變成 <code>file_field</code>、以及 <code>image_tag</code> 包著 <code>@test.image</code> 之類的。</li>
-<li>就這樣！如果要限制大小，你可以到 model 設定。</li>
-</ol>
+<pre><code class="language-bundle">gem 'carrierwave', '~&gt; 0.10.0'
+gem 'mini_magick', '~&gt; 4.3'
+</code></pre>
+<p>這會安裝到舊版。新版的以後再增筆。
+4. 使用鷹架快速完成稱為 <code>test</code> 的架構：<code>rails g scaffold test name:string description:text image:string</code>，接著用 <code>rake db:migrate</code> 產生資料庫。
+5. 新增稱為 <code>Image</code> 的上傳器（uploader）：<code>rails generate uploader Image</code>
+6. 去剛產生的 <code>uploader</code> 檔案改一些東西：
+1. 如果需要縮圖，你必須啟動 ImageMagick 程式並指定縮圖大小：前者需要去除 <code>include CarrierWave::MiniMagick</code> 註釋完成；後者則需要 <code>version :thumb do</code> 函式：該函式裡面有 <code>process :resize_to_fill =&gt; [50, 50]</code> 的宣告。其中 <code>[50, 50]</code> 陣列就可以指定縮圖大小。
+2. <code>def extension_white_list</code> 能指定上傳格式。
+3. 之類之類.....
+7. 告訴 model 我們要用 image 上傳器吧：去 <code>app/models/test.rb</code> 寫下 <code>mount_uploader :image, ImageUploader</code>。
+8. 最後去 view，也就是前端，把介面做出來。像是把 <code>text_area</code> 變成 <code>file_field</code>、以及 <code>image_tag</code> 包著 <code>@test.image</code> 之類的。
+9. 就這樣！如果要限制大小，你可以到 model 設定。</p>
 <h2><a href="http://railsgirls.tw/thumbnails">Rails Girls</a> 還有其他的問答</h2>
 <p>在第四個步驟完成時，解釋用 HTML 指定圖片寬度與伺服器來縮圖的差別</p>
 <p>用 HTML 或 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/width">CSS</a> 指定圖片寬度的意思，是我們直接把原圖上傳到伺服器。發動請求時，瀏覽器也抓取原圖，再透過瀏覽器的 HTML 或 CSS 引擎來調整外觀；<br>

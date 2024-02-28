@@ -30,10 +30,9 @@
 <li>內含 &lt;abbr title=&quot;PHP Extension Community Library&quot;&gt;PECL&lt;/abbr&gt; 的 PHP</li>
 </ol>
 <p>你可以輸入以下指令，檢查套件是否有是否安裝：</p>
-<p>&lt;pre&gt;
-pecl help version # PECL 與 PHP 版本
+<pre><code class="language-bash">pecl help version # PECL 與 PHP 版本
 brew -v # Homebrew 版本
-&lt;/pre&gt;</p>
+</code></pre>
 <p><a href="https://icyapril.com/php/programming/2016/08/14/installing-pecl-on-osx.html">這裡有如何安裝內含 PECL 的 PHP 教學</a>...至於如何安裝 Homebrew，官網都有指引......而 PECL 是一種套件管理工具，任務大致上與 <a href="https://getcomposer.org/">Composer</a> 差不多，不過 PECL 管了一些更底層（用 C 語言寫的...）的套件，所以 Composer 裝不了。</p>
 <p>這次的主角是 <a href="https://pecl.php.net/package/igbinary">igbinary</a>。</p>
 <h2>安裝</h2>
@@ -49,7 +48,7 @@ brew -v # Homebrew 版本
 <p>這次就可以直接輸入 <code>sudo pecl install igbinary</code> 了。記得安裝完以後重啟伺服器軟體。</p>
 <h2>後記</h2>
 <blockquote>
-<p>「很多人 Mac 最後不是賣掉，就是灌 Windows。」 &lt;br /&gt;
+<p>「很多人 Mac 最後不是賣掉，就是灌 Windows。」<br>
 「喔，我倒不會。最差的情況是灌 Ubuntu 而已。」</p>
 </blockquote>
 <h2>參考資料</h2>

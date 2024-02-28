@@ -26,56 +26,97 @@
 <h2>面試</h2>
 <h3>CSS</h3>
 <ol>
-<li>如果要完成水平與垂直置中，怎麼做？&lt;br /&gt;<code>margin</code> 用 <code>x auto</code>、<code>flex</code> 也有水平與垂直置中的功能。文字還可以用 text-align 置中。
-1.1. 還有嗎？&lt;br /&gt;我沒有想到了。</li>
-<li>display 有哪些屬性？&lt;br /&gt;<code>none</code>, <code>inline</code>, <code>block</code>, <code>inline-block</code>, <code>flex</code>, <code>grid</code>
-2.1. 你通常用哪個屬性切板？&lt;br /&gt;<code>block</code>。有些更老的還有 <code>float</code>。</li>
-<li>SASS 有什麼優點？&lt;br /&gt;巢狀選擇器、變數、mixin。
-3.1. 那你怎麼用 SASS？ &lt;br /&gt; 純前端如 <code>node</code> 會選擇 <code>gulp-sass</code> 之類的、後端框架如 <code>rails</code> 同樣也有 <code>sass</code> 可選。</li>
+<li>如果要完成水平與垂直置中，怎麼做？<br>
+<code>margin</code> 用 <code>x auto</code>、<code>flex</code> 也有水平與垂直置中的功能。文字還可以用 text-align 置中。
+1.1. 還有嗎？<br>
+我沒有想到了。</li>
+<li>display 有哪些屬性？<br>
+<code>none</code>, <code>inline</code>, <code>block</code>, <code>inline-block</code>, <code>flex</code>, <code>grid</code>
+2.1. 你通常用哪個屬性切板？<br>
+<code>block</code>。有些更老的還有 <code>float</code>。</li>
+<li>SASS 有什麼優點？<br>
+巢狀選擇器、變數、mixin。
+3.1. 那你怎麼用 SASS？<br>
+純前端如 <code>node</code> 會選擇 <code>gulp-sass</code> 之類的、後端框架如 <code>rails</code> 同樣也有 <code>sass</code> 可選。</li>
 </ol>
 <h3>JS</h3>
 <p>（括弧內都是我的註解，沒和考官說明）</p>
 <ol>
-<li>你之前除了 jQuery 還用過什麼框架？&lt;br&gt;Vue 與 Angular1。react 稍微用過，但因為不喜歡他的想法（JSX 把 HTML 寫進 JavaScript 嚴重牴觸我的三觀）所以沒有深究。</li>
-<li>你知道 REST 嗎？&lt;br&gt;一種設計模式。傳統的 URL 是一個頁面加上問號、參數、值（例如 <code>example.com/foobar.php?foo=1?bar=2000</code> ）－－但 REST 把這些東西用 / 表示（ <code>example.com/foobar/1/2000</code> ）能令網站更好維護。</li>
-<li>你知道請求有哪些狀態嗎？除了 <code>GET</code> 以外。&lt;br&gt;<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>UPDATE</code>, <code>DELETE</code></li>
-<li>你用過哪些套件發動非同步請求？&lt;br&gt;除了 jQuery 以外，如果專案不大，我會用原生。我也曾經用過 axios 還有 request 套件。</li>
-<li>你知道 ES6 嗎？&lt;br&gt;我知道：<code>let</code>, <code>const</code>, arrow function（<code>=&gt;</code> 這玩意）之類的。我用過 <code>let</code> and arrow。
-5.1. 那你知道 <code>Promise</code> 嗎？&lt;br&gt;我知道，不過我還是沒用成功過。
-5.2. 那 Fetch 呢？&lt;br&gt;聽過，應該是類似 Promise 的東西？</li>
-<li>框架值是什麼？&lt;br&gt;不知道。</li>
-<li>你怎麼開發專案？&lt;br&gt;以我的作品集為例，我用的是 Vue。我用 gulp 找到需要的套件、看好手冊後，就開工，讓 gulp 幫我完成事情。
-7.1. 除了 gulp 還有其他的嗎？&lt;br&gt;噢......我知道有 webpack 的存在，但我還在研究。&lt;br&gt;（其實我有點排斥 webpack 把什麼都包在一起的概念......）</li>
+<li>你之前除了 jQuery 還用過什麼框架？<br>
+Vue 與 Angular1。react 稍微用過，但因為不喜歡他的想法（JSX 把 HTML 寫進 JavaScript 嚴重牴觸我的三觀）所以沒有深究。</li>
+<li>你知道 REST 嗎？<br>
+一種設計模式。傳統的 URL 是一個頁面加上問號、參數、值（例如 <code>example.com/foobar.php?foo=1?bar=2000</code> ）－－但 REST 把這些東西用 / 表示（ <code>example.com/foobar/1/2000</code> ）能令網站更好維護。</li>
+<li>你知道請求有哪些狀態嗎？除了 <code>GET</code> 以外。<br>
+<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>UPDATE</code>, <code>DELETE</code></li>
+<li>你用過哪些套件發動非同步請求？<br>
+除了 jQuery 以外，如果專案不大，我會用原生。我也曾經用過 axios 還有 request 套件。</li>
+<li>你知道 ES6 嗎？<br>
+我知道：<code>let</code>, <code>const</code>, arrow function（<code>=&gt;</code> 這玩意）之類的。我用過 <code>let</code> and arrow。
+5.1. 那你知道 <code>Promise</code> 嗎？<br>
+我知道，不過我還是沒用成功過。
+5.2. 那 Fetch 呢？<br>
+聽過，應該是類似 Promise 的東西？</li>
+<li>框架值是什麼？<br>
+不知道。</li>
+<li>你怎麼開發專案？<br>
+以我的作品集為例，我用的是 Vue。我用 gulp 找到需要的套件、看好手冊後，就開工，讓 gulp 幫我完成事情。
+7.1. 除了 gulp 還有其他的嗎？<br>
+噢......我知道有 webpack 的存在，但我還在研究。<br>
+（其實我有點排斥 webpack 把什麼都包在一起的概念......）</li>
 </ol>
 <h3>other</h3>
 <ol>
-<li>用過 Git 嗎？&lt;br&gt;我用過。
-1.1. 那你怎麼用的？指令列？圖形介面？&lt;br&gt;都有。小烏龜、vscode、指令都有用過。還有 Github 之類的……</li>
+<li>用過 Git 嗎？<br>
+我用過。
+1.1. 那你怎麼用的？指令列？圖形介面？<br>
+都有。小烏龜、vscode、指令都有用過。還有 Github 之類的……</li>
 </ol>
 <hr>
 <h2>面試反省</h2>
 <ol>
-<li>如果要完成水平與垂直置中，怎麼做？還有嗎？&lt;br /&gt;<a href="http://www.oxxostudio.tw/articles/201502/css-vertical-align-7methods.html">還有很多方法。</a>：<code>line-height</code>, <code>::before</code>, <code>::after</code>, <code>calc</code>......等等：<a href="http://www.flycan.com/article/css/css-div-position-center-1562.html">甚至你要用 <code>position:absolute</code> 也是答案</a>。</li>
-<li>display 有哪些屬性？&lt;br /&gt;<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/display">MDN 直接上</a>。我漏了 <code>table</code>, <code>flow</code>, <code>list-item</code>
-2.1. 你通常用哪個屬性切板？ &lt;br /&gt; 其實我該早點用 Flex 的……</li>
-<li>SASS 有什麼優點？&lt;br /&gt;<a href="https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor">身為 CSS preprocessor 的作者</a>，我還算滿意自己的答案。&lt;br /&gt; SASS 還是有些特點，不過我覺得易於維護的特點已經講到了。</li>
+<li>如果要完成水平與垂直置中，怎麼做？還有嗎？<br>
+<a href="http://www.oxxostudio.tw/articles/201502/css-vertical-align-7methods.html">還有很多方法。</a>：<code>line-height</code>, <code>::before</code>, <code>::after</code>, <code>calc</code>......等等：<a href="http://www.flycan.com/article/css/css-div-position-center-1562.html">甚至你要用 <code>position:absolute</code> 也是答案</a>。</li>
+<li>display 有哪些屬性？<br>
+<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/display">MDN 直接上</a>。我漏了 <code>table</code>, <code>flow</code>, <code>list-item</code>
+2.1. 你通常用哪個屬性切板？<br>
+其實我該早點用 Flex 的……</li>
+<li>SASS 有什麼優點？<br>
+<a href="https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor">身為 CSS preprocessor 的作者</a>，我還算滿意自己的答案。<br>
+SASS 還是有些特點，不過我覺得易於維護的特點已經講到了。</li>
 </ol>
 <h3>JS 反省</h3>
 <ol>
-<li>你之前除了 jQuery 還用過什麼框架？&lt;br /&gt;我知道很多公司很愛 react，但不喜歡就是不喜歡。</li>
-<li>你知道 REST 嗎？&lt;br /&gt;<a href="https://zh.wikipedia.org/zh-tw/%E5%85%B7%E8%B1%A1%E7%8B%80%E6%85%8B%E5%82%B3%E8%BC%B8">差得遠了</a>：雖然依舊是一種設計模式，但 REST 的意思是給出一段網址，稱為資源（resource）；配合 HTTP 的請求狀態，就可以完成特定的請求：例如說給出 <code>example.com/foobar/1/2000</code> 的網址──也就是資源──再配合 HTTP 的 <code>PATCH</code> 就可以叫用戶端發起更新 <code>foobar/1/2000</code> 資源的請求。<a href="https://ihower.tw/blog/archives/1542">Ref: iHower</a></li>
-<li>你知道請求有哪些狀態嗎？除了 GET 以外。&lt;br&gt;沒有 <code>UPDATE</code>、少了 <code>PATCH</code> 與 <code>CONNECT</code>。</li>
-<li>你用過哪些套件發動非同步請求？&lt;br&gt;唔……</li>
-<li>你知道 ES6 嗎？&lt;br&gt;呃……
-5.1. 那你知道 Promise 嗎？&lt;br&gt;啊…我還是不懂概念……
-5.2. 那 Ftech 呢？&lt;br /&gt;&lt;q cite=&quot;@calpaliu&quot;&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API&quot;&gt;Fetch&lt;/a&gt; 不是 Promise 的那一類。。。&lt;/q&gt;</li>
-<li>框架值是什麼？&lt;br /&gt;好像沒有人知道。是我聽錯嗎？</li>
-<li>你怎麼開發專案？&lt;br /&gt;我當然有自己的 Freestyle...
-7.1. 除了 gulp 還有其他的嗎？&lt;br /&gt;&lt;q cite=&quot;@calpaliu&quot;&gt;gulp, grunt, node-script, webpack, babel, eslint 都可以算是前端常用工具&lt;/q&gt;</li>
+<li>你之前除了 jQuery 還用過什麼框架？<br>
+我知道很多公司很愛 react，但不喜歡就是不喜歡。</li>
+<li>你知道 REST 嗎？<br>
+<a href="https://zh.wikipedia.org/zh-tw/%E5%85%B7%E8%B1%A1%E7%8B%80%E6%85%8B%E5%82%B3%E8%BC%B8">差得遠了</a>：雖然依舊是一種設計模式，但 REST 的意思是給出一段網址，稱為資源（resource）；配合 HTTP 的請求狀態，就可以完成特定的請求：例如說給出 <code>example.com/foobar/1/2000</code> 的網址──也就是資源──再配合 HTTP 的 <code>PATCH</code> 就可以叫用戶端發起更新 <code>foobar/1/2000</code> 資源的請求。<a href="https://ihower.tw/blog/archives/1542">Ref: iHower</a></li>
+<li>你知道請求有哪些狀態嗎？除了 GET 以外。<br>
+沒有 <code>UPDATE</code>、少了 <code>PATCH</code> 與 <code>CONNECT</code>。</li>
+<li>你用過哪些套件發動非同步請求？<br>
+唔……</li>
+<li>你知道 ES6 嗎？<br>
+呃……
+5.1. 那你知道 Promise 嗎？<br>
+啊…我還是不懂概念……
+5.2. 那 Ftech 呢？</li>
 </ol>
+<blockquote>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch</a> 不是 Promise 的那一類。。。</p>
+</blockquote>
+<ol start="6">
+<li>框架值是什麼？<br>
+好像沒有人知道。是我聽錯嗎？</li>
+<li>你怎麼開發專案？<br>
+我當然有自己的 Freestyle...
+7.1. 除了 gulp 還有其他的嗎？</li>
+</ol>
+<blockquote>
+<p>gulp, grunt, node-script, webpack, babel, eslint 都可以算是前端常用工具</p>
+</blockquote>
 <h3>other 反省</h3>
 <ol>
-<li>用過 Git 嗎？那你怎麼用的？指令列？圖形介面？&lt;br /&gt;好像也沒什麼好說的？</li>
+<li>用過 Git 嗎？那你怎麼用的？指令列？圖形介面？<br>
+好像也沒什麼好說的？</li>
 </ol>
 <hr>
 <p>20180516 增筆：</p>
