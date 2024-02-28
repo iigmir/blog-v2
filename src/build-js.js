@@ -19,9 +19,6 @@ async function minifyFiles(filePaths = [""], targetDirectory = "src", outputDire
         const fileContent = (await Terser.minify(fs.readFileSync(targetPath, "utf8"))).code;
         fs.writeFileSync( newPath, fileContent );
     });
-    // await Promise.all(filePaths.map(async (filePath) => {
-    //     fs.writeFileSync( filePath, (await Terser.minify(fs.readFileSync(filePath, "utf8"))).code );
-    // }));
 }
 
 const targetDirectory = "src/js";
