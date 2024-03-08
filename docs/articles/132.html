@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>GCP-CLI notebook</h1>
+<p>Firstly, of course, is to create a Google account and establish a cloud service.</p>
+<h2>On Windows</h2>
+<p>Assume than you install Ubuntu.</p>
+<h3>By WSL</h3>
+<ol>
+<li><a href="https://learn.microsoft.com/en-us/windows/wsl/install">Install linux subsystem</a>.</li>
+<li>Install Ubuntu disto for WSL.</li>
+<li>Go Install Google Cloud CLI</li>
+</ol>
+<h3>By VirtualBox</h3>
+<p>If you don't feel like installing WSL, maybe VirtualBox is your friend.</p>
+<ol>
+<li>Download Ubuntu ISO.</li>
+<li>Install Ubuntu on VirtualBox by ISO file.</li>
+<li>Go Install Google Cloud CLI</li>
+</ol>
+<h3>Install Google Cloud CLI</h3>
+<ol>
+<li>Wherever you install your Ubuntu, you should now in a Ubuntu shell. If so, open the <a href="https://cloud.google.com/sdk/docs/install-sdk">installation guide</a> and select <code>Debian/Ubuntu</code> on the manual.</li>
+<li>After installing, login by Google Cloud CLI with your account. When login success and entered the cloud shell, exit.</li>
+<li>Now type <code>gcloud cloud-shell ssh --ssh-flag &quot;-L 8080:localhost:80&quot; --ssh-flag &quot;-L 33306:localhost:3306&quot; --ssh-flag &quot;-L 2222:localhost:22&quot;</code></li>
+</ol>
+<h3>Try Git and composer</h3>
+<blockquote>
+<p>There are tow ways to upload/download files to Google Cloud Shell: Git or FTP. The former need to buy some books...</p>
+</blockquote>
+<p>Actually, since the cloud shell ssh has installed <code>git</code> and <code>composer</code>, so...</p>
+<h2>How to Git</h2>
+<h3>Test Git</h3>
+<ol>
+<li><code>git clone https://github.com/Azure-Samples/html-docs-hello-world.git</code></li>
+<li><code>mv html-docs-hello-world html-test</code></li>
+<li>Access <code>http://127.0.0.1:8080/html-test/</code></li>
+</ol>
+<p>You should see the &quot;Azure App Service&quot; page even though it's not.</p>
+<h3>Test composer</h3>
+<ol>
+<li><code>composer create-project laravel/laravel laravel-app --prefer-dist</code></li>
+<li><code>cd laravel-app</code></li>
+<li><code>sudo chmod -R ugo+rw storage</code></li>
+<li>Access <code>http://127.0.0.1:8080/laravel-app/</code></li>
+</ol>
+<p>You should see a Laravel page.</p>
+<hr>
+<p>Oh, by the way, you can upload/download indirectly by pushing your app to Github, then pull if from your Google Cloud Shell.</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://cloud.google.com/sdk/docs/install-sdk">Quickstart: Install the Google Cloud CLI | Google Cloud CLI Documentation</a></li>
+<li><a href="https://www.chainhao.com.tw/google-cloud-shell">研蘋果 - Google Cloud Shell</a></li>
+<li><a href="https://www.chainhao.com.tw/gcloud_xampp">Google Cloud Shell 與 XAMPP 的完美結合 – 研蘋果</a></li>
+<li><a href="https://laravel.com/docs/5.1/quickstart">Basic Task List - Laravel 5.1 - The PHP Framework For Web Artisans</a></li>
+<li><a href="https://stackoverflow.com/a/45673457">php - How to fix Error: laravel.log could not be opened? - Stack Overflow</a></li>
+<li><a href="https://laracasts.com/discuss/channels/laravel/laravel-the-stream-or-file-storagelogslaravellog-could-not-be-opened-in-append-mode-failed-to-open-stream-permission-denied">laravel - The stream or file &quot;/storage/logs/laravel.log&quot; could not be opened in append mode: failed to open stream: Permission denied</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>
