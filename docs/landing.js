@@ -32,7 +32,6 @@ class ArticlePreviewItem extends HTMLElement {
         const tags_api = GlobalTags.tags;
         const dom = template.querySelector("*[data-app='tags']");
         dom.innerHTML = "";
-        console.log(dom);
         tags.forEach( (tag) => {
             const item = tags_api.find( (its) => its.id === tag ) ?? { "id": 0, "tag_name": "unknown" };
             const span = document.createElement("span");
