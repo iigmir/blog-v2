@@ -20,30 +20,7 @@
         </nav>
         <article class="row">
             <h2>最新文章</h2>
-            <article-preview-item
-                aid="0"
-                title="Hello"
-                tags="[0]"
-                tags-api="[{'id':0,'tag_name':'unknown'}]"
-                language="en"
-                created="1970-01-01T00:00:00Z"
-            ></article-preview-item>
-            <article-preview-item
-                aid="0"
-                title="Hello"
-                tags="[0]"
-                tags-api="[{'id':0,'tag_name':'unknown'}]"
-                language="en"
-                created="1970-01-01T00:00:00Z"
-            ></article-preview-item>
-            <article-preview-item
-                aid="0"
-                title="Hello"
-                tags="[0]"
-                tags-api="[{'id':0,'tag_name':'unknown'}]"
-                language="en"
-                created="1970-01-01T00:00:00Z"
-            ></article-preview-item>
+            <div id="loading-appapp"></div>
         </article>
         <template id="article-preview-item">
             <style>
@@ -80,14 +57,14 @@
                 }
             }
             </style>
-            <article class="article">
+            <section class="article">
                 <a href="#" class="link" data-app="link">
                     <h3 class="title" data-app="title">{RENDERED-TITLE}</h3>
                 </a>
                 Created: <time datetime="{DATE}" data-app="date">{RENDERED-DATE}</time>
                 <!-- Renders: <span class="item" data-app="tag-id" data-i-btn-id={TAG-ID}>{TAG-TITLE}</span> -->
                 <p class="tags" data-app="tags"></p>
-            </article>
+            </section>
         </template>
         <script type="module" src="landing.js"></script>
     </main>
