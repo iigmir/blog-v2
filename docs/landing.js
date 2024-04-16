@@ -34,9 +34,8 @@ class ArticlePreviewItem extends HTMLElement {
         dom.innerHTML = "";
         const tags_dom = tags.map( (tag) => {
             const item = tags_api.find( (its) => its.id === tag ) ?? { "id": 0, "tag_name": "unknown" };
-            return `<span class="item" data-app="tag-id" data-i-btn-id="${String(item.id)}">${tag.tag_name}</span>`;
-        });
-        tags_dom.forEach( (tag) => {
+            return `<span class="item" data-app="tag-id" data-i-btn-id="${String(item.id)}">${item.tag_name}</span>`;
+        }).forEach( (tag) => {
             dom.innerHTML += tag;
         });
     }
