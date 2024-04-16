@@ -19,8 +19,77 @@
             </ul>
         </nav>
         <article class="row">
-            <p>首頁暫時沒有設計。</p>
+            <h2>最新文章</h2>
+            <article-preview-item
+                aid="0"
+                title="Hello"
+                tags="[0]"
+                tags-api="[{'id':0,'tag_name':'unknown'}]"
+                language="en"
+                created="1970-01-01T00:00:00Z"
+            ></article-preview-item>
+            <article-preview-item
+                aid="0"
+                title="Hello"
+                tags="[0]"
+                tags-api="[{'id':0,'tag_name':'unknown'}]"
+                language="en"
+                created="1970-01-01T00:00:00Z"
+            ></article-preview-item>
+            <article-preview-item
+                aid="0"
+                title="Hello"
+                tags="[0]"
+                tags-api="[{'id':0,'tag_name':'unknown'}]"
+                language="en"
+                created="1970-01-01T00:00:00Z"
+            ></article-preview-item>
         </article>
+        <template id="article-preview-item">
+            <style>
+            .article {
+                margin: 1rem auto;
+                padding: 1rem;
+                border: 5px solid #424a50;
+                border-radius: 1rem;
+            }
+            .article a.link {
+                display: block;
+                color: var(--text-colour);
+                text-decoration: underline dotted;
+            }
+            .article a.link:hover {
+                color: var(--article-link-colour);
+            }
+            .article a.link > * {
+                margin: 0.5rem;
+            }
+            .tags {
+                .item {
+                    display: inline-block;
+                    padding: 0.2em 0.6em;
+                    margin-right: 0.4rem;
+                    text-align: center;
+                    vertical-align: baseline;
+                    border: 1px solid #CDEEDC;
+                    border-radius: 50rem;
+                }
+                .item:hover {
+                    color: var(--hover-link-colour);
+                    background-color: #383b40;
+                }
+            }
+            </style>
+            <article class="article">
+                <a href="#" class="link" data-app="link">
+                    <h3 class="title" data-app="title">{RENDERED-TITLE}</h3>
+                </a>
+                Created: <time datetime="{DATE}" data-app="date">{RENDERED-DATE}</time>
+                <!-- Renders: <span class="item" data-app="tag-id" data-i-btn-id={TAG-ID}>{TAG-TITLE}</span> -->
+                <p class="tags" data-app="tags"></p>
+            </article>
+        </template>
+        <script type="module" src="landing.js"></script>
     </main>
 </body>
 </html>
