@@ -13,6 +13,9 @@ class ArticlePreviewItem extends HTMLElement {
         date.textContent = (new Date(this.getAttribute("created"))).toLocaleString();
     }
     set_tags(template) {
+        if (!this.hasAttribute("tags-api")) {
+            return;
+        }
         function get_tags(input = "[]") {
             try {
                 return JSON.parse(input);
