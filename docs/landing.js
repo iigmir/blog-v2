@@ -1,3 +1,8 @@
+const GlobalTags = {
+    src: [{ "id": 0, "tag_name": "unknown" }],
+    get tags() { return this.src; },
+    set tags(input = []) { this.src = input; },
+};
 // Components
 class ArticlePreviewItem extends HTMLElement {
     set_link(template) {
@@ -6,6 +11,9 @@ class ArticlePreviewItem extends HTMLElement {
         const title = template.querySelector("*[data-app='title']");
         link.href = `./articles/${aid.padStart(3, "0")}.html`;
         title.textContent = this.getAttribute("title");
+        if( link.href === "#" ) {
+            throw new Error("COmponent corupped");
+        }
     }
     set_date(template) {
         const date = template.querySelector("*[data-app='date']");
@@ -13,9 +21,6 @@ class ArticlePreviewItem extends HTMLElement {
         date.textContent = (new Date(this.getAttribute("created"))).toLocaleString();
     }
     set_tags(template) {
-        if (!this.hasAttribute("tags-api")) {
-            return;
-        }
         function get_tags(input = "[]") {
             try {
                 return JSON.parse(input);
@@ -23,16 +28,11 @@ class ArticlePreviewItem extends HTMLElement {
                 return [];
             }
         }
-        function get_tags_api(input = "[]") {
-            try {
-                return JSON.parse(input);
-            } catch (error) {
-                return [{ "id": 0, "tag_name": "unknown" }];
-            }
-        }
         const tags = get_tags(this.getAttribute("tags"));
-        const tags_api = get_tags_api(this.getAttribute("tags-api"));
+        const tags_api = GlobalTags.tags;
         const dom = template.querySelector("*[data-app='tags']");
+        dom.innerHTML = "";
+        console.log(dom);
         tags.forEach( (tag) => {
             const item = tags_api.find( (its) => its.id === tag ) ?? { "id": 0, "tag_name": "unknown" };
             const span = document.createElement("span");
@@ -49,25 +49,17 @@ class ArticlePreviewItem extends HTMLElement {
     constructor() {
         super();
         const template = document.getElementById("article-preview-item").content;
-        // this.observedAttributes = [
-        //     "tags",
-        //     "tags-api",
-        // ];
 
-        // Append DOMs
+        // Render attributes
         this.set_link(template);
         this.set_date(template);
         this.set_tags(template);
         this.set_lang(template);
 
-        // Append shadow root
+        // Other
         const shadowRoot = this.attachShadow({ mode: "open" });
         shadowRoot.appendChild(template.cloneNode(true));
     }
-    // attributeChangedCallback(name, oldValue, newValue) {
-    //     console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`);
-    //     // You can perform further actions here based on the attribute change
-    // }
 };
 customElements.define("article-preview-item", ArticlePreviewItem);
 
@@ -84,29 +76,21 @@ const get_article_apis = () => {
 
 // Rendering
 const defa = [{ "id": 0, "title": "", "category_id": [0], "language": "en", "created_at": "1970-01-01T00:00:00Z", "updated_at": "1970-01-01T00:00:00Z" }];
-const deft = [{ "id": 0, "tag_name": "unknown" }];
 /**
- * <article-preview-item
-    aid="0"
-    title="Hello"
-    tags="[0]"
-    tags-api="[{'id':0,'tag_name':'unknown'}]"
-    language="en"
-    created="1970-01-01T00:00:00Z"
-></article-preview-item>
+ * 
  * @param {*} latest_articles 
  * @param {*} tags 
  */
-const render_articles = (latest_articles = defa, tags = deft) => {
+const render_articles = (latest_articles = defa) => {
     latest_articles.forEach( (its) => {
-        const dom = document.createElement("article-preview-item");
-        dom.setAttribute("aid", its.id);
-        dom.setAttribute("title", its.title);
-        dom.setAttribute("tags", JSON.stringify(its.category_id));
-        dom.setAttribute("tags-api", JSON.stringify(tags));
-        dom.setAttribute("language", its.language);
-        dom.setAttribute("created", its.created_at);
-        document.querySelector("#loading-appapp").appendChild( dom );
+        const component = `<article-preview-item
+            aid="${its.id}"
+            title="${its.title}"
+            tags="${JSON.stringify(its.category_id)}"
+            language="${its.language}"
+            created="${its.created_at}"
+        ></article-preview-item>`;
+        document.querySelector("#loading-appapp").innerHTML += component;
     });
 };
 
@@ -114,8 +98,9 @@ const render_articles = (latest_articles = defa, tags = deft) => {
 const main = () => {
     get_article_apis().then( ([articles, tags]) => {
         const article_amount = -6;
-        const latest_articles = articles.slice( 1 ).slice( article_amount ).reverse();
-        render_articles(latest_articles, tags);
+        const latest_articles = articles.slice( 1 ).slice(article_amount).reverse();
+        GlobalTags.tags = tags;
+        render_articles(latest_articles);
     }).catch( (e) => {
         alert(e);
     });
