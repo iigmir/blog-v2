@@ -1,9 +1,11 @@
+// Tag
 const GlobalTags = {
     src: [{ "id": 0, "tag_name": "unknown" }],
     get tags() { return this.src; },
     set tags(input = []) { this.src = input; },
 };
-// Components
+
+// Component
 class ArticlePreviewItem extends HTMLElement {
     set_link(template) {
         const aid = String( this.getAttribute("aid") );
@@ -78,14 +80,13 @@ const defa = [{ "id": 0, "title": "", "category_id": [0], "language": "en", "cre
  * @param {*} tags 
  */
 const render_articles = (latest_articles = defa) => {
-    latest_articles.forEach( (its) => {
-        const component = `<article-preview-item
-            aid="${its.id}"
-            title="${its.title}"
-            tags="${JSON.stringify(its.category_id)}"
-            language="${its.language}"
-            created="${its.created_at}"
-        ></article-preview-item>`;
+    latest_articles.map( (its) => `<article-preview-item
+        aid="${its.id}"
+        title="${its.title}"
+        tags="${JSON.stringify(its.category_id)}"
+        language="${its.language}"
+        created="${its.created_at}"
+    ></article-preview-item>` ).forEach( (component) => {
         document.querySelector("#loading-appapp").innerHTML += component;
     });
 };
