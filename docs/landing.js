@@ -12,7 +12,7 @@ class ArticlePreviewItem extends HTMLElement {
         link.href = `./articles/${aid.padStart(3, "0")}.html`;
         title.textContent = this.getAttribute("title");
         if( link.href === "#" ) {
-            throw new Error("COmponent corupped");
+            throw new Error("Component corrupted");
         }
     }
     set_date(template) {
