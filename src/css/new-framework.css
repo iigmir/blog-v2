@@ -1,6 +1,10 @@
+/* https://www.joshwcomeau.com/css/full-bleed/ */
 .container {
-    max-width: 1200px;
-    margin: 1rem auto;
+    display: grid;
+    grid-template-columns: 1fr min(1200px, 100%) 1fr;
+}
+.container > * {
+    grid-column: 2;
 }
 
 .navigator {
@@ -17,9 +21,13 @@ code {
     padding: 3px;
 }
 
-p, article p { line-height: 24px; }
+p, article p {
+    line-height: 24px;
+}
 
-.click-icon { cursor: pointer; }
+.click-icon {
+    cursor: pointer;
+}
 
 .badges {
     list-style: none;
@@ -35,8 +43,7 @@ p, article p { line-height: 24px; }
 /* Modal module */
 
 /* Modal: Basic layout */
-.nf-modal
-{
+.nf-modal {
     display: none;
     position: absolute;
     left: 0;
@@ -47,28 +54,23 @@ p, article p { line-height: 24px; }
 }
 
 /* Modal: text and block */
-.nf-modal
-{
+.nf-modal {
     overflow-y: scroll;
 }
-.nf-modal.show
-{
+.nf-modal.show {
     display: block;
 }
 
 /* Modal: Colour */
-.nf-modal
-{
+.nf-modal {
     background-color: rgba(250, 250, 250, 0.4);
-    .centre.container
-    {
+    .centre.container {
         --container-bg-colour: var(--bg-colour);
     }
 }
 
 /* Modal: Close button */
-.nf-modal .close
-{
+.nf-modal .close {
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
@@ -80,8 +82,7 @@ p, article p { line-height: 24px; }
         #fa00af 0 0.1em 0.1rem,
         #610043 0 0.1em 0.05rem
     ;
-    &:active
-    {
+    &:active {
         background-color: #9F002d;
         box-shadow: inset rgba(255, 255, 255, 0.6) 0 0.3rem 0.3rem, inset rgba(0, 0, 0, 0.15) 0 -0.1rem 0.3rem;
     }
