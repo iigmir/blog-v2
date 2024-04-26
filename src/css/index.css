@@ -79,6 +79,7 @@ body
     color: var(--text-colour);
 }
 
+.navigator .list .item a,
 .articles.container a
 {
     color: var(--article-link-colour);
