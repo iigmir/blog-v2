@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>AWS: 小全端 part 1</h1>
+<blockquote>
+<p>I want an API only service on my site that returns only JSON interface. The cost itself should be as low as possible. What is my best bet on choosing web services?</p>
+<p>For a cost-effective solution, you might consider using serverless platforms like AWS Lambda or Google Cloud Functions. These services allow you to pay only for the compute time you use, which can be very cost-efficient for low-traffic APIs. You can also leverage API Gateway for managing your API endpoints. This setup can provide scalability and flexibility while keeping costs low.</p>
+</blockquote>
+<hr>
+<p>一般來說，前後端分離的網站，通常都會分前後端：前端的 HTML, CSS, JavaScript 會與使用者或後端 API 互動；有 CRUD 的後端伺服器語言，則負責與前端程式、後端資料庫、或其他後端 API 互動。</p>
+<p>我們可以把兩者的銜接這樣畫：</p>
+<pre><code>使用者 &lt;=====&gt; 前端程式 &lt;=====&gt; REST API &lt;=====&gt; 後端程式 &lt;=====&gt; 資料庫
+</code></pre>
+<p>前端程式不用多說，放上去就是了。在 AWS 的話有 Amplify, S3 等。後端則很多了。這裡我想講 AWS Lambda──本來我想講看起來有點像 Heroku 的 <a href="https://aws.amazon.com/lightsail">Amazon Lightsail</a> 這玩意，無奈網路完全不行，只好放棄。</p>
+<p>但 AWS 的服務還有很多。其中印入我眼簾的，就是只用 AWS 服務就完成網站、完全不需要維護後端伺服器這種作法。那就叫無伺服器運算 (<a href="https://en.wikipedia.org/wiki/Serverless_computing">Serverless computing</a>)。</p>
+<p>在 AWS 會怎麼實做「無伺服器」呢？這就不得不談 <a href="https://aws.amazon.com/lambda">AWS Lambda</a> 了──簡單來說，就是在 AWS 呼叫已經寫好的程式。只要和其他程式組好，那就可以叫 API、存取資料庫、授權、搭配其他服務……</p>
+<p>感覺就和 <a href="https://www.greasespot.net">Greasemonkey</a> 一樣好用耶！</p>
+<p><img src="https://d1.awsstatic.com/product-marketing/Lambda/Diagrams/product-page-diagram_Lambda-WebApplications%202.c7f8cf38e12cb1daae9965ca048e10d676094dc1.png" alt="AWS Lambda 如何與其他服務配合，組成完整的網站"></p>
+<p>把前面畫的圖放上去就會變成：</p>
+<pre><code>使用者 &lt;=====&gt; Amazon S3 &lt;=====&gt; Amazon API Gateway &lt;=====&gt; AWS Lambda &lt;=====&gt; Amazon DynamoDB
+</code></pre>
+<p>接著我就看到相當有趣的玩意──就是<a href="https://aws.amazon.com/getting-started/hands-on/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito">建置無伺服器 Web 應用程式</a> (<a href="https://aws.amazon.com/tw/getting-started/hands-on/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito">中文</a>)。</p>
+<p><img src="https://d1.awsstatic.com/diagrams/Serverless_Architecture.d930970c77b382db6e0395198aacccd8a27fefb7.png" alt="建置無伺服器 Web 應用程式的架構附圖"></p>
+<p>一樣，弄成文字就是：</p>
+<pre><code>使用者 &lt;=====&gt; AWS Amplify &lt;=====&gt; Amazon API Gateway &lt;=====&gt; AWS Lambda &amp; Amazon Cognito &lt;=====&gt; Amazon DynamoDB
+</code></pre>
+<hr>
+<p>我就想，那我要不要就去接第三方 API 然後代理回傳啊？一般而言我會想到 <a href="https://xkcd.com">xkcd</a> 的 API 然後畫成文字圖……</p>
+<pre><code>使用者 &lt;=====&gt; AWS Amplify &lt;=====&gt; Amazon API Gateway &lt;=====&gt; AWS Lambda &lt;=====&gt; xkcd API
+</code></pre>
+<p>然後用 <code>/xkcd/614</code> 接 <code>https://xkcd.com/614/info.0.json</code> 會傳給前端。很簡單，但可以好好熟悉 AWS Lambda 怎麼跑的。</p>
+<p>殊不知這是害我從官方文件預估的一小時變成兩小時以上的都還在 Debug 的致命決定……下一篇再說吧。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://godleon.github.io/blog/Serverless/AWS-Serverless_API-Gateway">AWS Serverless 學習筆記 - API Gateway | 小信豬的原始部落</a></li>
+<li><a href="https://www.ecloudture.com/the-difference-between-traditional-server-and-serverless">傳統伺服器 V.S. 無伺服器！如何找出適合自己的架構？ – eCloudture</a></li>
+<li><a href="https://aws.amazon.com/cn/blogs/china/iaas-faas-serverless">从IaaS到FaaS—— Serverless架构的前世今生 | 亚马逊AWS官方博客</a></li>
+<li><a href="https://aws.amazon.com/lambda">Serverless Function, FaaS Serverless  - AWS Lambda - AWS</a></li>
+<li><a href="https://aws.amazon.com/getting-started/hands-on/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito">Build a Serverless Web Application with AWS Lambda, Amazon API Gateway, AWS Amplify, Amazon DynamoDB, and Amazon Cognito</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>

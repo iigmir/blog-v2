@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>AWS: 小全端 part 2</h1>
+<p>有時候覺得事情應該很簡單<br>
+卻發現實際上很困難<br>
+但最後發現問題與解法相當簡單<br>
+自己卻完全想不到時<br>
+這大概就是最想放棄的時候</p>
+<h2>前情提要</h2>
+<p>我想透過給定 ID 去抓 <a href="https://xkcd.com">xkcd</a> 的 API 然後畫成文字圖。也就是用 <code>/xkcd/614</code> 接 <code>https://xkcd.com/614/info.0.json</code> 接著傳給前端。</p>
+<p>圖是這樣畫的：</p>
+<pre><code>使用者 &lt;=====&gt; AWS Amplify &lt;=====&gt; Amazon API Gateway &lt;=====&gt; AWS Lambda &lt;=====&gt; xkcd API
+</code></pre>
+<h2>Lambda 牛刀小試：奇數與偶數</h2>
+<p>既然 AWS Lambda 就是程式的話，那先寫個<a href="https://www.reddit.com/r/ProgrammerHumor/comments/i1fkb1">判斷奇數與偶數的程式</a> (<a href="https://news.ycombinator.com/item?id=29241943">HN</a>)也不為過吧。</p>
+<p>Okay, let's go.</p>
+<pre><code class="language-js">export const handler = async (event) =&gt; {
+  const check_even_main = (input = 0, target = true) =&gt; {
+    if( isNaN(input) ) {
+      return false;
+    }
+    const check_even_func =  (input = 0) =&gt; input % 2 === 0;
+    return check_even_func(input) === target;
+  };
+  const input = parseInt(event.input, 10);
+  const response = {
+    input,
+    result: {
+        is_even: check_even_main(input, true),
+        is_odd: check_even_main(input, false),
+    }
+  };
+  return response;
+};
+</code></pre>
+<p>完成。然後程式這樣傳值：</p>
+<pre><code class="language-js">is_odd_or_even({ input: 0 }); // returns: { &quot;input&quot;: 0, &quot;result&quot;: { &quot;is_even&quot;: true, &quot;is_odd&quot;: false } }
+</code></pre>
+<h2>Lambda 正事： xkcd API</h2>
+<p>還不錯。那就開始做正事吧。</p>
+<pre><code class="language-js">/* global fetch */
+const get_api = (id = &quot;&quot;) =&gt; {
+    if(id ==&quot;&quot;) {
+        return &quot;https://xkcd.com/info.0.json&quot;;
+    }
+    return &quot;https://xkcd.com/&quot; + id + &quot;/info.0.json&quot;;
+};
+
+const ajax = async(id = &quot;&quot;) =&gt; {
+    const default_json = {
+        &quot;month&quot;: &quot;1&quot;,
+        &quot;num&quot;: 0,
+        &quot;link&quot;: &quot;&quot;,
+        &quot;year&quot;: &quot;1970&quot;,
+        &quot;news&quot;: &quot;&quot;,
+        &quot;safe_title&quot;: &quot;&quot;,
+        &quot;transcript&quot;: &quot;&quot;,
+        &quot;alt&quot;: &quot;&quot;,
+        &quot;img&quot;: &quot;&quot;,
+        &quot;title&quot;: &quot;&quot;,
+        &quot;day&quot;: &quot;1&quot;
+    };
+    try {
+        const res = await fetch( get_api(id) );
+        if( res.status == 404 ) {
+            return {
+                ...default_json,
+                message: &quot;No such comic&quot;,
+            };
+        }
+        return res.json();
+    } catch (e) {
+        console.error(e);
+        return {
+            ...default_json,
+            message: &quot;Error occurs&quot;,
+            e,
+        };
+    }
+};
+
+export const handler = async (event) =&gt; {
+  const id = event.id;
+  const response = await ajax(id);
+  return response;
+};
+</code></pre>
+<pre><code class="language-js">fetch_xkcd({ id: &quot;614&quot; }); // { &quot;month&quot;: &quot;7&quot;, &quot;num&quot;: 614, ... }
+</code></pre>
+<p>很滿意的結果。</p>
+<h2>Amazon API Gateway: endpoints</h2>
+<p>接下來，既然要呼叫 <code>/xkcd/614</code> 的話，當然就是 <code>GET /xkcd/{id}</code>，然後事情就簡單啦：</p>
+<ol>
+<li>Create API: =&gt; Build REST API =&gt; Create REST API and choose Edge-optimized</li>
+<li>Create resource: Create resource name <code>/xkcd</code> then <code>/{id}</code></li>
+<li>Create <code>GET</code> and <code>OPTIONS</code> (to apply CORS)</li>
+<li>Lambda integration, done!</li>
+</ol>
+<p>把 API 格式開好，叫 Lambda 幫我請 API，事情潮簡單der──</p>
+<h2>Amazon API Gateway: 除錯之道既阻且長</h2>
+<p>──並不是。</p>
+<pre><code>/xkcd/614
+
+{&quot;month&quot;:&quot;5&quot;,&quot;num&quot;:2934,&quot;link&quot;:&quot;&quot;,&quot;year&quot;:&quot;2024&quot;,&quot;news&quot;:&quot;&quot;,&quot;safe_title&quot;:&quot;Bloom Filter&quot;,&quot;transcript&quot;:&quot;&quot;,&quot;alt&quot;:&quot;Sometimes, you can tell Bloom filters are the wrong tool for the job, but when they're the right one you can never be sure.&quot;,&quot;img&quot;:&quot;https://imgs.xkcd.com/comics/bloom_filter.png&quot;,&quot;title&quot;:&quot;Bloom Filter&quot;,&quot;day&quot;:&quot;17&quot;}
+</code></pre>
+<p>事實上 API 都在請最新的 API。<code>GET /xkcd/{id}</code> 的 <code>/{id}</code> 彷彿一點用也沒有。</p>
+<p>困擾了很久，和 ChatGPT 談過，她建議用 <code>pathParameters</code> 參數，類似這樣：</p>
+<pre><code class="language-js">export const handler = async (event) =&gt; {
+  const id = event.pathParameters.id;
+  const response = {
+    statusCode: 200,
+    body: { id },
+  };
+  return response;
+};
+</code></pre>
+<p>所以我給前面的 handler 這樣做：</p>
+<pre><code class="language-js">export const handler = async (event) =&gt; {
+  const id = event.pathParameters.id;
+  const response = await ajax(id);
+  return response;
+};
+</code></pre>
+<p>結果卻回傳 <code>TypeError: Cannot read property 'id' of undefined</code></p>
+<h2>Amazon API Gateway: 出乎意料的大逆轉</h2>
+<p>我花了很久、開了幾個新的來測試，才發現是因為 pathParameters 必須開 Lambda proxy integration 才能用：</p>
+<blockquote>
+<p>it returns: {&quot;errorMessage&quot;: &quot;'pathParameters'&quot;, &quot;errorType&quot;: &quot;KeyError&quot;, &quot;requestId&quot;: &quot;904c51f2-9b2f-4e94-a475-25f40b95515b&quot;, &quot;stackTrace&quot;: [&quot;  File &quot;/var/task/lambda_function.py&quot;, line 4, in lambda_handler\n    input_value = event['pathParameters']['input']\n&quot;]} -- What happened?</p>
+<p>The error you are encountering indicates that the <code>pathParameters</code> key is not present in the event object passed to your Lambda function. This typically happens when the request is not properly configured to pass the path parameter to the Lambda function. Let's review the configuration and make sure everything is set up correctly.</p>
+<ol>
+<li><strong>Check API Gateway Method Integration</strong>: Ensure that the method integration is set to use Lambda Proxy integration. This allows the entire request to be passed as-is to the Lambda function.</li>
+</ol>
+</blockquote>
+<p>為什麼。</p>
+<p>……正當我這麼想時，又出現 {&quot;message&quot;: &quot;Internal server error&quot;} 了：</p>
+<pre><code>2024 : Endpoint response body before transformations: {&quot;month&quot;:&quot;7&quot;,&quot;num&quot;:614,&quot;link&quot;:&quot;&quot;,&quot;year&quot;:&quot;2009&quot;,&quot;news&quot;:&quot;&quot;,&quot;safe_title&quot;:&quot;Woodpecker&quot;,&quot;transcript&quot;:&quot;[[A man with a beret and a woman are standing on a boardwalk, leaning on a handrail.]]\nMan: A woodpecker!\n&lt;&lt;Pop pop pop&gt;&gt;\nWoman: Yup.\n\n[[The woodpecker is banging its head against a tree.]]\nWoman: He hatched about this time last year.\n&lt;&lt;Pop pop pop pop&gt;&gt;\n\n[[The woman walks away.  The man is still standing at the handrail.]]\n\nMan: ... woodpecker?\nMan: It's your birthday!\n\nMan: Did you know?\n\nMan: Did... did nobody tell you?\n\n[[The man stands, looking.]]\n\n[[The man walks away.]]\n\n[[There is a tree.]]\n\n[[The man approaches the tree with a present in a box, tied up with ribbon.]]\n\n[[The man sets the present down at the base of the tree and looks up.]]\n\n[[The man walks away.]]\n\n[[The present is sitting at the bottom of the tree.]]\n\n[[The woodpecker looks down at the present.]]\n\n[[The woodpecker sits on the present.]]\n\n[[The woodpecker pu [TRUNCATED]
+2024 : Execution failed due to configuration error: Malformed Lambda proxy response
+2024 : Gateway response type: DEFAULT_5XX with status code: 502
+2024 : Gateway response body: {&quot;message&quot;: &quot;Internal server error&quot;}
+</code></pre>
+<p>明明就有回應……問題難道是 <code>Execution failed due to configuration error: Malformed Lambda proxy response</code> 嗎？然後再查了下，因為當你開 Lambda proxy integration 以後，所有請求與回應都必須要用 API Gateway 的格式了。</p>
+<p>這一點天理也沒有。</p>
+<p>被氣到不想寫前端部份了，小全端到此為止。</p>
+<h2>結語</h2>
+<p>Lambda 如果和 Amazon API Gateway 結合會有很多麻煩與眉角。花上整天除錯也不是不可能。</p>
+<p>程式啊──自己來幹自己事很簡單，但與其他東西結合就是一團亂。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://aws.amazon.com/lambda">Serverless Function, FaaS Serverless  - AWS Lambda - AWS</a></li>
+<li><a href="https://aws.amazon.com/tutorials/run-serverless-code">Run a Serverless &quot;Hello, World!&quot; with AWS Lambda</a></li>
+<li><a href="https://aws.amazon.com/getting-started/hands-on/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito">Build a Serverless Web Application with AWS Lambda, Amazon API Gateway, AWS Amplify, Amazon DynamoDB, and Amazon Cognito</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10215530">Day05-概觀(一)Lambda、API Gateway以及Lambda Proxy integration - iT 邦幫忙::一起幫忙解決難題，拯救 IT 人的一天</a></li>
+<li><a href="https://stackoverflow.com/a/67768349">node.js - AWS Lambda event.pathParameters is undefined and hence cannot destructure a property - Stack Overflow</a></li>
+<li><a href="https://hackernoon.com/what-causes-malformed-lambda-proxy-response-and-how-to-fix-it-4t1d31ld">What Causes Malformed Lambda Proxy Response and How to Fix it | HackerNoon</a></li>
+<li><a href="https://stackoverflow.com/a/43709502">node.js - AWS lambda api gateway error &quot;Malformed Lambda proxy response&quot; - Stack Overflow</a></li>
+<li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-output-format">Set up Lambda proxy integrations in API Gateway - Amazon API Gateway</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>
