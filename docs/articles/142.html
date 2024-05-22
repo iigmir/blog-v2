@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>AWS: S3</h1>
+<p>我在想要不要給 AWS 文章一個獨立的專案，但想想還是先不要：畢竟 Web 開發也不會 AWS 服務全都用吧？</p>
+<hr>
+<p><a href="https://aws.amazon.com/s3">Amazon S3</a> 就是放檔案的服務。所以要當圖床、上傳文件、還是放啥、甚至架靜態網站都隨意；如果只是從主控台放檔案也還算簡單，開個 Bucket 然後上傳就是。下次試試看用 API 接上去。</p>
+<p>但檔案權限授權機制就很麻煩了。在 AWS 裡面有幾種管理機制：</p>
+<ol>
+<li><a href="https://docs.aws.amazon.com/console/s3/publicaccess">Block public access (bucket settings)</a>：封鎖存取：最優先。可以蓋過其他機制。</li>
+<li><a href="https://docs.aws.amazon.com/console/s3/access-policy-language-overview">Bucket policy</a>：許可政策：以 JSON 設定整個 Bucket 的權限。</li>
+<li><a href="https://docs.aws.amazon.com/console/s3/acl-overview">Access control list (ACL)</a>：存取控制清單，需要去 Object Ownership 設定開啟才能用。特點是能特定特定檔案。</li>
+<li><a href="https://docs.aws.amazon.com/console/s3/enablecors">Cross-origin resource sharing (CORS)</a>：設定跨來源資源分享。前後端都知道的 <code>Access-Control-Allow-Origin</code>。</li>
+</ol>
+<p>這邊就說最簡單的：讓網路所有人都能訪問檔案。</p>
+<ol>
+<li>關掉所有 Block public access 設定。</li>
+<li>編輯並複製以下檔案到 Bucket policy 的 Statement：</li>
+</ol>
+<pre><code class="language-json">{
+    &quot;Sid&quot;: &quot;AccessAllFiles&quot;,
+    &quot;Effect&quot;: &quot;Allow&quot;,
+    &quot;Principal&quot;: &quot;*&quot;,
+    &quot;Action&quot;: &quot;s3:GetObject&quot;,
+    &quot;Resource&quot;: [
+        &quot;{ARN編號}&quot;,
+        &quot;{ARN編號}/*&quot;
+    ]
+}
+</code></pre>
+<p><code>{ARN編號}</code> 在 Bucket 清單應該能看到。Amazon Resource Name 啥的。</p>
+<p>就這樣。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://stackoverflow.com/questions/22077445">amazon web services - AWS S3 Bucket Permissions - Access Denied - Stack Overflow</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10238435">AWS新手的30天之旅 - 7. S3 - iT 邦幫忙::一起幫忙解決難題，拯救 IT 人的一天</a></li>
+<li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Controlling ownership of objects and disabling ACLs for your bucket - Amazon Simple Storage Service</a></li>
+<li><a href="https://docs.aws.amazon.com/console/s3/publicaccess">Blocking public access to your Amazon S3 storage - Amazon Simple Storage Service</a></li>
+<li><a href="https://docs.aws.amazon.com/console/s3/access-policy-language-overview">Policies and permissions in Amazon S3 - Amazon Simple Storage Service</a></li>
+<li><a href="https://docs.aws.amazon.com/console/s3/acl-overview">Access control list (ACL) overview - Amazon Simple Storage Service</a></li>
+<li><a href="https://docs.aws.amazon.com/console/s3/enablecors">Configuring cross-origin resource sharing (CORS) - Amazon Simple Storage Service</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>
