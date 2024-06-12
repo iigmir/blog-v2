@@ -124,12 +124,17 @@ class ResolvedElements {
         div.appendChild( small );
         return div;
     }
+    get hr_gap_dom() {
+        const gap = document.createElement("hr");
+        return gap;
+    }
     /**
      * THE wrapper
      */
     get wrapper() {
         const wrapper = document.createElement( "footer" );
         wrapper.setAttribute( "class", "tags container" );
+        wrapper.appendChild( this.hr_gap_dom );
         wrapper.appendChild( this.date_components );
         wrapper.appendChild( this.help_dom );
         wrapper.appendChild( this.tags_list_dom );
