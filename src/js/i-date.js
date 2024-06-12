@@ -43,16 +43,24 @@ export class IDateComponentElement extends HTMLElement {
     constructor() {
         super();
     }
-    get title() { return this.hasAttribute("data-title") ? this.getAttribute("data-title") : "Date: "; }
-    get date() { return this.hasAttribute("data-date") ? this.getAttribute("data-date") : "Unknown date"; }
+    get title() {
+        return this.hasAttribute("data-title") ? this.getAttribute("data-title") : "Date: ";
+    }
+    get date() {
+        return this.hasAttribute("data-date") ? this.getAttribute("data-date") : "Unknown date";
+    }
 
     // Date modules. See also `DateStore` class.
     date_store = null;
-    get classes() { return this.hasAttribute("data-classes") ? this.getAttribute("data-classes") : "date"; }
+    get classes() {
+        return this.hasAttribute("data-classes") ? this.getAttribute("data-classes") : "date";
+    }
     /**
      * @see: Info about [Etc/UTC](https://en.wikipedia.org/wiki/UTC%2B00:00)
      */
-    get timezone() { return this.hasAttribute("data-timezone") ? this.getAttribute("data-timezone") : "Etc/UTC"; }
+    get timezone() {
+        return this.hasAttribute("data-timezone") ? this.getAttribute("data-timezone") : "Etc/UTC";
+    }
     connectedCallback() {
         this.date_store = new DateStore( this.date, this.timezone );
         const shadow = this.attachShadow({ mode: "open" });

@@ -70,6 +70,14 @@ class ResolvedElements {
             updated: this.generate_date_component( "Updated: ", "date -updated", this.ajax_data.updated_at ),
         };
     }
+    get date_components() {
+        const component = document.createElement("div");
+        component.classList.add("i-date-component");
+        component.appendChild( this.date_doms.created );
+        component.appendChild( this.gap_dom );
+        component.appendChild( this.date_doms.updated );
+        return component;
+    }
     /**
      * Mind the gap
      */
@@ -122,9 +130,7 @@ class ResolvedElements {
     get wrapper() {
         const wrapper = document.createElement( "footer" );
         wrapper.setAttribute( "class", "tags container" );
-        wrapper.appendChild( this.date_doms.created );
-        wrapper.appendChild( this.gap_dom );
-        wrapper.appendChild( this.date_doms.updated );
+        wrapper.appendChild( this.date_components );
         wrapper.appendChild( this.help_dom );
         wrapper.appendChild( this.tags_list_dom );
         wrapper.appendChild( this.lisence_dom );
