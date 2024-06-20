@@ -80,13 +80,7 @@ const defa = [{ "id": 0, "title": "", "category_id": [0], "language": "en", "cre
  * @param {*} tags 
  */
 const render_articles = (latest_articles = defa) => {
-    latest_articles.map( (its) => `<article-preview-item
-        aid="${its.id}"
-        title="${its.title}"
-        tags="${JSON.stringify(its.category_id)}"
-        language="${its.language}"
-        created="${its.created_at}"
-    ></article-preview-item>` ).forEach( (component) => {
+    latest_articles.map( (its) => `<article-preview-item aid="${its.id}" title="${its.title}" tags="${JSON.stringify(its.category_id)}" language="${its.language}" created="${its.created_at}"></article-preview-item>` ).forEach( (component) => {
         document.querySelector("#loading-appapp").innerHTML += component;
     });
 };
