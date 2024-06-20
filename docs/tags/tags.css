@@ -36,14 +36,35 @@ a:hover
     color: var(--hover-link-colour);
 }
 
-::backdrop
+dialog { width: 100%; }
+dialog::backdrop
 {
-    background-image: linear-gradient(
-        45deg,
-        magenta,
-        rebeccapurple,
-        dodgerblue,
-        green
-    );
+    background-image: linear-gradient( 45deg, magenta, rebeccapurple, dodgerblue, green );
     opacity: 0.75;
 }
+
+@media screen and (min-width: 480px)
+{
+    dialog { width: 480px; }
+}
+
+#tag-app *[data-iapp-render="links"]
+{
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: groove 3px black;
+    height: 256px;
+    overflow-y: scroll;
+}
+#tag-app *[data-iapp-render="links"] li { padding: 0.3rem; }
+#tag-app *[data-iapp-render="links"] li a { display: inline-block; width: 100%; }
+
+#tag-app *[data-iapp-action="close"]
+{
+    width: 100%;
+    justify-content: center;
+    display: inline-flex;
+}
+
+#tag-app dialog .button:hover { background-color: initial; }
+#tag-app dialog .button:active { background-color: var(--active-link-colour); }
