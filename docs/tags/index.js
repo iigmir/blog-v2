@@ -32,19 +32,6 @@ const TAGAPP_SELECTOR = {
 };
 
 /**
- * Show and close buttons
- */
-function assign_tag_app_actions()
-{
-    const dialog = document.querySelector( TAGAPP_SELECTOR.DIALOG );
-    // "Close" button closes the dialog
-    const close_button = document.querySelector( TAGAPP_SELECTOR.CLOSE_BUTTON );
-    close_button.addEventListener("click", () => {
-        dialog.close();
-    });
-}
-
-/**
  * Renders:
  * ```html
  * <li> <a href="../articles/007.html">SPY FAMILY</a> </li>
@@ -62,22 +49,26 @@ const set_item_component = (item = { id: 1, title: "" }) => `<li>
 function render_tag_app( tags_data = new TagsData )
 {
     // Render new tags and assign their action
-    const tags = tags_data.tags;
-    document.querySelector( TAGAPP_SELECTOR.TAG_PANEL ).innerHTML += tags.map( (tag = { "id": 0, "tag_name": "Unknown" }) =>
+    document.querySelector( TAGAPP_SELECTOR.TAG_PANEL ).innerHTML += tags_data.tags.map( (tag = { "id": 0, "tag_name": "Unknown" }) =>
         `<a href="javascript: void(0)" class="button" data-iapp-action="open" data-iapp-id="${tag.id}">${tag.tag_name}</button>`
     ).join( "" );
-    // "Show the dialog" button opens the dialog modally
-    const render2 = (event) => {
-        tags_data.store_number(event.target.dataset.iappId);
+
+    // Open the dialog
+    const render_tags = (event) => {
+        tags_data.store_number( event.target.dataset.iappId );
         const links = tags_data.articles_with_number.map( set_item_component ).join( "" );
         document.querySelector( TAGAPP_SELECTOR.LINKS_LIST ).innerHTML = links;
         document.querySelector( TAGAPP_SELECTOR.DIALOG ).showModal();
     };
     [...document.querySelectorAll( TAGAPP_SELECTOR.OPEN_BUTTON )].forEach( (shown_buttons) => {
-        shown_buttons.addEventListener("click", render2 );
+        shown_buttons.addEventListener("click", render_tags );
     });
-    // Dialog action
-    assign_tag_app_actions();
+
+    // Close the dialog
+    const close_button = document.querySelector( TAGAPP_SELECTOR.CLOSE_BUTTON );
+    close_button.addEventListener("click", () => {
+        document.querySelector( TAGAPP_SELECTOR.DIALOG ).close();
+    });
 }
 
 $( document ).ready(() =>
