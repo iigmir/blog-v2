@@ -10,12 +10,6 @@
     <link rel="shortcut icon" href="../favicon.ico" />
 </head>
 <body>
-    <div id="modal" class="nf-modal">
-        <div class="centre narrow container">
-            <button type="button" class="close">❌</button>
-            <ul id="articles-list"><li>1</li><li>2</li></ul>
-        </div>
-    </div>
     <main class="articles container">
         <h1>露比的銳思：標籤</h1>
         <nav class="navigator">
@@ -26,12 +20,12 @@
                 <li class="item"><a href="../tags">標籤</a></li>
             </ul>
         </nav>
-        <div id="tags-app"></div>
         <div id="tag-app">
             <dialog>
                 <button autofocus data-iapp-action="close">關閉</button>
-                <div data-iapp-render="tags-list"></div>
+                <div data-iapp-render="links"></div>
             </dialog>
+            <div data-iapp-render="list"></div>
         </div>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

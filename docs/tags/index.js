@@ -25,10 +25,10 @@ class TagsData
 
 const TAGAPP_SELECTOR = {
     DIALOG: "#tag-app dialog",
-    OPEN_BUTTON: "#tags-app *[data-iapp-action='open']",
+    OPEN_BUTTON: "#tag-app *[data-iapp-action='open']",
     CLOSE_BUTTON: "#tag-app *[data-iapp-action='close']",
-    TAGS_LIST: "#tag-app *[data-iapp-render='tags-list']",
-    TAG_PANEL: "#tags-app"
+    LINKS_LIST: "#tag-app *[data-iapp-render='links']",
+    TAG_PANEL: "#tag-app *[data-iapp-render='list']"
 };
 
 /**
@@ -44,28 +44,6 @@ function assign_tag_app_actions()
     });
 }
 
-function render_tag_app( tags_data = new TagsData )
-{
-    // Render new tags and assign their action
-    const tags = tags_data.tags;
-    document.querySelector( TAGAPP_SELECTOR.TAG_PANEL ).innerHTML += tags.map( (tag = { "id": 0, "tag_name": "Unknown" }) =>
-        `<a href="javascript: void(0)" class="button" data-iapp-action="open" data-iapp-id="${tag.id}">${tag.tag_name}</button>`
-    ).join( "" );
-    // "Show the dialog" button opens the dialog modally
-    const render2 = (event) => {
-        tags_data.store_number(event.target.dataset.iappId);
-        const links = tags_data.articles_with_number.map( set_item_component ).join( "" );
-        document.querySelector( TAGAPP_SELECTOR.TAGS_LIST ).innerHTML = links;
-        document.querySelector( TAGAPP_SELECTOR.DIALOG ).showModal();
-    };
-    [...document.querySelectorAll( TAGAPP_SELECTOR.OPEN_BUTTON )].forEach( (shown_buttons) => {
-        shown_buttons.addEventListener("click", render2 );
-    });
-    // Dialog action
-    assign_tag_app_actions();
-}
-
-
 /**
  * Renders:
  * ```html
@@ -77,6 +55,27 @@ function render_tag_app( tags_data = new TagsData )
 const set_item_component = (item = { id: 1, title: "" }) => `<li>
     <a href="../articles/${String(item.id).padStart( 3, "0" )}.html">${item.title}</a>
 </li>`;
+
+function render_tag_app( tags_data = new TagsData )
+{
+    // Render new tags and assign their action
+    const tags = tags_data.tags;
+    document.querySelector( TAGAPP_SELECTOR.TAG_PANEL ).innerHTML += tags.map( (tag = { "id": 0, "tag_name": "Unknown" }) =>
+        `<a href="javascript: void(0)" class="button" data-iapp-action="open" data-iapp-id="${tag.id}">${tag.tag_name}</button>`
+    ).join( "" );
+    // "Show the dialog" button opens the dialog modally
+    const render2 = (event) => {
+        tags_data.store_number(event.target.dataset.iappId);
+        const links = tags_data.articles_with_number.map( set_item_component ).join( "" );
+        document.querySelector( TAGAPP_SELECTOR.LINKS_LIST ).innerHTML = links;
+        document.querySelector( TAGAPP_SELECTOR.DIALOG ).showModal();
+    };
+    [...document.querySelectorAll( TAGAPP_SELECTOR.OPEN_BUTTON )].forEach( (shown_buttons) => {
+        shown_buttons.addEventListener("click", render2 );
+    });
+    // Dialog action
+    assign_tag_app_actions();
+}
 
 $( document ).ready(() =>
 {
