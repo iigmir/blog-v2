@@ -14,7 +14,8 @@
   },
   "author": "iigmir",
   "devDependencies": {
-    "@types/jsdom": "^21.1.1",
+    "@digitalocean/do-markdownit": "^1.14.0",
+    "@types/jsdom": "^21.1.7",
     "@types/markdown-it": "^12.2.3",
     "axios": "^1.6.0",
     "css-minify": "^2.0.0",
@@ -22,8 +23,5 @@
     "markdown-it": "^13.0.2",
     "terser": "^5.24.0",
     "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "@digitalocean/do-markdownit": "^1.12.2"
   }
 }
