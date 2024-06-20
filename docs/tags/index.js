@@ -53,7 +53,10 @@ function assign_tag_app_actions()
  * @returns 
  */
 const set_item_component = (item = { id: 1, title: "" }) => `<li>
-    <a href="../articles/${String(item.id).padStart( 3, "0" )}.html">${item.title}</a>
+    <a href="../articles/${String(item.id).padStart( 3, "0" )}.html">${
+        // Sanitiser
+        item.title.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    }</a>
 </li>`;
 
 function render_tag_app( tags_data = new TagsData )
