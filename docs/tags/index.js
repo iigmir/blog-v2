@@ -23,14 +23,22 @@ class TagsData
     }
 }
 
+const TAGAPP_SELECTOR = {
+    DIALOG: "#tag-app dialog",
+    OPEN_BUTTON: "#tags-app *[data-iapp-action='open']",
+    CLOSE_BUTTON: "#tag-app *[data-iapp-action='close']",
+    TAGS_LIST: "#tag-app *[data-iapp-render='tags-list']",
+    TAG_PANEL: "#tags-app"
+};
+
 /**
  * Show and close buttons
  */
 function assign_tag_app_actions()
 {
-    const dialog = document.querySelector("#tag-app dialog");
+    const dialog = document.querySelector( TAGAPP_SELECTOR.DIALOG );
     // "Close" button closes the dialog
-    const close_button = document.querySelector("#tag-app *[data-iapp-action='close']");
+    const close_button = document.querySelector( TAGAPP_SELECTOR.CLOSE_BUTTON );
     close_button.addEventListener("click", () => {
         dialog.close();
     });
@@ -40,17 +48,17 @@ function render_tag_app( tags_data = new TagsData )
 {
     // Render new tags and assign their action
     const tags = tags_data.tags;
-    document.querySelector("#tags-app").innerHTML += tags.map( (tag = { "id": 0, "tag_name": "Unknown" }) =>
+    document.querySelector( TAGAPP_SELECTOR.TAG_PANEL ).innerHTML += tags.map( (tag = { "id": 0, "tag_name": "Unknown" }) =>
         `<a href="javascript: void(0)" class="button" data-iapp-action="open" data-iapp-id="${tag.id}">${tag.tag_name}</button>`
     ).join( "" );
     // "Show the dialog" button opens the dialog modally
     const render2 = (event) => {
         tags_data.store_number(event.target.dataset.iappId);
         const links = tags_data.articles_with_number.map( set_item_component ).join( "" );
-        document.querySelector("#tag-app *[data-iapp-render='tags-list']").innerHTML = links;
-        document.querySelector("#tag-app dialog").showModal();
+        document.querySelector( TAGAPP_SELECTOR.TAGS_LIST ).innerHTML = links;
+        document.querySelector( TAGAPP_SELECTOR.DIALOG ).showModal();
     };
-    [...document.querySelectorAll("#tags-app *[data-iapp-action='open']")].forEach( (shown_buttons) => {
+    [...document.querySelectorAll( TAGAPP_SELECTOR.OPEN_BUTTON )].forEach( (shown_buttons) => {
         shown_buttons.addEventListener("click", render2 );
     });
     // Dialog action
