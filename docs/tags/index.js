@@ -137,7 +137,23 @@ $( document ).ready(() =>
         });
         render.tags_to_the_modal( "a[data-i-btn-id]", callback );
         render.close_modal( "#modal .close", "#modal" );
+        newFunction();
     };
     // show
     init_tags( tags_data ).then( data => render_act({ data, tags_data }));
 });
+
+function newFunction() {
+    const dialog = document.querySelector("#tag-app dialog");
+    const showButton = document.querySelector("#tag-app *[data-tagapp='open-dialog']");
+    const closeButton = document.querySelector("#tag-app *[data-tagapp='close-dialog']");
+    // "Show the dialog" button opens the dialog modally
+    showButton.addEventListener("click", () => {
+        dialog.showModal();
+    });
+    // "Close" button closes the dialog
+    closeButton.addEventListener("click", () => {
+        dialog.close();
+    });
+}
+
