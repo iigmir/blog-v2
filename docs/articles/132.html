@@ -20,14 +20,14 @@
         </nav>
         <article class="article">
             <h1>GCP-CLI notebook</h1>
-<p>Firstly, of course, is to create a Google account and establish a cloud service.</p>
+<p>The First thing you need is, of course, to create a Google account and establish a cloud service.</p>
 <h2>On Windows</h2>
 <p>Assume than you install Ubuntu.</p>
 <h3>By WSL</h3>
 <ol>
-<li><a href="https://learn.microsoft.com/en-us/windows/wsl/install">Install linux subsystem</a>.</li>
-<li>Install Ubuntu disto for WSL.</li>
-<li>Go Install Google Cloud CLI</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/wsl/install">Install Linux subsystem</a>.</li>
+<li>Install Ubuntu distro for WSL.</li>
+<li>Install Google Cloud CLI</li>
 </ol>
 <h3>By VirtualBox</h3>
 <p>If you don't feel like installing WSL, maybe VirtualBox is your friend.</p>
@@ -38,15 +38,15 @@
 </ol>
 <h3>Install Google Cloud CLI</h3>
 <ol>
-<li>Wherever you install your Ubuntu, you should now in a Ubuntu shell. If so, open the <a href="https://cloud.google.com/sdk/docs/install-sdk">installation guide</a> and select <code>Debian/Ubuntu</code> on the manual.</li>
-<li>After installing, login by Google Cloud CLI with your account. When login success and entered the cloud shell, exit.</li>
+<li>Wherever you install your Ubuntu, you should now be in a Ubuntu shell. If so, open the <a href="https://cloud.google.com/sdk/docs/install-sdk">installation guide</a> and select <code>Debian/Ubuntu</code> on the manual.</li>
+<li>After installing, log in by Google Cloud CLI with your account. When login succussed and entered the cloud shell, exit.</li>
 <li>Now type <code>gcloud cloud-shell ssh --ssh-flag &quot;-L 8080:localhost:80&quot; --ssh-flag &quot;-L 33306:localhost:3306&quot; --ssh-flag &quot;-L 2222:localhost:22&quot;</code></li>
 </ol>
 <h3>Try Git and composer</h3>
 <blockquote>
-<p>There are tow ways to upload/download files to Google Cloud Shell: Git or FTP. The former need to buy some books...</p>
+<p>There are two ways to upload/download files to Google Cloud Shell: Git or FTP. The former need to buy some books...</p>
 </blockquote>
-<p>Actually, since the cloud shell ssh has installed <code>git</code> and <code>composer</code>, so...</p>
+<p>Actually, since the cloud shell SSH has installed <code>git</code> and <code>composer</code>, so...</p>
 <h2>How to Git</h2>
 <h3>Test Git</h3>
 <ol>
@@ -64,7 +64,7 @@
 </ol>
 <p>You should see a Laravel page.</p>
 <hr>
-<p>Oh, by the way, you can upload/download indirectly by pushing your app to Github, then pull if from your Google Cloud Shell.</p>
+<p>Oh, by the way, you can upload/download indirectly by pushing your app to Github, then pulling it from your Google Cloud Shell.</p>
 <h2>References</h2>
 <ul>
 <li><a href="https://cloud.google.com/sdk/docs/install-sdk">Quickstart: Install the Google Cloud CLI | Google Cloud CLI Documentation</a></li>

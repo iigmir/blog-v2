@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>2024-05-24 Interview</h1>
+<p>這次面試，面試官問了我四題：</p>
+<ol>
+<li>箭頭函式是什麼</li>
+<li>程式題</li>
+<li>如何避免程式短時間內請求過多 HTTP</li>
+<li>忘了，但記得沒答好</li>
+</ol>
+<p>先把筆記寫好。之後再慢慢補。</p>
+<h2>箭頭函式是什麼</h2>
+<p>其實不難。簡化的 es6 語法、省略的回傳、還有砍掉 this binding。這些箭頭函式的特點回答好就可以了。</p>
+<h2>程式題</h2>
+<p>參見：<a href="https://pjchender.dev/javascript/js-arrow-function/">[JS] 箭頭函式（arrow function）和它對 this 的影響 | PJCHENder 未整理筆記</a></p>
+<pre><code class="language-js">// https://pjchender.dev/javascript/js-arrow-function/
+let id = 21;
+let data = {
+  id: 21,
+};
+
+fn.call(data);
+arrowFn.call(data);
+
+function fn() {
+  console.log(this.constructor.name);
+  setTimeout(function () {
+    console.log(this.constructor.name);
+  }, 100);
+}
+
+function arrowFn() {
+  console.log(this.constructor.name);
+  setTimeout(() =&gt; {
+    console.log(this.constructor.name);
+  }, 100);
+}
+</code></pre>
+<p>因為不懂 <code>this.constructor.name</code> 所以答不出來。即使發現 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name#telling_the_constructor_name_of_an_object">this.constructor.name</a> 是函式名稱後也……</p>
+<h2>如何避免程式短時間內請求過多 HTTP</h2>
+<p>可以用 throttle 與 debounce：</p>
+<pre><code class="language-js">/**
+ * @see [throttle](https://www.explainthis.io/zh-hant/swe/throttle)
+ */
+function throttle(fn, delay = 500) {
+    let timer = null;
+    return (...args) =&gt; {
+        if (timer) {
+            return;
+        }
+        timer = setTimeout(() =&gt; {
+            fn(...args);
+            timer = null;
+        }, delay);
+    };
+}
+
+/**
+ * @see [debounce](https://www.explainthis.io/zh-hant/swe/debounce)
+ */
+function debounce(fn, delay = 500) {
+    let timer = null;
+    return (...args) =&gt; {
+        clearTimeout(timer);
+        timer = setTimeout(() =&gt; {
+            fn(...args);
+        }, delay);
+    };
+}
+</code></pre>
+<h2>忘了，但記得沒答好</h2>
+<p>感覺這次不行了……</p>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>

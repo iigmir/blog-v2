@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../articles">Articles</a></li>
+                <li class="item"><a href="../about">About Me</a></li>
+                <li class="item"><a href="../tags">Tags</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>設定域名的兩三事</h1>
+<p>在<a href="https://blog.iigmir.idv.tw/articles/139.html">上次架站碰上問題</a>後，我開始認真思考要不要有個自己的域名。幾經思考，最後還是決定註冊一個：<code>iigmir.idv.tw</code>。有自己的域名感覺還是比較好，做很多事情會比較容易。</p>
+<p>我個人是從<a href="https://domain.cloudmax.com.tw">匯智資訊</a>註冊域名，因為他們當時有在給 <code>.idv.tw</code> 相當不錯的<a href="https://domain.cloudmax.com.tw/registration/idv-tw-domain">註冊優惠</a>。五年 1500 就買了。</p>
+<p><img src="https://raw.githubusercontent.com/iigmir/blog-source/master/assets/145/1-idv-tw.png" alt="idv.tw 網域 新註冊/轉入 現正優惠中 現在新註冊或轉入，只要 $300 / 個 / 年起！真香的折扣不買嗎？"></p>
+<p>真香。</p>
+<p>註冊好後我做了點事情玩玩。這裡講下我做的事。</p>
+<h2>DNS 設定</h2>
+<p>註冊完網域後，首先最重要的，自然就是 DNS 設定要指向到哪裡去。在你面前會有兩種選擇：一是自管、二是代管。匯智預設是自管，但如果不太懂怎麼接或架 DNS Server 的話，建議讓匯智代管就好。等 DNS 紀錄超過 100 以上時，再考慮搬出去也不遲。</p>
+<p><img src="https://raw.githubusercontent.com/iigmir/blog-source/master/assets/145/2-dns-overview.png" alt="DNS 管理設定。這裡設為 DNS 代管"></p>
+<p>匯智提供11個類型給我們。這裡會講到 <code>A</code>, <code>AAAA</code>, <code>CNAME</code> 這三種。全部類型可以看<a href="https://en.wikipedia.org/wiki/List_of_DNS_record_types">英文維基百科</a>。簡單來說：<code>A</code> 對應 IPv4, <code>AAAA</code> 對應 IPv6, <code>CNAME</code> 則對應其他網域。</p>
+<h2>AWS</h2>
+<p>AWS 這裡最簡單的服務當然是 Amplify 去弄。不就弄了個 Amplify 實例後去導向域名嗎？有啥難的？</p>
+<p><img src="https://raw.githubusercontent.com/iigmir/blog-source/master/assets/145/3-aws.png" alt="The &quot;tw tld is not supported&quot; message was shown on AWS"></p>
+<p>Oops... <code>tw tld is not supported</code>!!??</p>
+<p>嚇到，難道說 <code>.tw</code> 域名不能用 AWS 嗎？趕緊問 Amazon Q 怎回事：</p>
+<blockquote>
+<p>Hello, I have assign a &quot;example.idv.tw&quot;, but the AWS said &quot;tw tld is not supported&quot; -- Doesn that mean, I can never use AWS if my domain ends with &quot;.tw&quot;?</p>
+<p>(略) If the TLD you want to use is not supported by Route 53, you may need to consider using a different domain registrar that supports the desired TLD.</p>
+<p>What is &quot;different domain registrar&quot; in the article, then? Can I use Amplify without using Route 53?</p>
+<p>The key is that you do not need to use Route 53 to register your domain in order to use other AWS services like Amplify. You can use a different registrar and then associate that domain with the AWS services you want to use.</p>
+</blockquote>
+<p>原來是 <code>.tw</code> 域名不能直接用 <a href="https://aws.amazon.com/route53">AWS Route 53</a> 設定域名啊。那就是說要從 different domain registrar ──也就是匯智那邊──設定域名了。</p>
+<p>總之 DNS 代管也開了，就用吧。但怎用？</p>
+<p>查了下<a href="https://docs.aws.amazon.com/amplify/latest/userguide/to-add-a-custom-domain-managed-by-a-third-party-dns-provider.html">設定說明手冊</a>，其實沒那麼困難。AWS 使用 <a href="https://en.wikipedia.org/wiki/CNAME_record"><code>CNAME</code></a> 類型，把他給的 <code>CNAME</code> 放到匯智就好了。</p>
+<p>……首先，按照說明，如果註冊了 <code>iigmir.idv.tw</code> 的話，假設我還需要個 <code>www.iigmir.idv.tw</code> 的域名、然後 AWS 產生以下紀錄：</p>
+<table>
+<thead>
+<tr>
+<th>Hostname</th>
+<th>Type</th>
+<th>Data/URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_c3e2d7eaf1e656b73f46cd6980fdc0e.iigmir.idv.tw</code></td>
+<td>CNAME</td>
+<td><code>_cjhwou20vhu2exampleuw20vuyb2ovb9.j9s73ucn9vy.acm-validations.aws</code></td>
+</tr>
+<tr>
+<td><code>www</code></td>
+<td>CNAME</td>
+<td><code> d111111abcdef8.cloudfront.net</code></td>
+</tr>
+</tbody>
+</table>
+<p>這個可以去 Action View DNS records 看。但問題是，匯智那邊要怎麼寫呢？針對第一個，那就要把 <code>_c3e2d7eaf1e656b73f46cd6980fdc0e</code> 這玩意貼到匯智的主機名稱、然後對應的 <code>_cjhwou20vhu2exampleuw20vuyb2ovb9.j9s73ucn9vy.acm-validations.aws</code> 貼到設定值。<code>www</code> 也比照辦理：</p>
+<p><img src="https://raw.githubusercontent.com/iigmir/blog-source/master/assets/145/4-insert-dns.png" alt="匯智的主機名稱設定。類型主機名稱填入 _c3e2d7eaf1e656b73f46cd6980fdc0e, 設定值填入 _cjhwou20vhu2exampleuw20vuyb2ovb9.j9s73ucn9vy.acm-validations.aws, TTL選10分鐘"></p>
+<p>新增成功的話大概是這樣：</p>
+<p><img src="https://raw.githubusercontent.com/iigmir/blog-source/master/assets/145/5-dns-result.png" alt="匯智的主機名稱顯示。"></p>
+<p>接著再稍等一會，應該就能上了。而且 Amplify 支援 HTTPS 服務，省去很多時間，實在是太棒了！</p>
+<p>我這邊則有個 <a href="https://test-aws.iigmir.idv.tw">https://test-aws.iigmir.idv.tw</a> 能看。</p>
+<h2>Github Pages</h2>
+<p>完成 Hello World 後就把 Github Pages 的網址 <a href="http://iigmir.github.io/blog-v2">http://iigmir.github.io/blog-v2</a> 改到 <a href="http://blog.iigmir.idv.tw">http://blog.iigmir.idv.tw</a> 吧。</p>
+<p>我原本按照<a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site">手冊說的</a>，去 Pages 頁面的 Custom domain 設定域名、然後辛苦地把 <code>A</code> 與 <code>AAAA</code> 弄到匯智那邊後，Github Pages 檢查提醒我：</p>
+<blockquote>
+<p>Your site's DNS settings are using a custom subdomain, <code>blog.iigmir.idv.tw</code>, that is set up as an <code>A</code> record. We recommend you change this to a <code>CNAME</code> record pointing to <code>iigmir.github.io</code>. For more information, see <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site">documentation</a> (InvalidARecordError).</p>
+</blockquote>
+<p>真親切。<br>
+然後我把 <code>A</code> 與 <code>AAAA</code> 全部砍掉後，把 <code>CNAME</code> 加回來，最後 Enforce HTTPS 開啟。完成。</p>
+<h2>參考資料</h2>
+<ul>
+<li>DNS 設定
+<ul>
+<li><a href="https://www.tsg.com.tw/blog-detail2-185-0-dns-2.htm">如何設定DNS到對應的IP地址上？自管與代管DNS皆須對應｜天矽科技網頁設計</a></li>
+<li><a href="https://www.cloudmax.com.tw/help/domain-name/dns-hosting">DNS 自管跟 DNS 代管的差別 | Cloudmax 匯智</a></li>
+<li><a href="https://ithelp.ithome.com.tw/questions/10211057">DNS自管改代管要如何操作和注意什麼 - iT 邦幫忙::一起幫忙解決難題，拯救 IT 人的一天</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_DNS_record_types">List of DNS record types - Wikipedia</a></li>
+</ul>
+</li>
+<li>AWS
+<ul>
+<li><a href="https://docs.aws.amazon.com/amplify/latest/userguide/to-add-a-custom-domain-managed-by-a-third-party-dns-provider.html">Add a custom domain managed by a third-party DNS provider - AWS Amplify Hosting</a></li>
+<li><a href="https://docs.aws.amazon.com/amplify/latest/userguide/custom-domain-troubleshoot-guide.html">Troubleshooting custom domains - AWS Amplify Hosting</a></li>
+<li><a href="https://www.whatsmydns.net">DNS Propagation Checker - Global DNS Testing Tool</a></li>
+</ul>
+</li>
+<li>Github Pages
+<ul>
+<li><a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site">Configuring a custom domain for your GitHub Pages site - GitHub Docs</a></li>
+<li><a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site">Managing a custom domain for your GitHub Pages site - GitHub Docs</a></li>
+<li><a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages">Verifying your custom domain for GitHub Pages - GitHub Docs</a></li>
+<li><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site">Configuring a publishing source for your GitHub Pages site - GitHub Docs</a></li>
+<li><a href="https://www.reddit.com/r/github/comments/c6djer/error_with_github_pages_custom_domain">Error with github pages &amp; custom domain : r/github</a></li>
+</ul>
+</li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>
