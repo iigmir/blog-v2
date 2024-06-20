@@ -41,10 +41,10 @@
         </style>
         <div id="tag-app">
             <dialog>
-                <button autofocus data-tagapp="close-dialog">Close</button>
-                <p>This modal dialog has a groovy backdrop!</p>
+                <button autofocus data-iapp-action="close">Close</button>
+                <p>This modal dialog has a groovy backdrop! <span data-app-render="shown-tag"></span> </p>
+                <div data-iapp-render="tags-list"></div>
             </dialog>
-            <button data-tagapp="open-dialog">Show the dialog</button>
         </div>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
