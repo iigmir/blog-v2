@@ -46,8 +46,8 @@ function render_tag_app( tags_data = new TagsData )
     // "Show the dialog" button opens the dialog modally
     const render2 = (event) => {
         tags_data.store_number(event.target.dataset.iappId);
-        // console.log( tags_data.articles_with_number );
-        // #tag-app *[data-iapp-render='tags-list']
+        const links = tags_data.articles_with_number.map( set_item_component ).join( "" );
+        document.querySelector("#tag-app *[data-iapp-render='tags-list']").innerHTML = links;
         document.querySelector("#tag-app dialog").showModal();
     };
     [...document.querySelectorAll("#tags-app *[data-iapp-action='open']")].forEach( (shown_buttons) => {
