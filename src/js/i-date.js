@@ -67,7 +67,7 @@ export class IDateComponentElement extends HTMLElement {
         shadow.appendChild( this.wrapper_element() );
     }
     wrapper_element() {
-        const wrapper = document.createElement( "span" );
+        const wrapper = document.createElement("small");
         wrapper.setAttribute("title", `Source date: ${this.date}`);
         wrapper.classList.add("date-component");
         wrapper.textContent = this.title;
