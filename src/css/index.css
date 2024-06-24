@@ -77,6 +77,8 @@ body
 {
     background-color: var(--bg-colour);
     color: var(--text-colour);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .navigator .list .item a,
