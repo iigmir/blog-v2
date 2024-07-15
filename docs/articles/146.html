@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="../assets/prism/prism.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../">首頁</a></li>
+                <li class="item"><a href="../articles">文章總覽</a></li>
+                <li class="item"><a href="../about">關於我</a></li>
+                <li class="item"><a href="../tags">標籤</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>一次誠實的面試</h1>
+<p>我應徵一間 PHP 開發。這次大概會失敗，但我很欣賞這間公司。因為這位人資頗為直接地說出問題。</p>
+<h2>技術問題</h2>
+<p>首先是很簡單的幾個問題：</p>
+<ol>
+<li>PHP 哪個函式處理日期？</li>
+<li>PHP 哪個函式處理字串？</li>
+<li>PHP 迴圈怎麼用？</li>
+<li>PHP 三元運算子怎麼用？</li>
+<li>有兩個資料表： <code>actors_1st</code>, <code>actors_2nd</code>。兩者有共同值 <code>aim</code>，請用 SQL 把兩個連起來。</li>
+<li>有個資料表名為 <code>members</code>：</li>
+</ol>
+<pre><code class="language-sql">　　　name | subunit
+--------------------
+中須かすみ | QU4RTZ
+桜坂しずく | A·ZU·NA
+　　鐘嵐珠 | R3BIRTH
+　上原歩夢 | A·ZU·NA
+優木せつ菜 | A·ZU·NA
+</code></pre>
+<p>請用 SQL 把所有 <code>subunit</code> 不重複地列出來，而且不用 <code>GROUP</code> -- 也就是這樣：</p>
+<p>QU4RTZ
+A·ZU·NA
+R3BIRTH</p>
+<hr>
+<p>另外試題還考幾個 DNS 的用法……不過詳細文字我忘了。所以我試題也做過修改。</p>
+<h2>技術答案</h2>
+<p>這裡就直接寫答案吧。</p>
+<ol>
+<li><a href="https://www.php.net/manual/en/function.date.php"><code>date</code></a></li>
+<li><a href="https://www.php.net/manual/en/function.substr.php"><code>substr</code></a></li>
+<li><a href="https://www.php.net/manual/en/control-structures.for.php"><code>for ($a = 1; $a &lt;= 10; $a++) {}</code></a></li>
+<li><a href="https://www.php.net/manual/en/language.operators.comparison.php#language.operators.comparison.ternary"><code>$foo ? $bar : $baz</code></a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/join.html"><code>SELECT * FROM actors_1st JOIN actors_2nd ON actors_1st.aim = actors_2nd.aim</code></a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/distinct-optimization.html"><code>SELECT DISTINCT subunit FROM members</code></a></li>
+</ol>
+<p>DNS 的用法中，我印象最深的大概是考 Email 信箱與其他 DNS 伺服器用法。前者為 MX, 後者為 NS。</p>
+<p>等等，是 NS 不是 CNAME 嗎？</p>
+<p>不一樣。</p>
+<p>因為 CNAME 是用來紀錄 DNS 的<strong>別名或指向</strong>、而 NS 是用來紀錄 DNS 的<strong>名稱</strong>。</p>
+<h2>比結果更重要的事情</h2>
+<p>但其實我最有收穫的是面試官評論：他聽完我的面試後，說他相信我的技術夠紮實──雖然我覺得在 PHP 不過是 Jounior 左右──但在面談方面，提出說自己頗擔憂我的溝通能力。因為他比較期待的 PHP 開發是聽完就能很有默契地，回答他想知道的答案。而不是問了面試者一個問題，還要回答後者提出的兩三個新問題。</p>
+<p>我難得見到有面試官對我的評價如此誠實、讓我對自己的技術和面試問題心裡有底、並放下不切實際的期望。現在想想，大概沒有幾位面試官有這麼誠實的評價吧──如果大家都直接對不想錄取的人發通知書、或是直接點出問題的話，我想事情會變簡單多了吧。</p>
+<p>但誰在乎魯蛇怎麼想？<br>
+人生失敗者恕不另行通知。</p>
+<h2>雜談抱怨</h2>
+<p>必須說我很難接受「聽完問題就很有默契地回答正確答案」這種溝通方式：因為過去的經驗，通常是很有默契地作工，結果做出來的東西，並不是溝通者想要的；再加上程式開發這行的容錯率極低──意思是，幾乎不容許任何一點差錯──最後我發現自己變成了典型的……工程師腦袋？所以後來就養成不斷詢問的習慣、不完全明白前做了會懷疑、以及只接受某個答案這樣。</p>
+<p>也許信心薄弱也是這方面的原因吧？</p>
+<p>如果說不斷訊問溝通方式，成本巨大需要改進，那我就覺得……這勇氣是梁靜茹給的吧？你怎麼能對某個不明白的問題，給出幾乎百分百肯定的假設？<a href="https://chemistry.stackexchange.com/q/65180">化學提煉都不可能百分百了</a>。</p>
+<p>如果出現一趴的黑天鵝，誰負責？想也知道是做的人。</p>
+<p>程式只有對與錯；程式錯了，錯的永遠是寫程式的人──這大概是我寫程式幾年的感想。</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://webmasters.stackexchange.com/a/78191">server - Understanding CNAME and NS in DNS - Webmasters Stack Exchange</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_DNS_record_types">List of DNS record types - Wikipedia</a></li>
+<li><a href="https://www.cloudflare.com/en-gb/learning/dns/dns-records/dns-cname-record">What is a DNS CNAME record? | Cloudflare</a></li>
+<li><a href="https://www.cloudflare.com/en-gb/learning/dns/dns-records/dns-ns-record">DNS NS record | Cloudflare</a></li>
+<li><a href="http://dns-learning.twnic.net.tw/bind/intro6.html">DNS資源紀錄(Resource Record)介紹</a></li>
+<li><a href="https://www.ruanyifeng.com/blog/2022/06/weekly-issue-209.html">科技爱好者周刊（第 209 期）：程序员是怎样的人 - 阮一峰的网络日志</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="../assets/prism/prism.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>

@@ -153,11 +153,12 @@ export const handler = async (event) =&gt; {
 </blockquote>
 <p>為什麼。</p>
 <p>……正當我這麼想時，又出現 {&quot;message&quot;: &quot;Internal server error&quot;} 了：</p>
-<pre><code>2024 : Endpoint response body before transformations: {&quot;month&quot;:&quot;7&quot;,&quot;num&quot;:614,&quot;link&quot;:&quot;&quot;,&quot;year&quot;:&quot;2009&quot;,&quot;news&quot;:&quot;&quot;,&quot;safe_title&quot;:&quot;Woodpecker&quot;,&quot;transcript&quot;:&quot;[[A man with a beret and a woman are standing on a boardwalk, leaning on a handrail.]]\nMan: A woodpecker!\n&lt;&lt;Pop pop pop&gt;&gt;\nWoman: Yup.\n\n[[The woodpecker is banging its head against a tree.]]\nWoman: He hatched about this time last year.\n&lt;&lt;Pop pop pop pop&gt;&gt;\n\n[[The woman walks away.  The man is still standing at the handrail.]]\n\nMan: ... woodpecker?\nMan: It's your birthday!\n\nMan: Did you know?\n\nMan: Did... did nobody tell you?\n\n[[The man stands, looking.]]\n\n[[The man walks away.]]\n\n[[There is a tree.]]\n\n[[The man approaches the tree with a present in a box, tied up with ribbon.]]\n\n[[The man sets the present down at the base of the tree and looks up.]]\n\n[[The man walks away.]]\n\n[[The present is sitting at the bottom of the tree.]]\n\n[[The woodpecker looks down at the present.]]\n\n[[The woodpecker sits on the present.]]\n\n[[The woodpecker pu [TRUNCATED]
+<blockquote>
+<p>2024 : Endpoint response body before transformations: {&quot;month&quot;:&quot;7&quot;,&quot;num&quot;:614,&quot;link&quot;:&quot;&quot;,&quot;year&quot;:&quot;2009&quot;,&quot;news&quot;:&quot;&quot;,&quot;safe_title&quot;:&quot;Woodpecker&quot;,&quot;transcript&quot;:&quot;[[A man with a beret and a woman are standing on a boardwalk, leaning on a handrail.]]\nMan: A woodpecker!\n&lt;&lt;Pop pop pop&gt;&gt;\nWoman: Yup.\n\n[[The woodpecker is banging its head against a tree.]]\nWoman: He hatched about this time last year.\n&lt;&lt;Pop pop pop pop&gt;&gt;\n\n[[The woman walks away.  The man is still standing at the handrail.]]\n\nMan: ... woodpecker?\nMan: It's your birthday!\n\nMan: Did you know?\n\nMan: Did... did nobody tell you?\n\n[[The man stands, looking.]]\n\n[[The man walks away.]]\n\n[[There is a tree.]]\n\n[[The man approaches the tree with a present in a box, tied up with ribbon.]]\n\n[[The man sets the present down at the base of the tree and looks up.]]\n\n[[The man walks away.]]\n\n[[The present is sitting at the bottom of the tree.]]\n\n[[The woodpecker looks down at the present.]]\n\n[[The woodpecker sits on the present.]]\n\n[[The woodpecker pu [TRUNCATED]
 2024 : Execution failed due to configuration error: Malformed Lambda proxy response
 2024 : Gateway response type: DEFAULT_5XX with status code: 502
-2024 : Gateway response body: {&quot;message&quot;: &quot;Internal server error&quot;}
-</code></pre>
+2024 : Gateway response body: {&quot;message&quot;: &quot;Internal server error&quot;}</p>
+</blockquote>
 <p>明明就有回應……問題難道是 <code>Execution failed due to configuration error: Malformed Lambda proxy response</code> 嗎？然後再查了下，因為當你開 Lambda proxy integration 以後，所有請求與回應都必須要用 API Gateway 的格式了。</p>
 <p>這一點天理也沒有。</p>
 <p>被氣到不想寫前端部份了，小全端到此為止。</p>
