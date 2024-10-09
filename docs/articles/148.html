@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="../assets/prism/prism.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../">首頁</a></li>
+                <li class="item"><a href="../articles">文章總覽</a></li>
+                <li class="item"><a href="../about">關於我</a></li>
+                <li class="item"><a href="../tags">標籤</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>用 DOSBox 跑 Windows95</h1>
+<p>有一天，我發現有人放了<a href="https://www.ptt.cc/bbs/Old-Games/M.1458361776.A.FE2.html">程式</a>，能完美跑哆啦A夢大富翁。顏色聲音一應俱全。看下用什麼讓他跑出來的，發現是 <a href="https://dosbox-x.com">DOSBox-X</a>……我頗為驚訝，這玩意竟然能跑 Windows95。</p>
+<p>但現在想想，我其實應該想到 <a href="https://en.wikipedia.org/wiki/Windows_9x">Windows 9x</a> 本身就是以 DOS 核心為基礎開發的啊。那 DOSBox 能跑 Windows 9x 應該是可以預料的。</p>
+<p>總之，開始吧。</p>
+<h2>步驟</h2>
+<p>所有步驟都有寫在 DOSBox-X 的<a href="https://dosbox-x.com/wiki/Guide%3AInstalling-Windows-95">官方手冊</a>了。懂英文的可以直接讀。官方手冊寫的是 Windows95，但可以選其他的作業系統。甚至到 <a href="https://dosbox-x.com/wiki/Guide%3AInstalling-Windows-ME">Windows Me</a>。</p>
+<p>首先，要準備 <a href="https://dosbox-x.com">DOSBox-X</a> 與 Windows95 的光碟。 Windows95 光碟的 ISO 檔與驗證碼可以從 <a href="https://winworldpc.com">WinWorld</a> 找，在此省略。</p>
+<p>下載完畢後把 DOSBox-X 的 bin/x64/Release 解壓縮，接著把官方手冊寫的設定檔抓下來，貼進去解壓縮的目錄去。寫好後，進去 dosbox-x.exe 並點選 Restart DOSBox-X with config file 以選擇剛才的設定檔來用。</p>
+<p>載入後，我們需要在 DOSBox-X 的命令列輸入 <code>IMGMAKE hdd.img -t hd_2gig -fat 16</code> 以建立一個新的硬碟檔案。</p>
+<p>這樣就會在檔案中建立 <code>hdd.img</code> 的檔案。除此以外，還需要載入硬碟檔與 ISO 檔：</p>
+<ol>
+<li>IMGMOUNT C hdd.img</li>
+<li>IMGMOUNT D [Windows95 光碟的 ISO 檔]</li>
+<li>輸入 <code>XCOPY D:\WIN95 C:\WIN95 /I /E</code> 把 <code>D:\WIN95</code> 所有檔案複製到硬碟檔。</li>
+</ol>
+<p>完成後，輸入以下指令：</p>
+<ol>
+<li>D:</li>
+<li>CD \WIN95</li>
+<li>SETUP</li>
+</ol>
+<p>然後遵照光碟中的安裝指引把 Windows95 安裝起來。</p>
+<p>完成後，把 <code>win98.conf</code> 裡面的 <code>[autoexec]</code> 章節修改為：</p>
+<pre><code class="language-conf">[autoexec]
+IMGMOUNT 0 empty -fs none -t floppy
+IMGMOUNT 1 empty -fs none -t floppy -size 512,15,2,80
+IMGMOUNT C hdd.img -ide 1m
+IMGMOUNT D empty -t iso -ide 2m
+BOOT C:
+</code></pre>
+<p>這樣，以後只要載入 win98.conf 檔案，就可以跑安裝後的 Windows95 了。</p>
+<hr>
+<p>找時間看一下 DOSBox-X 的硬碟配置，也許可以讓他在 <a href="https://www.virtualbox.org">VirtualBox</a> 上面跑……？</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://dosbox-x.com/wiki/Guide%3AInstalling-Windows-95">Installing Microsoft Windows 95 in DOSBox-X</a></li>
+<li><a href="https://www.youtube.com/watch?v=sYAm6kZPjF4">DosBox-X - Installing Windows 95</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/xcopy">xcopy</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="../assets/prism/prism.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>
