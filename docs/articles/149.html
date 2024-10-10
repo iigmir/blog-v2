@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="../assets/prism/prism.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../">首頁</a></li>
+                <li class="item"><a href="../articles">文章總覽</a></li>
+                <li class="item"><a href="../about">關於我</a></li>
+                <li class="item"><a href="../tags">標籤</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>OverTheWire: Bandit 筆記 Part 1</h1>
+<p>我在 freeCodeCamp 部落格文章 <a href="https://www.freecodecamp.org/news/improve-hacking-skills-by-playing-wargames">How to Improve Your Hacking Skills by Playing OverTheWire Wargames</a> 發現 <a href="https://overthewire.org/wargames">OverTheWire</a> 網站會教你如何藉由動手做，來理解駭客做的事情。我不禁好奇起來、然後陷進去了。</p>
+<p>我這邊 <a href="https://overthewire.org/wargames/bandit">Bandit</a> 作到 &quot;Bandit Level 14 → Level 15&quot; 這邊。就講講目前為止的一些東西吧。</p>
+<h2>Bandit 簡介</h2>
+<p>Bandit 是個教你如何以 Linux 完成各種操作的遊戲。</p>
+<h2>Level 0</h2>
+<p>很簡單，用 <code>bandit0</code> 的身份、加上 <code>bandit0</code> 這密碼，連上 bandit.labs.overthewire.org 網站，並以 2220 port 登入。預設 port 是 <code>22</code>，需要改為 <code>2220</code>。</p>
+<pre><code class="language-bash">$ ssh bandit0@bandit.labs.overthewire.org -p 2220
+</code></pre>
+<h2>Level 0 → Level 1</h2>
+<p>這裡要會用 cat 看文字檔，然後用裡面提供的密碼登入。</p>
+<pre><code class="language-bash">$ cat readme
+Congratulations on your first steps into the bandit game!!
+(省略)
+The password you are looking for is: &lt;PASSWORD&gt;
+
+$ exit
+$ ssh bandit1@bandit.labs.overthewire.org -p 2220
+</code></pre>
+<h2>Level 1 → Level 2</h2>
+<p>要查 <code>-</code> 這檔案的話不能直接用 <code>cat -</code> 這指令，Bash 會誤會。請使用 <code>cat ./-</code>。</p>
+<p>有點出乎意料了吧。</p>
+<h2>Level 2 → Level 3</h2>
+<p>要處理並閱覽有空白的檔案有點棘手。我以前第一次用 Linux 時也採過坑。</p>
+<p>不過答案很簡單：只要在輸入 &quot;spaces&quot; 後按 Tab 鍵，程式就能自己補全合適的 &quot;spaces\ in\ this\ filename&quot; 啦。</p>
+<h2>Level 3 → Level 4</h2>
+<p><code>cd inhere</code> 後下 <code>ls -a</code> 會發現一個以 <code>.</code> 為開頭的檔案。在 Linux 中 <code>.</code> 是隱藏檔案。</p>
+<h2>Level 4 → Level 5</h2>
+<p>這裡要學會 <a href="https://manpages.ubuntu.com/manpages/noble/man1/file.1.html">file</a> 指令怎麼用。</p>
+<p>bandit4@bandit:~/inhere$ file ./-file06
+./-file06: data
+bandit4@bandit:~/inhere$ file ./-file07
+./-file07: ASCII text
+bandit4@bandit:~/inhere$ cat ./-file07</p>
+<pre><code class="language-bash">$ file ./-fileXX
+./-fileXX: data
+$ file ./-fileXY
+./-fileXY: ASCII text
+</code></pre>
+<p>不要懷疑。被標為 ASCII text 的 <code>-fileXY</code> 就是我們要的文字檔。</p>
+<h2>Level 5 → Level 6</h2>
+<p>本來想說要用 <code>du</code> 的……不過試了好久，最後用 <code>find . -size -1033c</code> 把所有 1033 bytes 的檔案都列出來，然後看看哪些合我要的。</p>
+<blockquote>
+<p>-size n</p>
+<p>True if the file's size, rounded up, in 512-byte blocks is n. If n is followed by a c, then the primary is true if the file's size is n bytes (characters).</p>
+</blockquote>
+<h2>Level 6 → Level 7</h2>
+<p>The password for the next level is stored somewhere on the server and has all of the following properties:</p>
+<ol>
+<li>owned by user bandit7</li>
+<li>owned by group bandit6</li>
+<li>33 bytes in size</li>
+</ol>
+<p>這很簡單。首先用 <code>find / -user bandit7 -group bandit6 -exec ls -lsad {} \;</code> 列出所有符合 1 與 2 的檔案後，再從裡面找到 33 就成。</p>
+<h2>Level 7 → Level 8</h2>
+<p>這裡使用 <a href="https://www.vim.org">vim</a> 完成工作。使用 <code>vim data.txt</code> 進去裡面後，打 <code>/</code> 會進入延伸指令列命令模式的搜尋功能，再把 <code>millionth</code> 貼進搜尋功能後即成。</p>
+<h2>Level 8 → Level 9</h2>
+<p>向 ChatGPT 求助，回說用 <code>tr -c '[:alnum:]' '[\n*]' &lt; data.txt | sort | uniq -u</code> 就能找到需要的檔案。試了下，還真是如此。再問那些東西做什麼的，回答：</p>
+<ol>
+<li><code>-c '[:alnum:]'</code> 抓到所有不是文數（alphanumeric）的文字：<code>[:alnum:]</code> 是文數；而 <code>-c</code> 是 <a href="https://en.wikipedia.org/wiki/Complement_(set_theory)">complement</a>，也就是互補、對立。</li>
+<li><code>'[\n*]'</code> 換行。還記得 <code>\n</code> 就是換行嗎？</li>
+<li><code>| sort</code> 會把前面的 <code>tr -c '[:alnum:]' '[\n*]' &lt; data.txt</code> 指令保留下來，然後用 <code>sort</code> 指令排列起來。</li>
+<li><code>| uniq -u</code> 同樣地會把前面的 <code>tr -c '[:alnum:]' '[\n*]' &lt; data.txt | sort</code> 指令保留下來，然後 <code>uniq -u</code> 指令會移掉所有重複的單字。</li>
+</ol>
+<h2>Level 9 → Level 10</h2>
+<p>同 &quot;Level 7 → Level 8&quot; 章節，打 <code>/</code> 進入搜尋功能，再把 <code>===</code> 貼進搜尋功能後找一下。</p>
+<h2>Level 10 → Level 11</h2>
+<p>用 <code>base64 -d data.txt</code> 把檔案內的 base64 文字解碼，答案就出現了。</p>
+<h2>Level 11 → Level 12</h2>
+<p>這是我第一次感覺很困難的 Level。</p>
+<p>首先，我發現 data.txt 隱約有某種規律，用 <code>xxd data.txt</code> 發現第一行是這樣：</p>
+<pre><code class="language-hexdump">00000000: 4775 7220 636e 6666 6a62 6571 2076 6620  Gur cnffjbeq vf
+</code></pre>
+<p>與 cnffjbeq 對應的 hexdump 是 <code>636e 6666 6a62 6571</code> 這串數字。查了下 <a href="https://en.wikipedia.org/wiki/ASCII#Printable_characters">ASCII</a> 資料後，發現 ASCII Hex 值會按照順序排列英文字母。看來能從修改 Hex 值下手。</p>
+<p>題目有說單字移動了 13 個單位。13 對應 HEX 就是 D。那試試看如何用 HEX 運算操縱 63 , 66, 6e 這三個數字，看看 <code>63 6e 66 66</code> 會有什麼結果吧。</p>
+<table>
+<thead>
+<tr>
+<th>運算結果</th>
+<th>運算結果對應字母</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>63 + D = 70</td>
+<td>p</td>
+</tr>
+<tr>
+<td>63 - D = 56</td>
+<td>V</td>
+</tr>
+<tr>
+<td>6e + D = 7B</td>
+<td><code>{</code></td>
+</tr>
+<tr>
+<td>6e - D = 61</td>
+<td>a</td>
+</tr>
+<tr>
+<td>66 + D = 73</td>
+<td>s</td>
+</tr>
+<tr>
+<td>66 - D = 59</td>
+<td>Y</td>
+</tr>
+</tbody>
+</table>
+<p>p, V, <code>{</code>, a, s, y 這六個單字解 cnff 這文字，最後發現是 pass 這單字。</p>
+<hr>
+<p>可是問題來了──到底題目所言「移動了 13 個單位」是怎麼移動的？為什麼 63 會是<strong>加</strong> D 對應 70 而不是<strong>減</strong> D 對應 56 呢？我不明白這個規律。</p>
+<p>經過痛苦的程式撰寫後，問題還是沒有進展。沒辦法，詢問 ChatGPT 後，發現原來我要找的「規律」是 <a href="https://en.wikipedia.org/wiki/ROT13">ROT13</a>，而且可以用程式完成。藉著 ChatGPT 的程式，總算完成了。</p>
+<h2>Level 12 → Level 13</h2>
+<p>另一個麻煩。似乎扯到 HEX 的都是麻煩。</p>
+<p>總之步驟如下：</p>
+<ol>
+<li>把 Hex dump 檔案變成被無限壓縮的二進制程式。</li>
+<li>用 file 查看檔案是什麼。</li>
+<li>按照 file 的顯示結果，處理對應的壓縮程序。注意 gzip 檔案需要把檔名改為 <code>.gz</code>。</li>
+<li>只要 file 程式最後顯示 ASCII text，那就是密碼了。</li>
+</ol>
+<p>裡面可能用 gzip, tar, 或其他壓縮演算法。反正 file 說是什麼，上網搜搜怎麼給那個檔案解壓縮就好。</p>
+<p>最困難的問題，大概是如何了把 Hex dump 變成二進制程式吧。我把檔案前幾行餵給 ChatGPT 吃：</p>
+<pre><code class="language-hexdump">00000000: 1f8b 0808 dfcd eb66 0203 6461 7461 322e  .......f..data2.
+00000010: 6269 6e00 013e 02c1 fd42 5a68 3931 4159  bin..&gt;...BZh91AY
+</code></pre>
+<p>然後 ChatGPT 回答說這是個 gzip 檔案，因為最前面兩個數字 <code>1f8b</code> 是 gzip 的<a href="https://en.wikipedia.org/wiki/Magic_number_(programming)#In_files">魔術數字</a>。接著建議我用 xxd 把檔案弄出來：<code>xxd -r -p data.txt output.gz</code>。</p>
+<p>可是我用了很久，發現 xxd 弄出來的檔案有問題。無奈，只好直接輸入 HEX 值：</p>
+<pre><code class="language-bash">$ xxd -r -p &lt;&lt;&quot;EOF&quot; &gt; myfile.gz
+&gt; 1f8b 0800 3416 1259 0003 edcf 310e...
+&gt; EOF
+$ file myfile.gz
+myfile.gz: gzip compressed data
+</code></pre>
+<p>然後開始無盡的解壓縮之旅。</p>
+<p><img src="https://raw.githubusercontent.com/iigmir/blog-source/refs/heads/master/assets/149/1-saito.png" alt="《全面啟動》中，因為困在被無限壓縮的夢中時光，而垂垂老矣的齋藤。 Warner Bros. Pictures. All rights reserved."></p>
+<p>直到變成老頭為止。</p>
+<h2>Level 13 → Level 14</h2>
+<p>很簡單，在使用 shh 登入時，把檔案中的 sshkey.private 放進去：<code>ssh -i sshkey.private bandit14@localhost -p 2220</code>。</p>
+<p>題外話，據說<a href="https://program-think.blogspot.com">编程随想</a>用做了幾個 KeyFiles 檔案，然後瞞過了中國監控好幾年。真的厲害。參見<a href="https://program-think.blogspot.com/2015/10/VeraCrypt.html">扫盲 VeraCrypt——跨平台的 TrueCrypt 替代品</a>以獲取詳細資訊。</p>
+<h2>結語</h2>
+<p>好的，暫時先說到這邊。看起來有33關耶，那就下次見吧。</p>
+<h2>附檔</h2>
+<ul>
+<li><a href="https://github.com/iigmir/blog-source/raw/refs/heads/master/assets/149/bandit9-chatgpt.txt">bandit9-chatgpt.txt</a></li>
+<li><a href="https://github.com/iigmir/blog-source/raw/refs/heads/master/assets/149/bandit12-chatgpt.txt">bandit12-chatgpt.txt</a></li>
+<li><a href="https://github.com/iigmir/blog-source/raw/refs/heads/master/assets/149/bandit13-chatgpt.txt">bandit13-chatgpt.txt</a></li>
+</ul>
+<h2>參考資料</h2>
+<ul>
+<li>Bandit Level 4 → Level 5
+<ul>
+<li><a href="https://unix.stackexchange.com/a/313462">Find human-readable files - Unix &amp; Linux Stack Exchange</a></li>
+</ul>
+</li>
+<li>Bandit Level 5 → Level 6
+<ul>
+<li><a href="https://stackoverflow.com/a/59443014">bash - Print in bytes with &quot;du&quot; - Stack Overflow</a></li>
+</ul>
+</li>
+<li>Bandit Level 6 → Level 7
+<ul>
+<li><a href="https://stackoverflow.com/a/57520350">linux - listing files in UNIX owned by a particular user - Stack Overflow</a></li>
+</ul>
+</li>
+<li>Bandit Level 7 → Level 8
+<ul>
+<li><a href="https://linux.vbird.org/linux_basic_train/rockylinux9/unit03.php">鳥哥私房菜 - 第 3 堂課：檔案管理與 vim 初探</a></li>
+</ul>
+</li>
+<li>Bandit Level 8 → Level 9
+<ul>
+<li><a href="https://manpage.me/?q=uniq">uniq man page</a></li>
+<li><a href="https://manpage.me/?q=sort">sort man page</a></li>
+</ul>
+</li>
+<li>Bandit Level 11 → Level 12
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/ASCII#Printable_characters">ASCII - Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/ROT13">ROT13 - Wikipedia</a></li>
+</ul>
+</li>
+<li>Bandit Level 12 → Level 13
+<ul>
+<li><a href="https://www.linuxquestions.org/questions/linux-newbie-8/need-help-with-converting-from-hex-dump-and-decompressing-4175644641">[SOLVED] Need Help With Converting from Hex Dump and Decompressing</a></li>
+<li><a href="https://stackoverflow.com/a/15744167">linux - How to extract filename.tar.gz file - Stack Overflow</a></li>
+<li><a href="https://superuser.com/a/1214652">linux - Convert hexdump to tar file - Super User</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hex_dump">Hex dump - Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Magic_number_(programming)#In_files">Magic number (programming) - Wikipedia</a></li>
+</ul>
+</li>
+<li>Bandit Level 13 → Level 14
+<ul>
+<li><a href="https://unix.stackexchange.com/a/23294">openssh - How to ssh to remote server using a private key? - Unix &amp; Linux Stack Exchange</a></li>
+</ul>
+</li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="../assets/prism/prism.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>

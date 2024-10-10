@@ -27,7 +27,7 @@
 <h2>步驟</h2>
 <p>所有步驟都有寫在 DOSBox-X 的<a href="https://dosbox-x.com/wiki/Guide%3AInstalling-Windows-95">官方手冊</a>了。懂英文的可以直接讀。官方手冊寫的是 Windows95，但可以選其他的作業系統。甚至到 <a href="https://dosbox-x.com/wiki/Guide%3AInstalling-Windows-ME">Windows Me</a>。</p>
 <p>首先，要準備 <a href="https://dosbox-x.com">DOSBox-X</a> 與 Windows95 的光碟。 Windows95 光碟的 ISO 檔與驗證碼可以從 <a href="https://winworldpc.com">WinWorld</a> 找，在此省略。</p>
-<p>下載完畢後把 DOSBox-X 的 bin/x64/Release 解壓縮，接著把官方手冊寫的設定檔抓下來，貼進去解壓縮的目錄去。寫好後，進去 dosbox-x.exe 並點選 Restart DOSBox-X with config file 以選擇剛才的設定檔來用。</p>
+<p>下載完畢後把 DOSBox-X 的 bin/x64/Release 解壓縮，接著把官方手冊寫的設定檔抓下來，貼進去解壓縮的目錄去。寫好後，進去 dosbox-x.exe 並點選 Restart DOSBox-X with config file 以選擇剛才的設定檔來用。嫌麻煩的話，可以去把<a href="#%E9%99%84%E6%AA%94">附檔</a>章節把檔案挖下來。</p>
 <p>載入後，我們需要在 DOSBox-X 的命令列輸入 <code>IMGMAKE hdd.img -t hd_2gig -fat 16</code> 以建立一個新的硬碟檔案。</p>
 <p>這樣就會在檔案中建立 <code>hdd.img</code> 的檔案。除此以外，還需要載入硬碟檔與 ISO 檔：</p>
 <ol>
@@ -53,6 +53,12 @@ BOOT C:
 <p>這樣，以後只要載入 win98.conf 檔案，就可以跑安裝後的 Windows95 了。</p>
 <hr>
 <p>找時間看一下 DOSBox-X 的硬碟配置，也許可以讓他在 <a href="https://www.virtualbox.org">VirtualBox</a> 上面跑……？</p>
+<h2>附檔</h2>
+<ul>
+<li><a href="https://github.com/iigmir/blog-source/raw/refs/heads/master/assets/148/win95.conf">win95.conf</a></li>
+<li><a href="https://github.com/iigmir/blog-source/raw/refs/heads/master/assets/148/win98.conf">win98.conf</a></li>
+<li><a href="https://github.com/iigmir/blog-source/raw/refs/heads/master/assets/148/winme.conf">winme.conf</a></li>
+</ul>
 <h2>參考資料</h2>
 <ul>
 <li><a href="https://dosbox-x.com/wiki/Guide%3AInstalling-Windows-95">Installing Microsoft Windows 95 in DOSBox-X</a></li>
