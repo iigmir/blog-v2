@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="../assets/prism/prism.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../">首頁</a></li>
+                <li class="item"><a href="../articles">文章總覽</a></li>
+                <li class="item"><a href="../about">關於我</a></li>
+                <li class="item"><a href="../tags">標籤</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>無障礙網頁速覽</h1>
+<h2>工具</h2>
+<p>無障礙三神器：</p>
+<ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/Tooling">瀏覽器</a> (<a href="https://dev.to/josefine/accessibility-testing-with-chrome-devtools-2bl4">Lighthouse on Chrome</a>)</li>
+<li><a href="https://accessibility.moda.gov.tw/Download/Detail/2763?Category=70">Freego</a></li>
+<li><a href="https://www.nvaccess.org/download/">NVDA</a> (<a href="https://www.nvda.org.tw/">NVDA 台灣</a>)</li>
+</ol>
+<h2>實做</h2>
+<p>無障礙做得好能促進 SEO。基本上，Freego能過算是基本。還有其他東西要幹。幾個點：</p>
+<ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/HTML">語意化 HTML</a>。
+<ul>
+<li><a href="https://accessibility.moda.gov.tw/Download/Detail/1519?Category=36">HM3241000C</a>, <a href="https://accessibility.moda.gov.tw/Download/Detail/1506?Category=63">HM1130100C</a>, <a href="https://accessibility.moda.gov.tw/Download/Detail/1520?Category=63">HM1310100C</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A4%9A%E5%AA%92%E9%AB%94%E9%9C%80%E8%A6%81%E6%96%87%E5%AD%97%E5%A0%B1%E8%AE%80">多媒體需要文字報讀</a>：幫圖片加上 <code>alt</code> 屬性、影片及聲音檔則加上文字描述。
+<ul>
+<li>Markdown 能幫圖片加上 <code>alt</code> 屬性：<code>![alt 說明](URL)</code>。<a href="https://accessibility.moda.gov.tw/Download/Detail/1499?Category=63">HM1110100C</a></li>
+<li><a href="https://en.wikipedia.org/wiki/MOS:ALT">撰寫 <code>alt</code> 屬性的小技巧</a></li>
+<li><a href="https://en.wikipedia.org/wiki/MOS:ANIMATION">如何給影像等多媒體加上文字解說？</a></li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Perceivable/Color_contrast">色彩要有對比</a>。
+<ul>
+<li>瀏覽器有工具，但 <a href="https://colororacle.org">Color Oracle</a> 可以試試看。</li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Keyboard-navigable_JavaScript_widgets">鍵盤導航</a>要多點心力。
+<ul>
+<li><code>onclick</code> 增加 <code>onkeydown</code> 事件。例如: <code>&lt;span tabindex=&quot;-1&quot; onkeydown=&quot;return handleKeyDown();&quot;&gt;…&lt;/span&gt;</code></li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement">漸進增強</a>：優先以 HTML 呈現內容、再來以 CSS 裝飾、最後以 JavaScript 讓網站好用。
+<ul>
+<li><code>noscript</code> 標籤</li>
+</ul>
+</li>
+</ol>
+<h2>其他網站</h2>
+<p>可能去資源教室問問看有沒有其他東西能考慮的？</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility">Accessibility - Learn web development | MDN</a></li>
+<li><a href="https://accessibility.moda.gov.tw/Accessible/Guide/68">網站無障礙規範(110.07)</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <script src="../assets/prism/prism.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>
