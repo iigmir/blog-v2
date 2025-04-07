@@ -35,11 +35,9 @@ class LisenceElement {
     }
     get main() {
         const div = document.createElement( "div" );
-        const small = this.small_dom();
-        const image_link = this.img_link_dom();
         div.setAttribute( "class", "lisence" );
-        div.appendChild( image_link );
-        div.appendChild( small );
+        div.appendChild( this.img_link_dom() );
+        div.appendChild( this.small_dom() );
         return div;
     }
 }
@@ -131,13 +129,12 @@ class ResolvedElements {
      * THE wrapper
      */
     get wrapper() {
-        const wrapper = document.createElement( "footer" );
+        const wrapper = document.createElement( "div" );
         wrapper.setAttribute( "class", "tags container" );
         wrapper.appendChild( this.hr_gap_dom );
         wrapper.appendChild( this.date_components );
         wrapper.appendChild( this.help_dom );
         wrapper.appendChild( this.tags_list_dom );
-        wrapper.appendChild( this.lisence_dom );
         return wrapper;
     }
 }

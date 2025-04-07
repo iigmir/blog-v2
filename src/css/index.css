@@ -82,7 +82,8 @@ body
 }
 
 .navigator .list .item a,
-.articles.container a
+.articles.container a,
+.copyright-notice.container a
 {
     color: var(--article-link-colour);
 }
@@ -99,3 +100,8 @@ body
     color: var(--active-link-colour);
 }
 
+/* copyright-notice */
+.copyright-notice img
+{
+    margin-bottom: 1rem;
+}
