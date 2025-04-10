@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+        <title>露比的銳思</title>
+        <description>網路開發的微小聲音</description>
+        <link>http://blog.iigmir.idv.tw</link>
+        <copyright>Copyright 2025, iigmir under CC BY-ND 4.0.</copyright>
+        <lastBuildDate>Mon, 6 Sep 2010 00:01:00 +0000</lastBuildDate>
+        <items />
+        <!-- <item>
+            <title>Hello World</title>
+            <description>Hello, this iismmx's blog...</description>
+            <link>https://blog.iigmir.idv.tw/articles/001.html</link>
+            <category>資訊開發以外的東西</category>
+            <guid isPermaLink="false">1</guid>
+            <pubDate>2019-04-08T15:25:21Z</pubDate>
+            <language>en-GB</language>
+        </item> -->
+
+    </channel>
+</rss>
