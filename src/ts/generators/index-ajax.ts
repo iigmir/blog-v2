@@ -15,8 +15,9 @@ class IndexAJAXGenerator implements BasicGenerator
     template: string = "";
     list: BlogArticleInfoInterface[] = [];
     get list_template()
-    {
-        return render_list( this.list );
+    {   // The list needs to be reverse because we need to sort the latest article
+        const latest_list = [...this.list].reverse();
+        return render_list( latest_list );
     }
     /**
      * @returns HTML texts with parsed Markdown HTML
