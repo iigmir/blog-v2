@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>露比的銳思</title>
+    <link href="../assets/prism/prism.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/new-framework.min.css" />
+    <link rel="stylesheet" href="../css/index.min.css" />
+    <link rel="shortcut icon" type="image/svg+xml" href="../favicon.svg" />
+</head>
+<body>
+    <main class="articles content container">
+        <nav class="navigator">
+            <ul class="list">
+                <li class="item"><a href="../">首頁</a></li>
+                <li class="item"><a href="../articles">文章總覽</a></li>
+                <li class="item"><a href="../about">關於我</a></li>
+                <li class="item"><a href="../tags">標籤</a></li>
+            </ul>
+        </nav>
+        <article class="article">
+            <h1>等比例縮小像素</h1>
+<p>最近在Wikipedia看到有趣的問題：<a href="https://en.wikipedia.org/wiki/Wikipedia:Non-free_content#Image_resolution">將原圖等比例縮小圖片至指定像素</a></p>
+<p>那問題來了：如何把圖片的像素以等比例縮小？不想看解題的可以直接去 <a href="https://gist.github.com/iigmir/b10d361bf4bf2d0ace04198cfb885718">resluation-ratio.js</a> 看看。</p>
+<h2>命題說明</h2>
+<p>一張圖片的像素多少，是該圖的長乘以寬。比方說一張 800×600 的圖片，像素就是 480000。</p>
+<p>有關「如何把圖片的像素以等比例縮小」的具體說明為：如果要限定像素的話，除了要出長與寬以外，還要給出限定像素，把比例收斂在該限定像素以下。</p>
+<p>具體示例：有一張 800×600 要縮小到 300000 的話，那程式要給出 <code>Ma×Pi×el([800, 600], 300000)</code> 的命題；而由於就要縮為 632×474 (299568 像素), 因此答案要給出 <code>[632, 474]</code> 的陣列。</p>
+<h2>解題</h2>
+<p>首先要知道的是圖片的長寬比例。比方說 800×600 的比例就是 4:3. 後來我才知道這比例被稱為「長寬比」（aspect ratio）。</p>
+<p>那如何解出長寬比？<a href="https://stackoverflow.com/a/1186465">Stack Overflow 的回答</a>說要用求取長寬的<a href="https://en.wikipedia.org/wiki/Greatest_common_divisor">最大公因數</a>後，再將長或寬除以最大公因數後，求取兩者比例。而最大公因數則要透過<a href="https://en.wikipedia.org/wiki/Euclidean_algorithm">輾轉相除法</a>取得。</p>
+<p>比方說 800×600 的長寬比是什麼？那就要從最大公因數開始求。依照<a href="https://en.wikipedia.org/wiki/Template:Euclidean_algorithm_steps">輾轉相除法解題</a>，答案為 200。那麼 800×600 的比呢？那就是 <code>(800/200):(600/200)</code>，也就是 4:3。恰好就是 <a href="https://en.wikipedia.org/wiki/Super_VGA">SVGA</a> 的比例。</p>
+<p>但接下來呢？我們希望長寬比例是 <code>4x * 3x = 300000</code> 的話，那該用什麼求取 <code>x</code> 是什麼？我一直想不通，只好向尋求 ChatGPT 答案。然後 ChatGPT 給了個巧妙的解法：</p>
+<ol>
+<li>把比例乘上去，並加上平方：也就是把 <code>4x * 3x = 300000</code> 變成 <code>12x^2 = 300000</code></li>
+<li>把左邊的乘數移動至結果後變成除法：也就是把 <code>12x^2 = 300000</code> 變成 <code>x^2 = 300000/12</code></li>
+<li>最後把平方根移動到右邊的除法結果後，將其寫成根號。該數字就是答案。也就是 <code>x = sqrt(300000/12)</code></li>
+<li><code>sqrt(300000/12)</code> 為 158.11。這邊無條件捨去（題目為給定像素以下）後就是 158。</li>
+</ol>
+<p>為什麼？</p>
+<p>首先，因為 <code>x * x</code> 會等於 <code>x^2</code>：也就是「x乘以x等於x的二次方」。因此 <code>4x * 3x</code> 就是 <code>12x^2</code>。接著，把 12 移動到右邊，就會讓算術變成 <code>x^2 = 300000</code>。最後，<code>x^2</code> 放到算式右邊就會變成平方根。x 就會知道是什麼了。</p>
+<p>最後只要把 x 乘上比例就完成了：</p>
+<pre><code>158 * 3 = 474
+158 * 4 = 632
+474 * 632 = 299568
+</code></pre>
+<p>299568 在 300000 以下，所以長 632 寬 474 是 300000 像素以下符合比例的最高長寬了。</p>
+<p>程式寫下來就是：<a href="https://gist.github.com/iigmir/b10d361bf4bf2d0ace04198cfb885718">resluation-ratio.js</a></p>
+<h2>後記</h2>
+<p>我後來看了一下原本的問題，才發現有更簡單的作法：<code>sqrt( (給定像素 * 原長) / 原寬 )</code></p>
+<p>那就會變成是：<code>sqrt( (300000 * 800) / 600 )</code>。算式導入後會變成 632.455...。因此 800×600 在 300000 像素下的新等比長為 632。</p>
+<p>很神奇，但為什麼呢？</p>
+<h2>參考資料</h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Aspect_ratio_(image)">Aspect ratio (image)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Template:Euclidean_algorithm_steps">Template:Euclidean algorithm steps</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_common_display_resolutions">List of common display resolutions</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Wikipedia:Non-free_content/Image_size_calculator?withgadget=calculator">Wikipedia:Non-free content/Image size calculator</a></li>
+<li><a href="https://stackoverflow.com/a/1186465">What's the algorithm to calculate aspect ratio?</a></li>
+</ul>
+
+        </article>
+    </main>
+    <article-tags-app></article-tags-app>
+    <div class="copyright-notice container">
+        <img src="../api/cc-by-nd-icon.svg" alt="CC-BY-ND 4.0" />
+        <small>Text is available under the <a href="https://creativecommons.org/licenses/by-nd/4.0">Creative Commons Attribution-NoDerivatives 4.0 License</a> (Attribution: iigmir) unless other available license declared in the article. Images are available under licenses specified in the article.</small>
+    </div>
+    <script src="../assets/prism/prism.js"></script>
+    <script type="module" src="../assets/article.min.js"></script>
+</body>
+</html>
