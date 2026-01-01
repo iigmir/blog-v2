@@ -14,10 +14,10 @@
   },
   "author": "iigmir",
   "devDependencies": {
-    "@digitalocean/do-markdownit": "^1.14.0",
+    "@digitalocean/do-markdownit": "^1.17.2",
     "@types/jsdom": "^21.1.7",
     "@types/markdown-it": "^14.1.2",
-    "axios": "^1.11.0",
+    "axios": "^1.13.2",
     "css-minify": "^2.0.0",
     "jsdom": "^26.1.0",
     "markdown-it": "^14.1.0",
