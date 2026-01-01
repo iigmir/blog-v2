@@ -1,6 +1,6 @@
 {
   "name": "my-blog-v2",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "My blog with own static site generator.",
   "main": "index.js",
   "scripts": {
