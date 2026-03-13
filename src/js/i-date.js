@@ -1,24 +1,38 @@
-import "https://cdn.jsdelivr.net/npm/temporal-polyfill/dist/global.js";
-
 class DateStore {
-    date = ""
+    /**
+     * Timezone, see [Time zones and offsets](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/ZonedDateTime#time_zones_and_offsets)
+     */
     current_timezone = ""
+    /**
+     * A Temporal object
+     */
     source_date = null
-    timezone_date = null;
-    constructor(date = "2020-06-13T00:05:11+08:00[Asia/Taipei]", timezone = "Etc/UTC") {
-        this.date = date;
-        this.current_timezone = timezone;
-        this.set_temporal_obj();
-    }
-    set_temporal_obj() {
-        this.source_date = Temporal.Instant.from( this.date ?? new Date() );
-        this.timezone_date = Temporal.TimeZone.from( this.current_timezone );
+    /**
+     * A Temporal object. The date after applying `current_timezone`
+     */
+    timezone_date = null
+    /**
+     * @see: Info about [Etc/UTC](https://en.wikipedia.org/wiki/UTC%2B00:00)
+     */
+    detect_timezone(input) {
+        return input ?? "Etc/UTC";
     }
     /**
-     * @see [toLocaleString method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString)
+     * Init date store by given date and timezone
+     * @param {String} date Set the date
+     * @param {String} timezone Set the current timezone
+     */
+    constructor(date = "2020-06-13T00:05:11+08:00[Asia/Taipei]", timezone = "Etc/UTC") {
+        this.current_timezone = this.detect_timezone(timezone);
+        this.source_date = Temporal.Instant.from( date ?? new Date() );
+    }
+    /**
+     * @see These sources:
+     * [toZonedDateTimeISO method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/Instant/toZonedDateTimeISO),
+     * [toLocaleString method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString)
      */
     get result() {
-        const result = this.source_date.toZonedDateTimeISO( this.timezone_date );
+        const result = this.source_date.toZonedDateTimeISO( this.current_timezone );
         return result.toLocaleString( navigator.language, { hour12: false });
     }
 }
@@ -55,14 +69,8 @@ export class IDateComponentElement extends HTMLElement {
     get classes() {
         return this.hasAttribute("data-classes") ? this.getAttribute("data-classes") : "date";
     }
-    /**
-     * @see: Info about [Etc/UTC](https://en.wikipedia.org/wiki/UTC%2B00:00)
-     */
-    get timezone() {
-        return this.hasAttribute("data-timezone") ? this.getAttribute("data-timezone") : "Etc/UTC";
-    }
     connectedCallback() {
-        this.date_store = new DateStore( this.date, this.timezone );
+        this.date_store = new DateStore( this.date, this.hasAttribute("data-timezone") );
         const shadow = this.attachShadow({ mode: "open" });
         shadow.appendChild( this.wrapper_element() );
     }
