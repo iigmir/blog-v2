@@ -21,7 +21,7 @@
         </nav>
         <article class="article">
             <h1>FastCGI sent in stderr: &quot;Primary script unknown&quot;</h1>
-<p>解決完 <a href="/articles/48.html">nginx worker_connections are not enough</a> 後，我依舊要解決問題。這次是在 php 檔案只出現 File not found 字樣，但檔案明明就有。排查 Log 以後，發現以下錯誤：</p>
+<p>解決完 <a href="/articles/048.html">nginx worker_connections are not enough</a> 後，我依舊要解決問題。這次是在 php 檔案只出現 File not found 字樣，但檔案明明就有。排查 Log 以後，發現以下錯誤：</p>
 <pre><code class="language-log">[error] 18762#0: *12 FastCGI sent in stderr: &quot;Primary script unknown&quot; while reading response header from upstream, client: 127.0.0.1, server: localhost, request: &quot;GET /phpinfo.php HTTP/1.1&quot;, upstream: &quot;fastcgi://127.0.0.1:9000&quot;, host: &quot;127.0.0.1&quot;, referrer: &quot;http://127.0.0.1/&quot;
 </code></pre>
 <p>去 <a href="https://serverfault.com/a/754378">Server Fault</a> 以後，發現可以在 Log 宣告變數：</p>
