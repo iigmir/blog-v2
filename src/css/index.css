@@ -105,3 +105,10 @@ body
 {
     margin-bottom: 1rem;
 }
+@media (max-width: 1199px)
+{
+    .copyright-notice
+    {
+        padding: 1rem;
+    }
+}

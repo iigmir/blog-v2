@@ -124,7 +124,4 @@ article img, .article img {
     article img, .article img {
         max-width: 100%;
     }
-    .copyright-notice {
-        padding: 1rem;
-    }
 }
