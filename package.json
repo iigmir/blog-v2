@@ -20,7 +20,7 @@
     "axios": "^1.18.1",
     "css-minify": "^2.1.0",
     "jsdom": "^29.1.1",
-    "markdown-it": "^14.3.0",
+    "markdown-it": "^14.3.3",
     "terser": "^5.49.0",
     "typescript": "^7.0.2"
   }
